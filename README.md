@@ -7,7 +7,7 @@ WORK IN PROGRESS
 Součástí stránky pro redaktora je i hlavní adresář, kam by mohli přibýt další role.
 
 Navrhovaná struktura:  
-- Produkt/
+Produkt/
   - admin/
   - autor/
   - clanky/ (adresář, kam se budou ukládat články)
