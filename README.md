@@ -7,8 +7,8 @@ WORK IN PROGRESS
 Součástí stránky pro redaktora je i hlavní adresář, kam by mohli přibýt další role.
 
 Navrhovaná struktura:
+
 Produkt/
-    folders:
     - admin/
     - autor/
     - clanky/ (adresář, kam se budou ukládat články)
@@ -16,8 +16,6 @@ Produkt/
         - index.php (přehled článků)
         - clanek.php (detail jednoho článku)
     - sefredaktor/
-
-    files:
     - index.php (zobrazí stránku pro čtenáře, po loginu přesměruje do složky pro danou roli.?)
     - style.css
     - head.php (společně s foot.php se snaží odlehčit množství opakujícího se kódu v jednotlivých php souborech, rád bych to prokonzultoval)
