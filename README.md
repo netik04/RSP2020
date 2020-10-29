@@ -1,7 +1,6 @@
 Toto je projekt RSP 2020 týmu Študáci
 
-REDAKTOR
-WORK IN PROGRESS:
+REDAKTOR WORK IN PROGRESS:
 https://alpha.kts.vspj.cz/~studaci/product/development/v0_redaktor/redaktor/
 
 Čerpejte inspiraci, ať se nám to pak dobře lepí dohromady.
