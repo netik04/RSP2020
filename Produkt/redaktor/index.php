@@ -1,7 +1,7 @@
 <?php
 // ZMĚNIT PŘI KOPÍROVÁNÍ PROJEKTU
-$base_path = "/home/studaci/public_html/product/development/v0_redaktor/"; // pro absolutni referenci mezi soubory např. include($base_path."head.php"); 
-$base_url = "https://alpha.kts.vspj.cz/~studaci/product/development/v0_redaktor/"; // pro absolutni referenci url odkazu např. <link src="<?php echo $base_url>style.css">, <a href="<?php echo $base_url>clanky/cl1.pdf">
+$base_path = "/home/studaci/public_html/product/development/v0_uzivatel/"; // pro absolutni referenci mezi soubory např. include($base_path."head.php"); 
+$base_url = "https://alpha.kts.vspj.cz/~studaci/product/development/v0_uzivatel/"; // pro absolutni referenci url odkazu např. <link src="<?php echo $base_url>style.css">, <a href="<?php echo $base_url>clanky/cl1.pdf">
 // bez předešlých se velice špatně používá relativná obzvláště, když se daná část přidává include (v případě head.php a style.css)
 
 require($base_path."head.php");
