@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Logos Polytechnikos</title>
-    <link rel="stylesheet" href="<?php echo($base_url);?>style.css">
+    <link rel="stylesheet" href="<?php echo($base_path."style.css");?>">
+    <?php echo($head_str); //přidá další věci do hlavičky z volajícího php?> 
     <style>
 
     </style>
