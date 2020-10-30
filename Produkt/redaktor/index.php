@@ -54,7 +54,7 @@ require($base_path."head.php");
                     </div>
                 </a>
                 <div class="control">
-                    <a class="download button" target="_blank" href="<?php echo($base_url.$article["cesta"])?>">Nahlédnout</a><?php
+                    <a class="download button" target="_blank" href="<?php echo($base_path.$article["cesta"])?>">Nahlédnout</a><?php
                     ?><a class="accept button">Přijmout
                         <?php/*
                             switch($article["stav_redaktor"]){
