@@ -1,14 +1,14 @@
 <?php
-// ZMĚNIT PŘI KOPÍROVÁNÍ PROJEKTU
+// ZMĚNIT PŘI KOP�?ROV�?N�? PROJEKTU
 $base_path = "/home/studaci/public_html/product/development/v0_uzivatel/"; // pro absolutni referenci mezi soubory např. include($base_path."head.php"); 
 $base_url = "https://alpha.kts.vspj.cz/~studaci/product/development/v0_uzivatel/"; // pro absolutni referenci url odkazu např. <link src="<?php echo $base_url>style.css">, <a href="<?php echo $base_url>clanky/cl1.pdf">
-// bez předešlých se velice špatně používá relativná obzvláště, když se daná část přidává include (v případě head.php a style.css)
+// bez předešlých se velice špatně používá relativná obzvláště, když se daná �?ást přidává include (v případě head.php a style.css)
 
 require($base_path."head.php");
 ?>
 
 <div id="content" class="redaktor">
-    <?php // ZDE ZAČÍNÁ OBSAH STRÁNKY REDAKTOR ?>
+    <?php // ZDE ZAČ�?N�? OBSAH STR�?NKY REDAKTOR ?>
 
     <?php
     if (!include($base_path."db.php")) echo "Nepodařilo se navázat spojení s databází.<br>Zkuste to prosím později.";
@@ -36,7 +36,7 @@ require($base_path."head.php");
                             echo("title=\"".$article["nazev"]."\">"); //on hover vypíše celý název
                             $stringCut = substr($article["nazev"], 0, 50);
                             $endPoint = strrpos($stringCut, ' '); 
-                            echo(($endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0))."..."); // vypíše useknutou část do poslední mezery
+                            echo(($endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0))."..."); // vypíše useknutou �?ást do poslední mezery
                         } else echo(">".$article["nazev"]);
                     ?>
                     </a>
