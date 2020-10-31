@@ -99,7 +99,10 @@
     padding: 1rem 1rem;
 }
 
-/*
-.redaktor .article .control .button:first-child{
-    margin-left: 0;
-}*/
+.redaktor .article .control input[type=submit]{
+    display: inline;
+    background-color: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 1.15rem;
+}

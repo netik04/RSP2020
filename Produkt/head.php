@@ -28,11 +28,11 @@
             <h1><a href="<?php echo($base_path."index.php");?>">Logos Polytechnikos<a></h1>
 
             <?php
-            if (!include("Scripty/jePrihlasen.php")){
+            if (!include("scripty/jePrihlasen.php")){
             ?>
 
             <div class="login">
-                <form id="loginForm" action="Scripty/prihlaseni.php" method="POST">
+                <form id="loginForm" action="scripty/prihlaseni.php" method="POST">
                     Login <input type="text" name="login" id="login"><br/>
                     Heslo <input type="password" name="password" id="password"><br/>
                     <input type="submit" value="Přihlásit">
@@ -61,7 +61,7 @@
         </header>
         <?php
         if(!($ignore == true)){
-            if(!include("Scripty/jePrihlasen.php")){
+            if(!include("scripty/jePrihlasen.php")){
                 header("Location: ../index.php");
                 die();
             }

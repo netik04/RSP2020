@@ -36,7 +36,7 @@
                                 }
                             }
                         };
-                        xmlhttp.open("GET","Scripty/existujeLogin.php?login="+$("#reg_login").val(),true);
+                        xmlhttp.open("GET","scripty/existujeLogin.php?login="+$("#reg_login").val(),true);
                         xmlhttp.send();
                     }
                     else
@@ -49,7 +49,7 @@
         </script>
         <h2>Registrační formulář</h2>
         <fieldset>
-        <form action="Scripty/registrace.php" method="POST" enctype="multipart/form-data">
+        <form action="scripty/registrace.php" method="POST" enctype="multipart/form-data">
             <label for="reg_login">Login:</label><input type="text" name="reg_login" id="reg_login" required /><span id="error"></span><br />
             <label for="reg_passwd">Heslo:</label><input type="password" name="reg_passwd" required /><br />
             <br />
