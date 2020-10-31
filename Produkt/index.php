@@ -13,15 +13,14 @@ if (isset($_SESSION[session_id()])){
 ?>
 <p><?php echo $_SESSION[session_id()];?></p>
 <button id="logOut">buttonek pro odhlaseni</button>
-<?php
-}
-?>
 <script>
     $(document).ready(function(){
         $("#logOut").click(function(){
-            <?php unset($_SESSION[session_id()]) ?> 
-            location.reload();
+            document.location = 'Scripty/log_out.php';
         });
     });
 </script>
+<?php
+}
+?>
 <?php require("foot.php"); $pdo = null; ?>
