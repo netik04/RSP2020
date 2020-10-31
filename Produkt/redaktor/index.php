@@ -34,7 +34,7 @@ require($base_path."head.php");
         while($article = $stmt->fetch(PDO::FETCH_ASSOC)){
         ?>
             <div class="article">
-                <a class="left" href="clanek.php/?id=<?php echo($article["id"])?>">
+                <a class="left" href="clanek.php?id=<?php echo($article["id"])?>">
                     <div class="title"
                         <?php //ošetření délky názvu
                             if (strlen($article["nazev"]) > 50) {
