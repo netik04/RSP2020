@@ -93,7 +93,7 @@ footer {
     text-decoration: none;
 }
 
-.article .button:hover{
+.article .button:hover, .article .button:focus, .article .button:active{
     background-color: #777;
     border: 1px solid #aaa;
 }
