@@ -6,12 +6,14 @@
 
 require("head.php");
 ?>
-<form id="loginForm" action="Scripty/prihlaseni.php" method="POST">
-Login <input type="text" name="login" id="login"><br/>
-Heslo <input type="password" name="password" id="password"><br/>
-<input type="submit" value="Přihlásit">
-<p class="error"><?php echo $_SESSION["error"];unset($_SESSION["error"])?></p>
-</form>
+<div id="loginWrapper">
+    <form id="loginForm" action="Scripty/prihlaseni.php" method="POST">
+    Login <input type="text" name="login" id="login"><br/>
+    Heslo <input type="password" name="password" id="password"><br/>
+    <input type="submit" value="Přihlásit">
+    <p class="error"><?php echo $_SESSION["error"];unset($_SESSION["error"])?></p>
+    </form>
+</div>
 
 
 

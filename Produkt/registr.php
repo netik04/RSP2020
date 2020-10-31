@@ -1,4 +1,5 @@
 <?php
+    $ignore = true;
     require("head.php");
 ?>
 
@@ -35,7 +36,7 @@
                                 }
                             }
                         };
-                        xmlhttp.open("GET","Scripty/login_check.php?login="+$("#reg_login").val(),true);
+                        xmlhttp.open("GET","Scripty/existujeLogin.php?login="+$("#reg_login").val(),true);
                         xmlhttp.send();
                     }
                     else
@@ -43,8 +44,7 @@
                         $("#error").text("");
                         $("#reg_submit").prop("disabled", true);
                     }
-                });
-            
+                });           
             });
         </script>
         <h2>Registrační formulář</h2>
@@ -53,11 +53,11 @@
             <label for="reg_login">Login:</label><input type="text" name="reg_login" id="reg_login" required /><span id="error"></span><br />
             <label for="reg_passwd">Heslo:</label><input type="password" name="reg_passwd" required /><br />
             <br />
-            <label for="reg_jmeno">Jméno:</label><input type="text" name="reg_jmeno" required /><br />
-            <label for="reg_prijmeni">Přijmení:</label><input type="text" name="reg_prijmeni" required /><br />
-            <label for="reg_mail">Email:</label><input type="email" name="reg_mail" required /><br />
-            <label for="reg_tel">Telefonní číslo (nepovinné):</label><input type="text" name="reg_tel" /><br />
-            <input type="file" name="reg_pfp" accept="image/png, image/jpeg"><br />
+            <label for="reg_jmeno">Jméno: </label><input type="text" name="reg_jmeno" required /><br />
+            <label for="reg_prijmeni">Přijmení: </label><input type="text" name="reg_prijmeni" required /><br />
+            <label for="reg_mail">Email: </label><input type="email" name="reg_mail" required /><br />
+            <label for="reg_tel">Telefonní číslo: </label><input type="text" name="reg_tel" /><br />
+            <label for="reg_pfp">Profilový obrázek: </label><input type="file" name="reg_pfp" accept="image/png, image/jpeg"><br />
             <input type="submit" name="reg_submit" id="reg_submit" value="Registrovat" />
         </form>
         </fieldset>

@@ -19,6 +19,13 @@ body {
 
 header {
     background-color: #262626;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header a{
+    text-decoration: none;
+    color: inherit;
 }
 
 header h1 {
@@ -47,67 +54,55 @@ footer {
     border-bottom: 1px solid #666;
 }
 
+
 /*
-*  REDAKTOR
+* Login 
 */
 
-.redaktor .article{
-    background-color: #555;
-    padding: 0.5rem;
-    margin: 1rem 0;
+.login{
+    width: 16rem;
+    height: 7rem;
+    /*border: 1px solid black;*/
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-/*.redaktor .article:hover{
-   background-color: #666;
-}*/
+#error{
+    font-size: 0.7rem;
+}
 
-.redaktor .article .button{
+
+/*
+* BASIC ARTICLE STYLES
+*/
+
+.article{
+    background-color: #555;
+    padding: 1rem;
+    font-size: 1.15rem;
+}
+
+.article .button{
     display: inline-block;
     border: 1px solid #888;
     color: #fff;
     padding: 5px 10px;
     text-decoration: none;
-    margin-left: 10px;
 }
 
-.redaktor .article .button:hover{
+.article .button:hover{
     background-color: #777;
     border: 1px solid #aaa;
 }
 
-.redaktor .article .title{
-    margin-bottom: 0.3rem;
-    border-bottom: 1px solid #777;
-}
-
-.redaktor .article .title a{
+.article .title{
     font-size: 1.3rem;
     font-weight: bold;
     color:#fff;
-    text-decoration: none;
-}
-
-.redaktor .article .control{
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-
-    /* rovnoměrné rozložení */
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-
-    /* vertical center */
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-
-    font-size: 1.15rem;
-}
-
-.redaktor .article .control .date{
-    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid #777;
 }

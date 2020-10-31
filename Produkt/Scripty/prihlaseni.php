@@ -47,12 +47,12 @@ if (!include($base_path."../db.php")) {
             }
         }else{
             $_SESSION["error"] = "Spatne jmeno nebo heslo";
-            header("Location: ../login.php");
+            header("Location: ../index.php");
             die();
         }
     }else{
         $_SESSION["error"] = "Spatne jmeno nebo heslo";
-        header("Location: ../login.php");
+        header("Location: ../index.php");
         die();
     }
 } 

@@ -34,6 +34,6 @@ if(isset($_REQUEST["reg_submit"]))
      echo($extension);
     rename($newFile, "../img/profile_pics/".$login . $extension);
 
-    header("Location: ../login.php");
+    header("Location: ../index.php");
 }
 ?>
