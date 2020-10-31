@@ -7,7 +7,7 @@
 require("head.php");
 ?>
 <div id="loginWrapper">
-    <form id="loginForm" action="Scripty/prihlaseni.php" method="POST">
+    <form id="loginForm" action="scripty/prihlaseni.php" method="POST">
     Login <input type="text" name="login" id="login"><br/>
     Heslo <input type="password" name="password" id="password"><br/>
     <input type="submit" value="Přihlásit">
