@@ -50,7 +50,7 @@
             <script>
                 $(document).ready(function(){
                     $("#logOut").click(function(){
-                        document.location = 'https://alpha.kts.vspj.cz/~studaci/product/development/v0_uzivatel/Scripty/odhlaseni.php';
+                        document.location = '<?php echo($base_path);?>scripty/odhlaseni.php';
                     });
                 });
             </script>
@@ -61,7 +61,7 @@
         </header>
         <?php
         if(!($ignore == true)){
-            if(!include("scripty/jePrihlasen.php")){
+            if(!include($base_path."scripty/jePrihlasen.php")){
                 header("Location: ../index.php");
                 die();
             }
