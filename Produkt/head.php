@@ -25,16 +25,16 @@
     <div id="page">
 
         <header>
-            <h1><a href="<?php echo($base_path."index.php");?>">Logos Polytechnikos<a></h1>
+            <h1><a href="<?php echo($base_path."index.php");?>">Logos Polytechnikos</a></h1>
 
             <?php
-            if (!include("Scripty/jePrihlasen.php")){
+            if (!include("scripty/jePrihlasen.php")){
             ?>
 
-            <div class="login">
-                <form id="loginForm" action="Scripty/prihlaseni.php" method="POST">
-                    Login <input type="text" name="login" id="login"><br/>
-                    Heslo <input type="password" name="password" id="password"><br/>
+            <div class="login flex_horizontalne">
+                <form id="loginForm" action="scripty/prihlaseni.php" method="POST">
+                    Login <input type="text" name="login" id="login" required><br/>
+                    Heslo <input type="password" name="password" id="password" required><br/>
                     <input type="submit" value="Přihlásit">
                     <input type="button" onclick="window.location.href='registr.php'" value="Registrace">
                 </form>
@@ -43,14 +43,26 @@
 
             <?php }else{ ?>
 
-            <div class="login">
-                <span><?php echo $_SESSION[session_id()];?></span>
+            <div class="login flex_horizontalne">
+                <div class="flex_vodorovne">
+                <?php include($base_path . "scripty/view_profile_pic.php")?> 
+                    <div class="flex_horizontalne">
+                        <?php 
+                            require("db.php");
+                            $query = $pdo->prepare("select jmeno, prijmeni from uzivatel where login = ?");
+                            $params = array($_SESSION[session_id()]);
+                            $query->execute($params);   
+                            $fetchedUser = $query->fetch(PDO::FETCH_ASSOC); ?>
+                        <div><?php echo $fetchedUser['jmeno'] . ' ' . $fetchedUser['prijmeni'];?></div><br/>
+                        <div><?php echo $_SESSION['role']?></div>
+            </div>
+                </div>
                 <button id="logOut">buttonek pro odhlaseni</button>
             </div>
             <script>
                 $(document).ready(function(){
                     $("#logOut").click(function(){
-                        document.location = 'https://alpha.kts.vspj.cz/~studaci/product/development/v0_uzivatel/Scripty/odhlaseni.php';
+                        document.location = '<?php echo($base_path);?>scripty/odhlaseni.php';
                     });
                 });
             </script>
@@ -61,9 +73,15 @@
         </header>
         <?php
         if(!($ignore == true)){
-            if(!include("Scripty/jePrihlasen.php")){
-                header("Location: ../index.php");
+            if(!include($base_path."scripty/jePrihlasen.php")){
+                header("Location: " . $base_path . "index.php");
                 die();
             }
+
+            if(!include($base_path."scripty/maSpravnouRoli.php")){
+                header("Location: " . $base_path . "index.php");
+                die();
+            }
+
         }
         ?>

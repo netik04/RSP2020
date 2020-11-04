@@ -72,16 +72,16 @@ if(isset($_REQUEST["reg_submit"])) // pokud byl odeslán formulář
             else // pokud přesun neprojde
             {
                 // vygeneruj chybu a vrať uživatele na registraci
-                $_SESSION["error_reg"] = 2;
-                header("Location: ../registr.php");
+                $_SESSION["error"] = "Váš účet byl vytvořen, nepodařilo se však nahrát vaší profilovou fotku.";
+                header("Location: ../index.php");
                 exit();
             }
         }
         else // pokud se fotku nepodařilo nahrát
         {
             // vygeneruj error a vrať uživatele na registraci
-            $_SESSION["error_reg"] = 2;
-            header("Location: ../registr.php");
+            $_SESSION["error"] = "Váš účet byl vytvořen, nepodařilo se však nahrát vaší profilovou fotku.";
+            header("Location: ../index.php");
             exit(); 
         }
     }

@@ -5,6 +5,7 @@ require("../db.php");
 $login = $_REQUEST["login"];
 $pass = $_REQUEST["password"];
 $saltedPass = hash("sha256", $login.$pass);
+$login = htmlentities($_REQUEST["login"], ENT_QUOTES | ENT_HTML5, "UTF-8");
 
 if (!include($base_path."../db.php")) {
     echo "Nepodařilo se navázat spojení s databází.<br>Zkuste to prosím později.";
@@ -19,6 +20,7 @@ if (!include($base_path."../db.php")) {
         if(strtolower($fetchedUser['heslo']) == $saltedPass){
             session_regenerate_id();
             $_SESSION[session_id()] = $fetchedUser["login"];
+            $_SESSION["role"] = $fetchedUser["role"];
             switch($fetchedUser['role']){
                 case "autor":
                     header("Location: ../autor/");
@@ -46,7 +48,7 @@ if (!include($base_path."../db.php")) {
                 break;
             }
         }else{
-            $_SESSION["error"] = "Spatne jmeno nebo heslo";
+            $_SESSION["error"] ="Spatne jmeno nebo heslo";
             header("Location: ../index.php");
             die();
         }
