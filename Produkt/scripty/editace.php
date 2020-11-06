@@ -3,7 +3,11 @@
 
     if(isset($_REQUEST["submit"])) // pokud byl odeslán formulář
     {
-        if (!include("../db.php")) echo "Nepodařilo se navázat spojení s databází.<br>Zkuste to prosím později."; // připojení do DB
+        if (!include("../db.php")){ // připojení do DB
+            $_SESSION["error_edit"] = "Neco se nepovedlo, zkuste to prosim znovu.";
+            header("Location: ../editProfile.php");
+            exit();
+        } 
         else
         {
             $raw_login = $_REQUEST["login"];
@@ -25,11 +29,11 @@
     catch(PDOException $ex)
     {
         // pdo vyhodilo vyjímku - něco se nepovedlo - přesměruji zpět na stránku s upravu profilu s chybovým kódem
-        $_SESSION["error_edit"] .= "Neco se nepovedlo, zkuste to porsim znovu.";
+        $_SESSION["error_edit"] = "Neco se nepovedlo, zkuste to prosim znovu.";
         header("Location: ../editProfile.php");
         exit();
     }
-    // pokud vše prošlo, nebo uživatel nenahrál žádnou profilovku - přesměruj na index
+    // pokud vše prošlo  přesměruj na index
     header("Location: ../editProfile.php");
     $_SESSION["error_edit"] = "Úprava proběhla úspěšně!";
     exit();
