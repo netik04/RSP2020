@@ -16,16 +16,29 @@
         
 ?>
     <fieldset>
+        <legend>Změna údajů</legend>
         <form action="scripty/editace.php" method="POST" enctype="multipart/form-data">
             <label for="login">Login:</label><input type="text" value="<?php echo $_SESSION[session_id()]; //vyplneni aktualniho loginu?>" disabled/><br/>
-            <input type="hidden" name="login" value="<?php echo $_SESSION[session_id()]; //nahrada za input login protoze se disabled objekty neodesilaji ?>">
             <label for="jmeno">Jméno: </label><input type="text" value="<?php echo $jmeno; //vyplneni aktualniho jmena?>" name="jmeno"/><br />
             <label for="prijmeni">Přijmení: </label><input type="text" value="<?php echo $prijmeni; //vyplneni aktualniho prijmeni?>" name="prijmeni" required /><br />
             <label for="mail">Email: </label><input type="email" value="<?php echo $email; //vyplneni aktualniho email?>" name="mail" required /><br />
             <label for="tel">Telefonní číslo: </label><input type="text" value="<?php echo $tel; //vyplneni aktualniho telefoniho cisla?>" name="tel" /><br />
             <!--<label for="reg_pfp">Profilový obrázek: </label><input type="file" name="reg_pfp"><br />-->
-            <input type="submit" name="submit" id="reg_submit" value="Provést změny" />
-            <span id="error"><?php echo $_SESSION["error_edit"]; unset($_SESSION["error_edit"]) //zobrazení chyb z přihlášení pomoci session, nasledně unset této session aby se zobrazila pouze jednou?></span>
+            <br /><label for="login">Zadejte heslo pro potvrzeni zmen</label><br />
+            <input type="password" name="password"/><br/>
+            <input type="submit" name="submit" id="submit" value="Provést změny" />
+            <span class="error"><?php echo $_SESSION["error_edit"]; unset($_SESSION["error_edit"]) //zobrazení chyb z přihlášení pomoci session, nasledně unset této session aby se zobrazila pouze jednou?></span>
+        </form>
+    </fieldset>
+
+    <fieldset>
+        <legend>Změna hesla</legend>
+        <form action="scripty/zmenitHeslo.php" method="POST" enctype="multipart/form-data">
+            <label for="newPassword">Nové heslo:</label><input type="password" name="newPassword"/><br/>
+            <br /><label for="login">Zadejte svoje staré heslo pro potvrzeni zmen</label><br />
+            <input type="password" name="oldPassword"/><br/>
+            <input type="submit" name="submit" id="submit" value="Změnit heslo" />
+            <span class="error"><?php echo $_SESSION["error_edit_pass"]; unset($_SESSION["error_edit_pass"]) //zobrazení chyb z přihlášení pomoci session, nasledně unset této session aby se zobrazila pouze jednou?></span>
         </form>
     </fieldset>
 

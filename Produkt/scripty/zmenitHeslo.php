@@ -4,21 +4,20 @@
     if(isset($_REQUEST["submit"])) // pokud byl odeslán formulář
     {
         if (!include("../db.php")){ // připojení do DB
-            $_SESSION["error_edit"] = "Neco se nepovedlo, zkuste to prosim znovu.";
+            $_SESSION["error_edit_pass"] = "Neco se nepovedlo, zkuste to prosim znovu.";
             header("Location: ../editProfile.php");
             exit();
         } 
         else
         {
             //nacteni predanych udaju z formulare
-            $raw_login = $_SESSION[session_id()];
-            $login = htmlentities($raw_login, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $jmeno = htmlentities($_REQUEST["jmeno"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $prijmeni = htmlentities($_REQUEST["prijmeni"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $email = htmlentities($_REQUEST["mail"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $tel = htmlentities($_REQUEST["tel"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-            $pass = $_REQUEST["password"];
-            $saltedPass = hash("sha256", $raw_login.$pass);
+            $login = $_SESSION[session_id()];
+            $newpass = $_REQUEST["newPassword"];
+            $oldpass = $_REQUEST["oldPassword"];
+            $saltedOldPass = hash("sha256", $login.$oldpass); // vytvoreni sha256 hashe se soli(login uzivatele)
+            $saltedNewPass = hash("sha256", $login.$newpass); // vytvoreni sha256 hashe se soli(login uzivatele)
+            $login = htmlentities($login, ENT_QUOTES | ENT_HTML5, "UTF-8"); // protoze v databazi ukladame data ktera bez nebezpecnych znaku, je potreba prevest login na string bez nebezpecnych znaku, kvuli dotazu na databazi
+
 
             $query = $pdo->prepare("SELECT login, heslo from uzivatel where login = ?"); // pripraveni dotazu
             $param = array($login); // pripraveni prommenych pro dotaz 
@@ -26,36 +25,36 @@
 
             if ($query->rowCount() == 1){ //pokud je nalezen pouze jeden radek, tak se uzivatel se zadanym jmenem v databazi nachazi
                 $fetchedUser = $query->fetch(PDO::FETCH_ASSOC); // do prommene si ulozim informace o uzivateli
-                if(strtolower($fetchedUser['heslo']) == $saltedPass){ // porovnani vytvoreneho hashe s hashem z databaze
+                if(strtolower($fetchedUser['heslo']) == $saltedOldPass){ // porovnani vytvoreneho hashe s hashem z databaze
                     //uzivatel zadal spravne jmeno a heslo
                     try
                     {
-                        $query = $pdo->prepare("UPDATE uzivatel set jmeno = ?, prijmeni = ?, email = ?, telefon = ? where login = ?");
-                        $params = array($jmeno, $prijmeni, $email, $tel, $login);
+                        $query = $pdo->prepare("UPDATE uzivatel set heslo = ? where login = ?");
+                        $params = array($saltedNewPass, $login);
                         $query->execute($params);
                     }
                     catch(PDOException $ex)
                     {
                         // pdo vyhodilo vyjímku - něco se nepovedlo - přesměruji zpět na stránku s upravu profilu s chybovým kódem
-                        $_SESSION["error_edit"] = "Neco se nepovedlo, zkuste to prosim znovu.";
+                        $_SESSION["error_edit_pass"] = "Neco se nepovedlo, zkuste to prosim znovu.";
                         header("Location: ../editProfile.php");
                         exit();
                     }
 
                     // pokud vše prošlo  přesměruj na index
-                    $_SESSION["error_edit"] = "Úprava proběhla úspěšně!";
+                    $_SESSION["error_edit_pass"] = "Heslo uspěšně změněno!";
                     header("Location: ../editProfile.php");
                     exit();
 
                 }else{
                     //uzivatel zadal spatne heslo
-                    $_SESSION["error_edit"] ="Špatně zadané heslo";
+                    $_SESSION["error_edit_pass"] ="Špatně zadané staré heslo";
                     header("Location: ../editProfile.php");
                     die();
                 }
             }else{
                 //uzivatel zadal spatny 
-                $_SESSION["error_edit"] = "Špatně zadané heslo";
+                $_SESSION["error_edit_pass"] = "Špatně zadané staré heslo";
                 header("Location: ../editProfile.php");
                 die();
             }
