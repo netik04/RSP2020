@@ -15,6 +15,7 @@
     $tel = $fetchedUser["telefon"];
         
 ?>
+<div id="content">
     <fieldset>
         <legend>Změna údajů</legend>
         <form action="scripty/editace.php" method="POST" enctype="multipart/form-data">
@@ -71,6 +72,7 @@
             });  
         });   
     </script>
+</div>
 
 <?php    
     }
