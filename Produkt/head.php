@@ -61,7 +61,7 @@
                         <div><?php echo $_SESSION['role'] //zobrazeni role ktera je prenasena v session role?></div>
                     </div>
                 </div>
-                <button id="logOut">buttonek pro odhlaseni</button>
+                <button id="logOut">Odhlášení</button>
             </div>
             <script>
                 // kdyz se klikne na button logOut, zavola se script ktery odhlasi uzivatele
