@@ -61,13 +61,22 @@
                         <div><?php echo $_SESSION['role'] //zobrazeni role ktera je prenasena v session role?></div>
                     </div>
                 </div>
-                <button id="logOut">Odhlášení</button>
+                <div class="flex_vodorovne">
+                    <button id="logOut">Odhlášení</button>
+                    <button id="editProfile">Upravit profil</button>
+                </div>
             </div>
+
+
             <script>
                 // kdyz se klikne na button logOut, zavola se script ktery odhlasi uzivatele
                 $(document).ready(function(){
                     $("#logOut").click(function(){
                         document.location = '<?php echo($base_path);?>scripty/odhlaseni.php';
+                    });
+
+                    $("#editProfile").click(function(){
+                        document.location = '<?php echo($base_path);?>editProfile.php';
                     });
                 });
             </script>
@@ -76,7 +85,9 @@
             }
             ?>
         </header>
+
         <?php
+        include_once("menu.php");
         /* tato cast slouzi pro overeni jestli je uzivatel prihlaseni a jestli ma spravnou roli*/
         if(!($ignore == true)){ // promenna ignore slouzi k zameceni zacykleni odkazovani na index, na strance index.php je prommena ignore = true
             if(!include($base_path."scripty/jePrihlasen.php")){ 

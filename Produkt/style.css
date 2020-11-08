@@ -121,3 +121,89 @@ footer {
     padding-bottom: 0.15rem;
     border-bottom: 1px solid #777;
 }
+
+/*
+* MENU
+*/
+
+#menu {
+    background-color: #333;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#menu ul{
+    flex-wrap: wrap;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: rgba(0,0,0,0);
+    margin: 0;
+}
+
+#menu li {
+    margin: 0 10px;
+    padding: 0;
+}
+#menu a{
+    color:white;
+    
+}
+
+/*
+* HELPDESK
+*/
+
+#wrapHelpDesk{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapotazka{
+    background-color: #777;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 2px;
+        
+        /* flexing stuff */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+}
+
+.wrapotazka input{
+    margin: 0;
+}
+
+.wrapotazka form{
+    display: flex;
+    flex-direction: row;
+}
+
+.wrapotazka .otazka{
+    margin-bottom: 10px;
+}
+
+#wrapHelpDeskQuestion{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#wrapHelpDeskQuestion form {
+    width: 100%;
+}
+
+#wrapHelpDeskQuestion textarea {
+    resize: none;
+    height: 6em;
+    width: 33%;
+}
+
+#wrapHelpDesk textarea {
+    resize: none;
+    height: 2em;
+}
