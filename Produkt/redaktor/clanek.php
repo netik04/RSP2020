@@ -1,74 +1,218 @@
 <?php
-// ZMĚNIT PŘI KOPÍROVÁNÍ PROJEKTU
-//abs 
-//$base_path = "/home/studaci/public_html/product/development/v0_redaktor/"; // pro absolutni referenci mezi soubory např. include($base_path."head.php"); 
-//$base_url = "https://alpha.kts.vspj.cz/~studaci/product/development/v0_redaktor/"; // pro absolutni referenci url odkazu např. <link src="<?php echo $base_url>style.css">, <a href="<?php echo $base_url>clanky/cl1.pdf">
-// rel
+
+// ROLE KTERÁ MÁ PŘÍSTUP 
+$role = "redaktor";
+
+// ZMĚNIT ABY VŽDY UKAZOVALA DO HLAVNÍ SLOŽKY
 $base_path = "../";
-//$head_str = "<link rel=\"stylesheet\" href=\"../style.css\">";
-// bez předešlých se velice špatně používá relativná obzvláště, když se daná část přidává include (v případě head.php a style.css)
+
+$head_str = "<link rel=\"stylesheet\" href=\"redaktor_style.css\">";
+$head_str .= "<script src=\"scripty/js/prijmuti_clanku.js\"></script>";
+$head_str .= "<script src=\"scripty/js/zobraz_form_recenzenti.js\"></script>";
+$head_str .= "<script src=\"scripty/js/prirazeni_recenzentu.js\"></script>";
+$head_str .= "<script src=\"scripty/js/zamitnuti_clanku.js\"></script>";
+$head_str .= "<script src=\"scripty/js/obnoveni_clanku.js\"></script>";
+$head_str .= "<script src=\"scripty/js/prijmout_k_vydani.js\"></script>";
+$head_str .= "<script src=\"scripty/js/odeslat_posudky.js\"></script>";
+$head_str .= "<script src=\"scripty/js/zmena_verze.js\"></script>";
+$head_str .= "<script src=\"scripty/js/zobraz_messagebox.js\"></script>";
+$head_str .= "<script src=\"scripty/js/vratit_autorovi.js\"></script>";
 
 require($base_path."head.php");
+
+if(!is_numeric($_GET['id'])){
+    header("Location: ".$base_path."redaktor");
+    die();
+}
+$article_id = $_GET['id'];
+
+if(is_numeric($_GET['verze'])){
+    $article_verze = $_GET['verze'];
+}
 ?>
 
-<div id="content" class="redaktor">
-    <?php // ZDE ZAČÍNÁ OBSAH STRÁNKY ČLÁNKU OTEVŘENÝ REDAKTOREM ?>
-
+<div id="content" class="redaktor clanek">
+    <a class="back_button" href="<?php echo($base_path."redaktor")?>">&larr; Zpět</a><br>
     <?php
     if (!include($base_path."db.php")) echo "Nepodařilo se navázat spojení s databází.<br>Zkuste to prosím později.";
     else {
-    ?>
-        <div class="main_title">Článek</div>
-        Zde bude detailní obsah článku
-        <?php
-        /*
-        $sql = "SELECT cl.id_clanku AS id, nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, id_casopisu, Concat(jmeno, ' ', prijmeni) AS autor FROM clanek AS cl
-        JOIN pise ON cl.id_clanku = pise.id_clanku
-        JOIN uzivatel ON pise.login = uzivatel.login
-        JOIN (SELECT id_clanku, Max(verze) AS verze, Min(datum) AS datum, Max(datum) AS datum_verze FROM verze GROUP BY id_clanku) AS lv ON cl.id_clanku = lv.id_clanku
-        JOIN verze ON cl.id_clanku = verze.id_clanku AND lv.verze = verze.verze
-        LIMIT 25";
-        $stmt = $pdo->query($sql);
+        if(isset($article_verze))
+            $sql = "SELECT nazev, vs.verze, vs.datum, verze.stav_redaktor, verze.cesta, casopis.*, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
+                JOIN casopis ON cl.id_casopisu = casopis.id_casopisu
+                JOIN pise ON cl.id_clanku = pise.id_clanku
+                JOIN uzivatel ON pise.login = uzivatel.login 
+                JOIN (SELECT id_clanku, Max(verze) AS verze, Min(datum) AS datum FROM verze GROUP BY id_clanku) AS vs ON cl.id_clanku = vs.id_clanku
+                JOIN verze ON cl.id_clanku = verze.id_clanku 
+                LEFT JOIN (SELECT id_clanku, verze, Max(datum_uzaverky) AS posudek_uzaverka FROM posudek GROUP BY id_clanku, verze) AS p ON cl.id_clanku = p.id_clanku AND verze.verze = p.verze
+                WHERE cl.id_clanku = ".$article_id." AND verze.verze = ".$article_verze  
+            ;
+        else
+            $sql = "SELECT nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, casopis.*, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
+                JOIN casopis ON cl.id_casopisu = casopis.id_casopisu
+                JOIN pise ON cl.id_clanku = pise.id_clanku
+                JOIN uzivatel ON pise.login = uzivatel.login
+                JOIN (SELECT id_clanku, Max(verze) AS verze, Min(datum) AS datum, Max(datum) AS datum_verze FROM verze GROUP BY id_clanku) AS lv ON cl.id_clanku = lv.id_clanku
+                JOIN verze ON cl.id_clanku = verze.id_clanku AND lv.verze = verze.verze
+                LEFT JOIN (SELECT id_clanku, verze, Max(datum_uzaverky) AS posudek_uzaverka FROM posudek GROUP BY id_clanku, verze) AS p ON cl.id_clanku = p.id_clanku AND lv.verze = p.verze
+                WHERE cl.id_clanku = ".$article_id
+            ;
 
-        while($article = $stmt->fetch(PDO::FETCH_ASSOC)){
-        ?>
-            <div class="article">
-                <div class="title">
-                    <a href="clanek.php/?id=<?php echo($article["id"])?>"
-                    <?php //ošetření délky názvu
-                        if (strlen($article["nazev"]) > 50) {
-                            echo("title=\"".$article["nazev"]."\">"); //on hover vypíše celý název
-                            $stringCut = substr($article["nazev"], 0, 50);
-                            $endPoint = strrpos($stringCut, ' '); 
-                            echo(($endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0))."..."); // vypíše useknutou část do poslední mezery
-                        } else echo(">".$article["nazev"]);
-                    ?>
-                    </a>
-                </div>
-                <div class="control">
+        try{
+            $stmt = $pdo->query($sql);
+        } catch (PDOException $e) {
+            echo("Při komunikaci s databází nastala chyba.<br>Zkuste to prosím později.");
+            $error = true;
+        }
+
+        if(!$error){
+            $article = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(!isset($article_verze))
+                $article_verze = $article['verze'];
+
+            ?>
+            <div class="main_title"><?php echo($article["nazev"])?></div>
+            <div id="<?php echo($article_id)?>" class="article detail">
+                <?php /*<div class="left"> */?>
+                <div class="info">
                     <span>
                         <span class="author"><?php echo($article["autor"])?></span><br>
-                        <span class="date"><?php echo(date_format(date_create($article["datum"]),"j.n.Y"))?></span>
+                        <span class="l2"><?php echo(date_format(date_create($article["datum"]),"j.n.Y"))?></span>
                     </span>
-                    <span class="version"><?php echo($article["verze"])?>. verze</span>
-                    <span class="state">Aktuální stav: <?php echo($article["stav_redaktor"])?></span>
-                    <span class="buttons">
-                        <a class="download button" target="_blank" href="<?php echo($base_path.$article["cesta"])?>">Nahlédnout</a><?php
-                        ?><a class="accept button">Přijmout
-
-                            ?>
-                        </a><?php
-                        ?><a class="open button" href="clanek.php/?id=<?php echo($article["id"])?>">Otevřít detail</a>
+                    <span>
+                        <span class="version"><?php echo($article_verze)?>. verze</span><br>
+                        <span class="l2"><?php echo(date_format(date_create($article["datum_verze"]),"j.n.Y"))?></span>
+                    </span>
+                    <span class="state">Stav<br><span class="l2">
+                        <?php
+                            echo($article["stav_redaktor"]);
+                            if($article["stav_redaktor"] == "Probíhá recenzní řízení" || $article["stav_redaktor"] == "1. posudek doručen redakci")
+                                echo("<br><span class=\"l3\">Uzávěrka recenze: ".date_format(date_create($article['posudek_uzaverka']),"j.n.Y")."</span>");
+                        ?>
+                    </span></span>
+                    <span>
+                        Časopis<br>
+                        <span class="l2">Téma: <?php echo($article["tema"])?></span><br>
+                        <span class="l2">Uzávěrka: <?php echo(date_format(date_create($article["datum_uzaverky"]),"j.n.Y"))?></span>
                     </span>
                 </div>
-            </div>
-        
-        <?php
-        }
-        
-        ?>
+                <?php /*</div>*/?>
+                <div class="control">
+                    <a class="download button" target="_blank" href="<?php echo($base_path.$article["cesta"])?>">Nahlédnout</a><?php
+                    switch($article["stav_redaktor"]){
+                        case "Nově podaný":
+                            echo("<button class=\"a_accept\" page=\"clanek\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Přijmout</button>");
+                        break;
+                        case "Čeká na stanovení recenzentů":
+                            // stanovit recenzenty
+                            echo("<button class=\"a_setR\" page=\"clanek\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Stanovit recenzenty</button>");
+                            
+                            // vrátit k úpravám
+                            echo("<button class=\"a_return\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Vrátit k úpravám</button>");
 
-    <?php */ } ?>
+                            // přijmout k vydáné
+                            if($article_verze > 1)
+                                echo("<button class=\"a_release\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Přijmout k vydání</button>");
+                            
+                                // zamítnout
+                            echo("<button class=\"a_deny\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Zamítnout</button>");
+                        break;
+                        case "Příspěvek zamítnut":
+                            echo("<button class=\"a_undeny\" page=\"clanek\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Zrušit zamítnutí</button>");
+                        break;
+                        case "Příspěvek je přijat k vydání":
+                            echo("<button class=\"a_undeny\" page=\"clanek\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Zrušit vydání</button>");
+                        break;
+                        case "2. posudek doručen redakci":
+                            echo("<button class=\"a_sendP\" page=\"clanek\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Odeslat posudky autorovi</button>");
+                        break;
+                        case "Posudky odeslány autorovi":
+                            echo("<button class=\"a_return\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Vrátit k úpravám</button>");
+                            echo("<button class=\"a_release\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Přijmout k vydání</button>");
+                            echo("<button class=\"a_deny\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Zamítnout</button>");
+                        break;
+                        case "Probíhá úprava textu autorem":
+                            echo("<button class=\"a_deny\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Zamítnout</button>");
+                        break;
+
+                        case "Probíhá recenzní řízení":
+                        case "1. posudek doručen redakci":
+                        case "Existuje nová verze":
+                            //echo("<a href=\"clanek?id=".$article["id"].")\">Zobrazit posudky</a>");
+                            //echo("<script>$('.article#".$article_id." .accept').hide()</script>");
+                        break;
+                    }
+
+                    if($article['verze'] > 1){
+                        echo("<select class=\"button change_ver\">" .
+                            "<option selected disabled>Zobrazit jinou verzi</option>"
+                        );
+
+                        $i = 1;
+                        $str = "";
+
+                        while($i <= (int)$article['verze']){
+                            if((isset($_GET["verze"]) && $i == $article_verze) || (!isset($_GET["verze"]) && $i == $article['verze']))
+                                echo("<option value=\"".$i."\">".$i." - zobrazená</option>");
+                            else
+                                echo("<option value=\"".$i."\">".$i."</option>");
+                            $i++;
+                        }
+
+                        echo("</select>");
+                    }
+                ?></div>
+                <?php
+                    $sql = "SELECT Concat(jmeno, ' ', prijmeni) AS recenzent, akt_zaj_prin, jazyk_styl_prinos, originalita, odbor_uroven, otevrena_odpoved, datum_vytvoreni, osobni_revize, vyjadreni_autora FROM posudek
+                    JOIN uzivatel ON posudek.login_recenzenta = uzivatel.login
+                    WHERE id_clanku = ".$article_id. " AND verze = ".$article_verze." AND datum_vytvoreni IS NOT NULL
+                    ORDER BY datum_vytvoreni";
+            
+                    try{
+                        $stmt = $pdo->query($sql);
+                    } catch (PDOException $e) {
+                        echo("Při načítaní posudků došlo k chybě.<br>Zkuste to prosím později.");
+                        $error = true;
+                    }
+
+                    if(!$error && $stmt->rowCount() > 0){
+                        $posudek = $stmt->fetch(PDO::FETCH_ASSOC);
+                        ?>
+                        <div class="posudky">Posudky<br>
+                        <span class="l2">Datum uzávěrky: <?php echo(date_format(date_create($article['posudek_uzaverka']),"j.n.Y"))?></span>
+                        <table><thead><tr>
+                            <th>Recenzent</th>
+                            <th>Aktuálnost, zajímavost a přínosnost</th>
+                            <th>Jazyková a stylistická úroveň</th>
+                            <th>Originalita</th>
+                            <th>Odborná úroveň</th>
+                            <th>Otevřená odpověď</th>
+                            <th>Datum vytvoření</th>
+                            <th>Vyjádření autora</th>
+                        </tr></thead>
+                        <tbody>
+                        <?php
+                        
+                        while($posudek){
+                            echo(
+                                "<tr>" .
+                                    "<td>".$posudek['recenzent']."</td>" .
+                                    "<td>".$posudek['akt_zaj_prin']."</td>" .
+                                    "<td>".$posudek['jazyk_styl_prinos']."</td>" .
+                                    "<td>".$posudek['originalita']."</td>" .
+                                    "<td>".$posudek['odbor_uroven']."</td>" .
+                                    "<td>".$posudek['otevrena_odpoved']."</td>" .
+                                    "<td>".date_format(date_create($posudek['datum_vytvoreni']),"j.n.Y")."</td>" .
+                                    "<td>".$posudek['vyjadreni_autora']."</td>" .
+                                "</tr>"
+                            );
+                            $posudek = $stmt->fetch(PDO::FETCH_ASSOC);
+                        }
+                        echo("</tbody></table></div>");
+                    }
+                ?>
+            </div>
+
+    <?php } } ?>
 
 </div>
 

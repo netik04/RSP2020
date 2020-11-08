@@ -19,12 +19,21 @@ body {
 
 header {
     background-color: #262626;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header a{
+    text-decoration: none;
+    color: inherit;
 }
 
 header h1 {
     margin: 0;
     /*border-bottom: 2px solid #000;*/
 }
+
+
 
 footer {
     background-color: #262626;
@@ -39,6 +48,10 @@ footer {
     padding: 1rem;
 }
 
+#content{
+    padding-bottom: 3rem;
+}
+
 #content .main_title{
     font-size: 1.6rem;
     font-weight: bold;
@@ -46,6 +59,30 @@ footer {
     padding-bottom: 0.2rem;
     border-bottom: 1px solid #666;
 }
+
+input, select{
+    color: #000;
+}
+
+/*
+* Login 
+*/
+
+.login{
+    width: 16rem;
+    height: 7rem;
+    /*border: 1px solid black;*/
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#error{
+    font-size: 0.7rem;
+}
+
 
 /*
 * BASIC ARTICLE STYLES
@@ -63,9 +100,10 @@ footer {
     color: #fff;
     padding: 5px 10px;
     text-decoration: none;
+    background-color: transparent;
 }
 
-.article .button:hover{
+.article .button:hover, .article .button:focus, .article .button:active{
     background-color: #777;
     border: 1px solid #aaa;
 }
@@ -78,109 +116,3 @@ footer {
     padding-bottom: 0.15rem;
     border-bottom: 1px solid #777;
 }
-
-/*
-*  REDAKTOR
-*/
-
-.redaktor .article{
-    margin: 1rem 0;
-    padding: 0;
-
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-
-    font-size: 1.15rem;
-}
-
-.redaktor .article .title a{
-    text-decoration: none;
-}
-
-.redaktor .article .left{
-    -webkit-box-flex:1;
-    -webkit-flex:1 1 auto;
-    -ms-flex:1 1 auto;
-    flex:1 1 auto;
-
-    padding: 1rem;
-
-    color: #fff;
-    text-decoration: none;
-}
-
-.redaktor .article .left:hover, .redaktor .article .left:hover ~ .control{
-    background-color: #666;
-}
-
-.redaktor .article .info{    
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-
-    -webkit-box-pack: left;
-    -webkit-justify-content: left;
-    -ms-flex-pack: left;
-    justify-content: left;
-
-    /* vertical center */
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-
-    gap: 2rem;
-}
-
-.redaktor .article .info .date{
-    font-size: 0.95rem;
-}
-
-.redaktor .article .control{
-    -webkit-box-flex:1;
-    -webkit-flex:1 1 auto;
-    -ms-flex:1 1 auto;
-    flex:1 1 auto;
-    max-width: 450px;
-    padding: 1rem;
-    
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-
-    /* rovnoměrné rozložení */
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-
-    /* vertical center */
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-
-    gap: 1rem;
-
-    
-}
-
-
-
-
-.redaktor .article .control .button{
-    /*margin-left: 10px;*/
-    padding: 1rem 1rem;
-}
-
-/*
-.redaktor .article .control .button:first-child{
-    margin-left: 0;
-}*/
