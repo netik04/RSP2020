@@ -11,7 +11,7 @@
                 # code...
                 break;    
             case "redaktor":
-                echo "<li> <a href=\"$base_path"."redaktor/\">Redaktor home</a> </li>";
+                echo "<li> <a href=\"$base_path"."redaktor/index.php\">Redaktor home</a> </li>";
                 break;
             case "sefredaktor":
                 #code

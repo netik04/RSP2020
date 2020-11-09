@@ -1,0 +1,30 @@
+tr, th, td
+{
+    border: 1px solid white;
+    padding: 10px;
+}
+table
+{
+    float: right;
+    text-align: right;
+}
+
+input, .add, .remove, .pridat_clanek
+{
+    margin: 2px;
+    padding: 4px;
+}
+
+select
+{
+    margin: 2px;
+    margin-left: -3px;
+    padding: 4px;
+}
+
+label
+{
+    display: inline-block;
+    width: 190px;
+    text-align: right;
+}
