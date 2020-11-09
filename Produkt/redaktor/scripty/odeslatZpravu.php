@@ -13,21 +13,19 @@ if(require($base_path . "scripty/jePrihlasen.php")){
         echo "test";
         try{
             $query = $pdo->prepare("INSERT INTO zprava VALUES(?,?,?,?,?,?,?);");
-            $params = array($id, $verze, $datetime, $message, $interni, $_SESSION[session_id()], false);
+            $params = array($id, $verze, $datetime, $message, $interni, $_SESSION[session_id()], 0);
             $query->execute($params);
         }catch(Exception $e){
             $_SESSION["errorMessage"] = $e->getMessage();
-            header("Location:" . $base_path. "redaktor");
+            header("Location:" . $base_path. "redaktor/messages.php");
             die();
         }
-        header("Location:" . $base_path. "redaktor");
+        header("Location:" . $base_path. "redaktor/messages.php");
         die();
-        }
     }else{
         $_SESSION["errorMessage"] = "Nepodarilo se prihlasit k databazi";
-        header("Location:" . $base_path. "redaktor");
+        header("Location:" . $base_path. "redaktor/messages.php");
         die();
     }
 }
-
 ?>

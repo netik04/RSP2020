@@ -43,6 +43,12 @@
     width: 10rem;
 }
 
+.redaktor .casopis{
+    font-size: 1.1rem;
+    margin: 1rem 0 -.5rem;
+    border-bottom: 1px solid #444;
+}
+
 .redaktor .article{
     position: relative;
     margin: 1rem 0;

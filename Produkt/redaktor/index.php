@@ -40,7 +40,8 @@ require($base_path."head.php");
                             "Existuje nová verze"*/
                         );
 
-                        echo("<option value=\"\" disabled ".(isset($_POST["state"]) ? "" : "selected").">Stav</option>");
+                        echo("<option value=\"\" disabled ".(!empty($_POST["state"]) ? "" : "selected").">Stav</option>");
+                        echo("<option value=\"\">Vše</option>");
 
                         foreach($states as $s){
                             if(isset($_POST["state"]) && $s == $_POST["state"])
@@ -50,6 +51,22 @@ require($base_path."head.php");
                         }
                     ?> 
                 </select>
+                <select name="uzaverka">
+                    <?php
+                        echo("<option value=\"\" disabled ".(!empty($_POST["uzaverka"]) ? "" : "selected").">Uzávěrka časopisu</option>");
+                        echo("<option value=\"\">Vše</option>");
+
+                        $stmt = $pdo->query("SELECT DISTINCT datum_uzaverky FROM casopis ORDER BY datum_uzaverky DESC;");
+              
+                        while($uzaverka = $stmt->fetch(PDO::FETCH_COLUMN)){
+                            echo("<option".((isset($_POST["uzaverka"]) && $uzaverka == $_POST["uzaverka"]) ? " selected" : "").
+                            " value=\"".$uzaverka."\">".
+                            date_format(date_create($uzaverka),"j.n.Y")."</option>");
+                        }
+
+                    ?> 
+                </select>
+
                 <input type="submit" value="Filtruj">
             </form><?php
             ?><form action="" method="POST">
@@ -70,20 +87,32 @@ require($base_path."head.php");
         </script>
         <?php
         
-        $sql = "SELECT cl.id_clanku AS id, nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, id_casopisu, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
-        JOIN pise ON cl.id_clanku = pise.id_clanku
-        JOIN uzivatel ON pise.login = uzivatel.login
-        JOIN (SELECT id_clanku, Max(verze) AS verze, Min(datum) AS datum, Max(datum) AS datum_verze FROM verze GROUP BY id_clanku) AS lv ON cl.id_clanku = lv.id_clanku
-        JOIN verze ON cl.id_clanku = verze.id_clanku AND lv.verze = verze.verze
-        LEFT JOIN (SELECT id_clanku, verze, Max(datum_uzaverky) AS posudek_uzaverka FROM posudek GROUP BY id_clanku, verze) AS p ON cl.id_clanku = p.id_clanku AND lv.verze = p.verze ";
-        if(isset($_POST["state"]))
-            $sql .= "WHERE stav_redaktor = '".$_POST["state"]."' ";
-        else if(isset($_POST["search"]))
+        $sql = "SELECT cl.id_clanku AS id, nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, datum_uzaverky, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
+            JOIN casopis ON cl.id_casopisu = casopis.id_casopisu
+            JOIN pise ON cl.id_clanku = pise.id_clanku
+            JOIN uzivatel ON pise.login = uzivatel.login
+            JOIN (SELECT id_clanku, Max(verze) AS verze, Min(datum) AS datum, Max(datum) AS datum_verze FROM verze GROUP BY id_clanku) AS lv ON cl.id_clanku = lv.id_clanku
+            JOIN verze ON cl.id_clanku = verze.id_clanku AND lv.verze = verze.verze
+            LEFT JOIN (SELECT id_clanku, verze, Max(datum_uzaverky) AS posudek_uzaverka FROM posudek GROUP BY id_clanku, verze) AS p ON cl.id_clanku = p.id_clanku AND lv.verze = p.verze ";
+        if(!empty($_POST["state"]) || !empty($_POST['uzaverka']))
+            $sql .= "WHERE ";
+            if(!empty($_POST["state"])){
+                $sql .= "stav_redaktor = '".$_POST["state"]."'";
+                if(!empty($_POST['uzaverka'])) $sql .= " AND";
+            }
+            if(!empty($_POST['uzaverka']))
+                $sql .= " datum_uzaverky = '".$_POST["uzaverka"]."'";
+        else if(!empty($_POST["search"]))
             $sql .= "WHERE nazev LIKE '%".$_POST["search"]."%' OR prijmeni LIKE '%".$_POST["search"]."%' OR jmeno LIKE '%".$_POST["search"]."%' ";
-        $sql .= "ORDER BY lv.datum_verze DESC LIMIT 25";
-        $stmt = $pdo->query($sql);
+        $sql .= " ORDER BY datum_uzaverky, lv.datum_verze DESC LIMIT 25";
+        $stmt = $pdo->query($sql);//GROUP BY datum_uzaverky
 
         while($article = $stmt->fetch(PDO::FETCH_ASSOC)){
+            //$lastUzaverka = $article['datum_uzaverky'];
+            if($lastUzaverka != $article['datum_uzaverky']){
+                echo("<div class=\"casopis\">Uzávěrka ".date_format(date_create($article["datum_uzaverky"]),"j.n.Y")."</div>");
+                $lastUzaverka = $article['datum_uzaverky'];
+            }
         ?>
             <div class="article" id="<?php echo($article["id"])?>">
                 <div class="control">

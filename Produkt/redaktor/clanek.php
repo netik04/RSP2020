@@ -37,7 +37,7 @@ if(is_numeric($_GET['verze'])){
     if (!include($base_path."db.php")) echo "Nepodařilo se navázat spojení s databází.<br>Zkuste to prosím později.";
     else {
         if(isset($article_verze))
-            $sql = "SELECT nazev, vs.verze, vs.datum, verze.stav_redaktor, verze.cesta, casopis.*, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
+            $sql = "SELECT nazev, vs.verze, vs.datum, verze.datum AS datum_verze, verze.stav_redaktor, verze.cesta, casopis.*, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
                 JOIN casopis ON cl.id_casopisu = casopis.id_casopisu
                 JOIN pise ON cl.id_clanku = pise.id_clanku
                 JOIN uzivatel ON pise.login = uzivatel.login 
@@ -80,7 +80,10 @@ if(is_numeric($_GET['verze'])){
                     </span>
                     <span>
                         <span class="version"><?php echo($article_verze)?>. verze</span><br>
-                        <span class="l2"><?php echo(date_format(date_create($article["datum_verze"]),"j.n.Y"))?></span>
+                        <?php
+                        if($article_verze > 1)
+                            echo("<span class=\"l2\">".date_format(date_create($article["datum_verze"]),"j.n.Y")."</span>");
+                        ?>
                     </span>
                     <span class="state">Stav<br><span class="l2">
                         <?php
