@@ -2,7 +2,6 @@
 // ZMĚNIT PŘI KOPÍROVÁNÍ PROJEKTU
 $base_path = ""; // pro absolutni referenci mezi soubory např. include($base_path."head.php"); 
 // bez předešlých se velice špatně používá relativná obzvláště, když se daná část přidává include (v případě head.php a style.css)
-$ignore = true; // slouzi pro zastaveni odkazovani v indexu, protoze v headu testuji prihlaseni a neprihlaseneho by to na index odkazovalo nekonecnekrat
 require("head.php");
 ?>
 <div id="content">
@@ -11,7 +10,7 @@ require("head.php");
     ?>
     <div id="wrapHelpDeskQuestion">
         <form action="<?php echo $base_path;?>scripty/odeslatHelpdesk.php" class="flex_horizontalne">
-            <textarea name="text"></textarea>
+            <textarea name="text" placeholder="Zde zadejte svůj dotaz" required></textarea>
             <input type="submit">
         </form>
         
@@ -24,9 +23,9 @@ require("head.php");
         require_once($base_path . "db.php");
 
         if($_SESSION["role"] == "redaktor"){
-            $sql = "SELECT id, zprava, jmeno, prijmeni FROM helpdesk NATURAL JOIN uzivatel WHERE id_otazky is NULL";
+            $sql = "SELECT id, zprava, jmeno, prijmeni FROM helpdesk NATURAL JOIN uzivatel WHERE id_otazky is NULL ORDER BY id desc";
         }else{
-            $sql = "SELECT id, zprava, jmeno, prijmeni FROM helpdesk NATURAL JOIN uzivatel WHERE login = ? AND id_otazky is NULL";
+            $sql = "SELECT id, zprava, jmeno, prijmeni FROM helpdesk NATURAL JOIN uzivatel WHERE login = ? AND id_otazky is NULL ORDER BY id desc";
         }
 
         $query = $pdo->prepare($sql);
@@ -49,14 +48,18 @@ require("head.php");
                         echo "<div class=\"odpoved\">" . $fetchedMessage["zprava"] . " - " . $fetchedMessage["jmeno"]. " " . $fetchedMessage["prijmeni"] . "</div>";
                     }else{
                         if($_SESSION["role"] == "redaktor"){
-                            echo "<form action=\"". $base_path . "scripty/odeslatHelpdesk.php\"><input type=\"hidden\" name=\"id\" value=\"". $row["id"] ."\"><textarea name=\"text\" rows=\"1\"></textarea> <input type=\"submit\"></form>";
+                            echo "<form action=\"". $base_path . "scripty/odeslatHelpdesk.php\"><input type=\"hidden\" name=\"id\" value=\"". $row["id"] ."\"><textarea name=\"text\" rows=\"1\" required></textarea> <input type=\"submit\"></form>";
+                        }else{
+                            echo "<div class=\"odpoved\">Dotaz ještě nebyl zodpovězen</div>";
                         }
                     }
                 echo "</div>";
 
             }
         }else{
-            echo "nefuguje to!!!!";
+            echo "<div class=\"wrapotazka\">";
+                echo "Jestě nebyla odeslána žádná otázka";
+            echo "</div>";
         }
         ?>
     </div>

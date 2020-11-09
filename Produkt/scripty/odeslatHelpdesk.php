@@ -3,7 +3,7 @@
     ob_start();
 
     // stahnu si potřebné údaje
-    $zprava = $_REQUEST["text"];
+    $zprava = htmlentities($_REQUEST["text"]);
     $login = $_SESSION[session_id()];
     // pokud byla odeslána odpověď
     if(isset($_REQUEST["id"]))

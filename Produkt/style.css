@@ -161,6 +161,9 @@ footer {
     width: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    height: 100%;
+    margin-bottom: 40px;
 }
 
 .wrapotazka{
@@ -186,6 +189,11 @@ footer {
 
 .wrapotazka .otazka{
     margin-bottom: 10px;
+}
+
+.wrapotazka .odpoved{
+    border-top: 1px #aaa solid;
+    padding-top: 10px;
 }
 
 #wrapHelpDeskQuestion{
