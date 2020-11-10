@@ -8,8 +8,8 @@ $role = "autor";
 // cesta ke kořeni
 $base_path = "../";
 //přidám jQueryUI
-$head_str .= "<script src='ui/jquery-ui.js'></script>";
-$head_str .= "<link rel='stylesheet' href='ui/jquery-ui.css'>";
+$head_str .= "<script src='" . $base_path . "ui/jquery-ui.js'></script>";
+$head_str .= "<link rel='stylesheet' href='" . $base_path . "ui/jquery-ui.css'>";
 // přidám autor-only CSS
 $head_str .= "<link rel='stylesheet' href='autor_style.css'>";
 
