@@ -1,6 +1,8 @@
 <?php
     session_start();
 
+    $base_path = "../";
+
     if(isset($_REQUEST["submit"])) // pokud byl odeslán formulář
     {
         if (!include("../db.php")){ // připojení do DB
@@ -42,8 +44,60 @@
                         exit();
                     }
 
-                    // pokud vše prošlo  přesměruj na index
-                    $_SESSION["error_edit"] = "Úprava proběhla úspěšně!";
+                    if($_FILES["reg_pfp"]['error'] != 4)
+                        {
+                            // zjistím lokaci, kam se fotka nahrála
+                            $tmpFile = $_FILES['reg_pfp']['tmp_name'];
+                            // připravím lokaci, kde se má na konci nacházet
+                            $newFile = '../img/profile_pics/'.$_FILES['reg_pfp']['name'];   
+
+                            $_SESSION["error_edit"] = "test";
+
+                            if(glob($base_path . "img/profile_pics/" . html_entity_decode($_SESSION[session_id()]) . ".*" )){
+                                $_SESSION["error_edit"] = "test";
+                                array_map('unlink', glob($base_path . "img/profile_pics/" . html_entity_decode($_SESSION[session_id()]) . ".*"));
+
+                            }
+
+                            // pokud se úspěšně nahrála
+                            if(is_uploaded_file($_FILES['reg_pfp']['tmp_name']))
+                            {
+                                // přesunu z dočasné složky do složky s profilovými fotkami
+                                // pokud se přesun zadaří
+                                if(move_uploaded_file($tmpFile, $newFile))
+                                {
+                                // zjistím, jakou příponu má obrázek
+                                    $extension = '';
+                                    for($i = 3; $i < strlen($newFile); $i++)
+                                    {
+                                        if($newFile[$i] == '.')
+                                        {
+                                            $extension = substr($newFile, $i, (strlen($newFile) - 1));
+                                            break;
+                                        }
+                                    }
+                                    // přejmenuji přesunutý soubor podle loginu uživatele
+                                    rename($newFile, "../img/profile_pics/" . $raw_login . $extension);
+                                }
+                                else // pokud přesun neprojde
+                                {
+                                    // vygeneruj chybu a vrať uživatele na registraci
+                                    $_SESSION["error_edit"] = "Váš účet byl vytvořen, nepodařilo se však nahrát vaší profilovou fotku.";
+                                    header("Location: ../editProfile.php");
+                                    exit();
+                                }
+                            }
+                            else // pokud se fotku nepodařilo nahrát
+                            {
+                                // vygeneruj error a vrať uživatele na registraci
+                                $_SESSION["error_edit"] = "Váš účet byl vytvořen, nepodařilo se však nahrát vaší profilovou fotku.";
+                                header("Location: ../editProfile.php");
+                                exit(); 
+                            }
+                        }
+
+                    // pokud vše prošlo  , nebo uživatel nenahrál žádnou profilovku - přesměruj na index
+                    $_SESSION["error_edit"] = $_SESSION["error_edit"] . "Úprava proběhla úspěšně!";
                     header("Location: ../editProfile.php");
                     exit();
 

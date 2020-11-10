@@ -4,7 +4,8 @@
         echo "<li> <a href=\"$base_path"."index.php\">Home</a> </li>";
         switch ($_SESSION["role"]) {
             case 'autor':
-                # code...
+                echo "<li> <a href=\"$base_path"."autor/index.php\">Zobrazit články</a> </li>";
+                echo "<li> <a href=\"$base_path"."autor/pridatClanekForm.php\">Vytvořit nový článek</a> </li>";
                 break;
             case 'recenzent':
                 # code...
