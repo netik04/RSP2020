@@ -4,7 +4,8 @@
 $role = "autor";
 
 $base_path = "../"; // cesta ke kořeni
-$head_str = "<link rel=\"stylesheet\" href=\"autor_style.css\">"; // přidám styly pro autora
+// přidám autor-only CSS
+$head_str .= "<link rel='stylesheet' href='autor_style.css'>";
 // přidám hlavičku - zároveň kotrola přihlášení
 require($base_path."head.php");
 ?>
@@ -172,7 +173,7 @@ $("document").ready(function ()
                 var kapacita = result[1];
                 var pocetPrispevku = result[2]; 
                 // vypíšu všechny informace do tabulky   
-                $("#casopis_info").html("<table><tr><th>Počet příspěvků v recenzním řízení</th><th>Kapacita výtisku</th><th>Datum uzávěrky</th></tr>" + 
+                $("#casopis_info").html("<table class='form-table'><tr><th>Počet příspěvků v recenzním řízení</th><th>Kapacita výtisku</th><th>Datum uzávěrky</th></tr>" + 
                 "<tr><td>" + pocetPrispevku + "</td><td>" + kapacita + "</td><td>" + datum + "</td></tr></table>");           
             },
         });       
@@ -194,10 +195,10 @@ $("document").ready(function ()
 ?>
 <fieldset>
 <!-- enctype=multipart/form-data ==> odesílám jak textové údaje, tak soubor -->
-<form action="scripty/pridatClanek.php" method="POST" enctype="multipart/form-data">
+<form action="scripty/pridatClanek.php" id="pridatForm" method="POST" enctype="multipart/form-data">
 <div id="casopis_info"></div>
 <label for="clanekCasopis">Zvolte časopis:</label>
-<select name="clanekCasopis" required>
+<select name="clanekCasopis" id="clanekCasopis" required>
 <option disabled selected value>Vyberte...</option>
 <?php
     try
@@ -228,12 +229,19 @@ $("document").ready(function ()
             echo("<option value=\"" . $id . "\">" . $tema . "</option>");
         }
     }
+    // pokud přidávám specificky novou verzi
+    if(isset($_REQUEST["verzeSubmit"]))
+    {
+        // nastavím pevnou value SELECTu, zakážu vybrání jiného časopisu a předám value do hidden inputu
+        echo("<script>$('#clanekCasopis').val(" . $_REQUEST["clanekCasopis"] . ");$('#clanekCasopis').prop('disabled', true);</script><input type='hidden' name='clanekCasopis' value='" . $_REQUEST["clanekCasopis"] . "'>");
+    }
 ?>
 </select><br />
-<label for="clanekNazev">Název článku: </label><input type="text" name="clanekNazev" required><br />
+<label for="clanekNazev">Název článku: </label><input type="text" name="clanekNazev" id="clanekNazev" <?php 
+if(isset($_REQUEST["verzeSubmit"])){echo("value='" . $_REQUEST["clanekNazev"] . "' readonly='readonly'");}?> required><br />
 <label for="clanekAutor">Autor: </label><input type="text" name="clanekAutor" value="<?php echo($jmeno . " " . $prijmeni); ?>" disabled>
-<button class="add" type="button">Přidat autora</button>
-<button class="remove" type="button">Odebrat pole</button>
+<button class="add" type="button" <?php/* Pokud přidávám specificky verzi - zakážu přidávání autorů */ if(isset($_REQUEST["verzeSubmit"])){echo("disabled");} ?> Přidat autora</button>
+<button class="remove" type="button" <?php/* Pokud přidávám verzi - zakážu odebírání autorů */ if(isset($_REQUEST["verzeSubmit"])){echo("disabled");} ?>Odebrat pole</button>
 <div id="clanekExtraAutor"></div>
 <input type="hidden" value="1" id="clanekPocetAutoru" name="clanekPocetAutoru">
 <label for="clanekSoubor">Nahrát článek:</label><input type="file" name="clanekSoubor" accept=".doc, .docx, .pdf, .odt" required><br />

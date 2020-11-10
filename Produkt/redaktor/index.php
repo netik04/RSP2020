@@ -1,13 +1,15 @@
 <?php
-// ZMĚNIT PŘI KOPÍROVÁNÍ PROJEKTU
-//abs 
-//$base_path = "/home/studaci/public_html/product/development/v0_redaktor/"; // pro absolutni referenci mezi soubory např. include($base_path."head.php"); 
-//$base_url = "https://alpha.kts.vspj.cz/~studaci/product/development/v0_redaktor/"; // pro absolutni referenci url odkazu např. <link src="<?php echo $base_url>style.css">, <a href="<?php echo $base_url>clanky/cl1.pdf">
-// rel
+
+// ROLE KTERÁ MÁ PŘÍSTUP    
+$role = "redaktor";
+
+// ZMĚNIT ABY VŽDY UKAZOVALA DO HLAVNÍ SLOŽKY
 $base_path = "../";
-//$head_str = "<link rel=\"stylesheet\" href=\"../style.css\">";
-// bez předešlých se velice špatně používá relativná obzvláště, když se daná část přidává include (v případě head.php a style.css)
+
 $head_str = "<link rel=\"stylesheet\" href=\"redaktor_style.css\">";
+$head_str .= "<script src=\"scripty/js/prijmuti_clanku.js\"></script>";
+$head_str .= "<script src=\"scripty/js/zobraz_form_recenzenti.js\"></script>";
+$head_str .= "<script src=\"scripty/js/prirazeni_recenzentu.js\"></script>";
 
 require($base_path."head.php");
 ?>
@@ -33,13 +35,13 @@ require($base_path."head.php");
 
         while($article = $stmt->fetch(PDO::FETCH_ASSOC)){
         ?>
-            <div class="article">
-                <a class="left" href="clanek.php/?id=<?php echo($article["id"])?>">
+            <div class="article" id="<?php echo($article["id"])?>">
+                <a class="left" href="clanek?id=<?php echo($article["id"])?>">
                     <div class="title"
                         <?php //ošetření délky názvu
-                            if (strlen($article["nazev"]) > 50) {
+                            if (strlen($article["nazev"]) > 70) {
                                 echo(" title=\"".$article["nazev"]."\">"); //on hover vypíše celý název
-                                $stringCut = substr($article["nazev"], 0, 50);
+                                $stringCut = substr($article["nazev"], 0, 70);
                                 $endPoint = strrpos($stringCut, ' '); 
                                 echo(($endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0))."..."); // vypíše useknutou část do poslední mezery
                             } else echo(">".$article["nazev"]);
@@ -51,7 +53,7 @@ require($base_path."head.php");
                             <span class="date"><?php echo(date_format(date_create($article["datum"]),"j.n.Y"))?></span>
                         </span>
                         <span class="version"><?php echo($article["verze"])?>. verze</span>
-                        <span class="state">Aktuální stav: <?php echo($article["stav_redaktor"])?></span>
+                        <span class="state">Stav: <?php echo($article["stav_redaktor"])?></span>
                     </div>
                 </a>
                 <div class="control">
@@ -60,17 +62,22 @@ require($base_path."head.php");
                         <?php
                             switch($article["stav_redaktor"]){
                                 case "Nově podaný":
-                                    echo("<script src=\"".$base_path."scripty/js/prijmuti_clanku.js\"></script>
-                                        <form action=\"\" method=\"POST\">
-                                            <input type=\"hidden\" name=\"id\" value=\"".$article["id"]."\">
-                                            <input type=\"submit\" value=\"Přijmout\">
-                                        </form>");
+                                    echo("<button class=\"a_new\" page=\"redaktor\" cl_id=\"".$article["id"]."\" cl_ver=\"".$article["verze"]."\">Přijmout</button>");
                                 break;
                                 case "Čeká na stanovení recenzentů":
-                                    echo("<a class=\"accept button\">Stanovit recenzenty</a>");
+                                    echo("<button class=\"a_setR\" page=\"redaktor\" cl_id=\"".$article["id"]."\" cl_ver=\"".$article["verze"]."\">Stanovit recenzenty</button>");
+                                break;
+                                case "Probíhá recenzní řízení";
+                                case "1. posudek doručen redakci":
+                                case "2. posudek doručen redakci":
+                                case "Posudky odeslány autorovi":
+                                case "Probíhá úprava textu autorem":
+                                case "Příspěvek je přijat k vydání":
+                                case "Příspěvek zamítnut":
+                                    //echo("<a href=\"clanek?id=".$article["id"].")\">Zobrazit posudky</a>");
+                                    echo("<script>$('.article#".$article["id"]." .accept').hide()</script>");
                                 break;
                             }
-                        
                         ?>
                     </span><?php
                     ?><a class="open button" href="clanek.php?id=<?php echo($article["id"])?>">Otevřít detail</a>

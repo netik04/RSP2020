@@ -16,15 +16,16 @@
     font-size: 1.15rem;
 }
 
-.redaktor .article .title a{
+.redaktor .article a{
     text-decoration: none;
+    color: #fff;
 }
 
 .redaktor .article .left{
-    -webkit-box-flex:1;
-    -webkit-flex:1 1 auto;
-    -ms-flex:1 1 auto;
-    flex:1 1 auto;
+    -webkit-box-flex:2;
+    -webkit-flex:2 1 auto;
+    -ms-flex:2 1 auto;
+    flex:2 1 auto;
 
     padding: 1rem;
 
@@ -66,40 +67,131 @@
     -webkit-flex:1 1 auto;
     -ms-flex:1 1 auto;
     flex:1 1 auto;
-    max-width: 450px;
+    /*max-width: 33rem;*/
     padding: 1rem;
     
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
 
-    /* rovnoměrné rozložení */
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
+    /* rovnoměrné rozložení - už ne */
+    -webkit-box-pack: flex-start;
+    -ms-flex-pack: flex-start;
+    justify-content: flex-start;
 
     /* vertical center */
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
 
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
+    /*-ms-flex-wrap: wrap;
+    flex-wrap: wrap;*/
 
     gap: 1rem;
-
-    
 }
-
-
 
 
 .redaktor .article .control .button{
     /*margin-left: 10px;*/
-    padding: 1rem 1rem;
+    padding: 1rem;
+    font-size: 1.15rem;
+}
+
+.redaktor .article .control .accept,
+.redaktor .article .control .deny,
+.redaktor .article .control .release {
+    padding: 0;
+}
+
+.redaktor .article .control button{
+    /*display: inline;*/
+    background-color: transparent;
+    border: 0;
+    padding: 1rem;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.15rem;
+}
+
+.redaktor .article .control .accept a{
+    display: inline-block;
+    padding: 1rem;
+}
+
+/* STANOVENI RECENZENTU */
+#set_recenzenty{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+
+    background-color: rgba(0,0,0,0.4);
+
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+
+    /* horizontal center */
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    
+    /* vertical center */
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+
+}
+
+#set_recenzenty form{
+    display: block;
+    border: 1px solid #555;
+    /*-webkit-box-shadow: 0 0 20px 20px #000;
+    box-shadow: 0 0 40px 0 #000;*/
+    padding: 1rem;
+    background-color: #222;
+    max-width: 400px;
+    height: 400px;
 }
 
 /*
-.redaktor .article .control .button:first-child{
-    margin-left: 0;
-}*/
+* DETAIL ČLÁNKU REDAKTORA
+*/
+
+.redaktor.clanek .article{
+    font-size: 1.3rem;
+    display: block;
+}
+
+.redaktor.clanek .article .info{
+    -webkit-box-align: flex-start;
+    -ms-flex-align: flex-start;
+    align-items: flex-start;
+
+    padding: 1rem;
+    width: 100%;
+
+    gap: 3rem;
+}
+
+.redaktor.clanek .article .info .l2{
+    font-size: 1rem;
+}
+
+.redaktor.clanek .article .info .state .l2{
+    font-size: 1.1rem;
+}
+
+.back_button{
+    display: inline-block;
+    background-color: #555;
+    padding: .5rem;
+    margin-bottom: 1rem;
+    text-decoration: none;
+    color: #fff;
+}
+.back_button:hover{
+    background-color: #666;
+}
