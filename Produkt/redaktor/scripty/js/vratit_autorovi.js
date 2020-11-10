@@ -1,4 +1,4 @@
-$(document).on("submit", "#message_box form", function (event) {
+$(document).on("submit", "#message_box form.a_return", function (event) {
   event.preventDefault();
 
   var formData = {
@@ -32,11 +32,13 @@ $(document).on("submit", "#message_box form", function (event) {
 
       } else {
         alert("Nepodařilo se vrátit článek k úpravám :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
-        location.reload();
+        //location.reload();
       }
 
     }).fail(function(){
       alert("Nepodařilo se vrátit článek k úpravámy :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
+      //location.reload();
+    }).always(function(){
       location.reload();
     });
   }

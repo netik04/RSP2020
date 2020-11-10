@@ -8,7 +8,7 @@ $(document).on("click", ".popbox", function(e) {
 });
 
 
-$(document).on("click", "button.a_return", function () {
+$(document).on("click", "button.a_return, button.a_deny", function () {
   var id = $(this).attr('cl_id');
   var verze = $(this).attr('cl_ver');
 
@@ -17,9 +17,17 @@ $(document).on("click", "button.a_return", function () {
     else
       $('#message_box').show();
 
+    if($(this).attr('class') == "a_return"){
+      var action = "scripty/vratit_autorovi.php";
+      var title = "Důvod vrácení k úpravě";
+    }
+    else if($(this).attr('class') == "a_deny"){
+      var action = "scripty/zamitnuti_clanku.php";
+      var title = "Důvod zamítnutí";
+    }
     $('#message_box').html(
-      "<form action=\"scripty/vratit_autorovi.php\" method=\"POST\">" +
-        "<div class=\"title\">Důvod vrácení k úpravě</div>" +
+      "<form class=\""+$(this).attr('class')+"\" action=\""+action+"\" method=\"POST\">" +
+        "<div class=\"title\">"+title+"</div>" +
         "<textarea name=\"duvod\" placeholder=\"Důvod&hellip;\"></textarea>" +
         "<input name=\"id\" type=\"hidden\" value=\"" + id + "\">" +
         "<input name=\"verze\" type=\"hidden\" value=\"" + verze + "\">" +

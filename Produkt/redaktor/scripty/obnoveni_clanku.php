@@ -84,11 +84,30 @@ if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && require($base_path."d
         $stmt->execute($data);
         if($stmt->rowCount() == 1)
             echo($new_state);
-        else
+        else{
             echo(0);
+            $pdo = null;
+            die();
+        }
     }
     catch(PDOException $e){
         echo(0);
+        $pdo = null;
+        die();
+        //echo($e);
+    }
+
+    $sql = "DELETE FROM zprava ".
+        "WHERE id_clanku = :id AND verze = :verze AND duvod = 2";
+
+
+    $stmt = $pdo->prepare($sql);
+
+    try{
+        $stmt->execute($data);
+    }
+    catch(PDOException $e){
+        //echo(0);
         //echo($e);
     }
     $pdo = null;

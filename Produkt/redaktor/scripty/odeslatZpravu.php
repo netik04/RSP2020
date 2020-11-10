@@ -5,7 +5,7 @@ if(require($base_path . "scripty/jePrihlasen.php")){
     $id = $_REQUEST["id"];
     $verze = $_REQUEST["verze"];
     $interni = $_REQUEST["interni"];
-    $message = $_REQUEST["message"];
+    $message = htmlentities($_REQUEST["message"], ENT_QUOTES | ENT_HTML5, "UTF-8");
     date_default_timezone_set("Europe/Prague");
     $datetime = date("Y-m-d H:i:s");
 
@@ -17,14 +17,14 @@ if(require($base_path . "scripty/jePrihlasen.php")){
             $query->execute($params);
         }catch(Exception $e){
             $_SESSION["errorMessage"] = $e->getMessage();
-            header("Location:" . $base_path. "redaktor/messages.php");
+            header("Location:" . $base_path. "redaktor/clanek.php?id=" . $id . "&verze=" . $verze);
             die();
         }
-        header("Location:" . $base_path. "redaktor/messages.php");
+        header("Location:" . $base_path. "redaktor/clanek.php?id=" . $id . "&verze=" . $verze);
         die();
     }else{
         $_SESSION["errorMessage"] = "Nepodarilo se prihlasit k databazi";
-        header("Location:" . $base_path. "redaktor/messages.php");
+        header("Location:" . $base_path. "redaktor/clanek.php?id=" . $id . "&verze=" . $verze);
         die();
     }
 }

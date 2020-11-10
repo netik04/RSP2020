@@ -215,6 +215,93 @@ if(is_numeric($_GET['verze'])){
                 ?>
             </div>
 
+                <div class="article">
+                    <div id="messageWrap">
+                        <div id="messagesMenu">
+                            <button id="interni" class="button">Redakce</button>
+                            <button id="autorsky" class="button">Autor</button>
+                        </div>
+                        <div id="messageBox">
+                        </div>
+                        <form id="messageSender" action="scripty/odeslatZpravu.php">
+                                <input type="hidden" name="id" value="<?php echo $article_id?>">
+                                <input type="hidden" name="verze" value="<?php echo $article_verze?>">
+                                <input type="hidden" id="inter" name="interni" value="1">
+                                <input type="text" name="message" id="message" required>
+                                <input type="submit" name="odeslatZpravu" value="Odeslat">
+                        </form>
+                        <div id="errorMessage"><?php echo $_SESSION["errorMessage"]; unset($_SESSION["errorMessage"]); ?></div>
+                    </div>
+                </div>
+
+                <script>
+                    $(document).ready(function(){
+                        $(function() {
+                            var interni = <?php if(!isset($_SESSION["interni"])) $_SESSION["interni"]=1; echo $_SESSION["interni"]; ?>;
+                            if(interni == 1){
+                                $('#interni').click();
+                            }else{
+                                $('#autorsky').click();
+                            }
+                            
+                        });
+                        $(".button").click(function(){
+                            if($(this).attr("id") == "interni"){
+                                interni = 1;
+                                $("#inter").val(1);
+                                $("#autorsky").removeClass("active");
+                                $("#interni").addClass("active");
+                                $.ajax('scripty/zapisSessionInterni.php', {
+                                    type: 'POST',  // http method
+                                    data: { 
+                                        interni: interni
+                                    },  // data to submit
+                                    success: function (data) {
+                                            
+                                    },
+                                    error: function (errorMessage) {
+                                        $('#errorMessage').text('Error' + errorMessage);
+                                    }
+                                });
+                            }else{
+                                interni = 0;
+                                $("#inter").val(0);
+                                $("#interni").removeClass("active");
+                                $("#autorsky").addClass("active");
+                                $.ajax('scripty/zapisSessionInterni.php', {
+                                    type: 'POST',  // http method
+                                    data: { 
+                                        interni: interni
+                                    },  // data to submit
+                                    success: function (data) {
+
+                                    },
+                                    error: function (errorMessage) {
+                                        $('#errorMessage').text('Error' + errorMessage);
+                                    }
+                                });
+                            }
+
+                            $.ajax('scripty/zobrazZpravy.php', {
+                                type: 'POST',  // http method
+                                data: { 
+                                    article_id: <?php echo $article_id ?>,
+                                    article_verze: <?php echo $article_verze ?>,
+                                    interni: interni
+                                },  // data to submit
+                                success: function (data) {
+                                    $('#messageBox').html(data);
+                                    var objDiv = document.getElementById("messageBox");
+                                    objDiv.scrollTop = objDiv.scrollHeight;
+                                },
+                                error: function (errorMessage) {
+                                    $('#errorMessage').text('Error' + errorMessage);
+                                }
+                            });
+                        });
+                    });
+                </script>
+
     <?php } } ?>
 
 </div>

@@ -87,7 +87,7 @@ require($base_path."head.php");
         </script>
         <?php
         
-        $sql = "SELECT cl.id_clanku AS id, nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, datum_uzaverky, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
+        $sql = "SELECT cl.id_clanku AS id, nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, datum_uzaverky, tema, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
             JOIN casopis ON cl.id_casopisu = casopis.id_casopisu
             JOIN pise ON cl.id_clanku = pise.id_clanku
             JOIN uzivatel ON pise.login = uzivatel.login
@@ -110,7 +110,7 @@ require($base_path."head.php");
         while($article = $stmt->fetch(PDO::FETCH_ASSOC)){
             //$lastUzaverka = $article['datum_uzaverky'];
             if($lastUzaverka != $article['datum_uzaverky']){
-                echo("<div class=\"casopis\">Uzávěrka ".date_format(date_create($article["datum_uzaverky"]),"j.n.Y")."</div>");
+                echo("<div class=\"casopis\">Uzávěrka: ".date_format(date_create($article["datum_uzaverky"]),"j.n.Y")." | Téma: ".$article["tema"]."</div>");
                 $lastUzaverka = $article['datum_uzaverky'];
             }
         ?>

@@ -58,40 +58,43 @@
         
     }
 
+    .article .button.active{
+        display: inline-block;
+        color: #fff;
+        padding: 5px 10px;
+        text-decoration: none;
+        background-color: #777;
+        border: 1px solid #aaa;
+    }
+
+    .article .button.active:hover{
+        background-color: #777;
+        border: 1px solid #aaa;
+    }
+
     </style>";
     require($base_path."head.php");
-    require($base_path."db.php")
+    
 ?>
+
+
 <div id="content" class="redaktor">
     <?php
         $article_id = 1;
         $article_verze = 1;
-
-        $query = $pdo->prepare("SELECT text_zpravy, datum_cas, login, jmeno, prijmeni FROM zprava NATURAL JOIN uzivatel WHERE id_clanku = ? AND verze = ? AND interni = true AND duvod = FALSE");
-        $params = array($article_id, $article_verze);
-        $query->execute($params);
     ?>
     <div class="article">
         <div id="messageWrap">
+            <div id="messagesMenu">
+                <button id="interni" class="button">Redakce</button>
+                <button id="autorsky" class="button">Autor</button>
+            </div>
             <div id="messageBox">
-                <?php
-                    if($query->rowCount() > 0){
-                        while($row = $query->fetch(PDO::FETCH_ASSOC))
-                        {
-                            if($row['login'] == $_SESSION[session_id()]){
-                                echo "<div class = \"message userMessage\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" . $row["text_zpravy"] . "</span></div>";
-                            }else{
-                                echo "<div class = \"message\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" . $row["text_zpravy"] . "</span> <span class=\"messagerName\">" . $row["jmeno"] . " " . $row["prijmeni"] . "</span></div>";
-                            }
-                            
-                        }
-                    }
-                ?>
             </div>
             <form id="messageSender" action="scripty/odeslatZpravu.php">
                     <input type="hidden" name="id" value="<?php echo $article_id?>">
                     <input type="hidden" name="verze" value="<?php echo $article_verze?>">
-                    <input type="hidden" name="interni" value=1>
+                    <input type="hidden" id="inter" name="interni" value="1">
                     <input type="text" name="message" id="message">
                     <input type="submit" name="odeslatZpravu" value="Odeslat">
             </form>
@@ -101,10 +104,71 @@
 </div>
 
 <script>
-    window.onload=function () {
-     var objDiv = document.getElementById("messageBox");
-     objDiv.scrollTop = objDiv.scrollHeight;
-}
+    $(document).ready(function(){
+        $(function() {
+            var interni = <?php if(!isset($_SESSION["interni"])) $_SESSION["interni"]=1; echo $_SESSION["interni"]; ?>;
+            if(interni == 1){
+                $('#interni').click();
+            }else{
+                $('#autorsky').click();
+            }
+            
+        });
+        $(".button").click(function(){
+            if($(this).attr("id") == "interni"){
+                interni = 1;
+                $("#inter").val(1);
+                $("#autorsky").removeClass("active");
+                $("#interni").addClass("active");
+                $.ajax('scripty/zapisSessionInterni.php', {
+                    type: 'POST',  // http method
+                    data: { 
+                        interni: interni
+                    },  // data to submit
+                    success: function (data) {
+                            
+                    },
+                    error: function (errorMessage) {
+                        $('#errorMessage').text('Error' + errorMessage);
+                    }
+                });
+            }else{
+                interni = 0;
+                $("#inter").val(0);
+                $("#interni").removeClass("active");
+                $("#autorsky").addClass("active");
+                $.ajax('scripty/zapisSessionInterni.php', {
+                    type: 'POST',  // http method
+                    data: { 
+                        interni: interni
+                    },  // data to submit
+                    success: function (data) {
+
+                    },
+                    error: function (errorMessage) {
+                        $('#errorMessage').text('Error' + errorMessage);
+                    }
+                });
+            }
+
+            $.ajax('scripty/zobrazZpravy.php', {
+                type: 'POST',  // http method
+                data: { 
+                    article_id: <?php echo $article_id ?>,
+                    article_verze: <?php echo $article_verze ?>,
+                    interni: interni
+                },  // data to submit
+                success: function (data) {
+                    $('#messageBox').html(data);
+                    var objDiv = document.getElementById("messageBox");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                },
+                error: function (errorMessage) {
+                    $('#errorMessage').text('Error' + errorMessage);
+                }
+            });
+        });
+    });
 </script>
 
 <?php require($base_path."foot.php"); $pdo = null; ?>

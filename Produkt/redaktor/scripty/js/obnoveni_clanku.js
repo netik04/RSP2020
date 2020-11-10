@@ -79,7 +79,7 @@ $(document).on("click", "button.a_undeny", function () {
 
   })
   .fail(function() {
-    alert("Nepodařilo se zrušit zamítnutí článeku :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
+    alert("Nepodařilo se zrušit zamítnutí článku :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
     location.reload();
   })
   .always(function() {

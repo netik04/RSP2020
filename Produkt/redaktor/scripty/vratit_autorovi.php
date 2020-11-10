@@ -4,8 +4,6 @@ $base_path = "../../";
 session_start();
 
 
-//echo("id: ".$_SESSION[session_id()]."<br>");
-
 if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && isset($_REQUEST["duvod"])
     && isset($_SESSION[session_id()]) && require($base_path."db.php")) {
     
