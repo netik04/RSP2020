@@ -74,7 +74,7 @@ else
             $verze = $radek["verze"]; // verzi článku
             $stav_autor = $radek["stav_autor"]; // jaký stav zobrazit autorovi
             $nazev = $radek["nazev"]; // název článku
-            $datum = $radek["datum"]; // datum vytvoření verze článku
+            $datum = date("j.m.yy", strtotime($radek["datum"]));
             $cesta = $radek["cesta"]; // cestu ke článku
             $tema = $radek["tema"]; // do jakého časopisu byl článek odeslán
             $id_casopisu = $radek["id_casopisu"]; // id časopisu - pro pozdější práci s verzemi
@@ -87,15 +87,7 @@ else
             {
                 // jedná se pouze o verzi - vypíšu info k verzi do již existující sekce accordionu
                 echo("<tr>");
-                echo("<td>" . $verze . "</td><td>" . $stav_autor . "</td><td>" . $datum . "</td><td><a href='" . $base_path . $cesta . "' target='_blank'><button type='button' class='zobrazit'>Zobrazit</button></a></td>");
-                // pokud byla verze vrácena k úpravě a neexistuje nová verze
-                if(($stav_autor == "Vráceno k úpravě") && ($stav_redaktor != "Existuje nová verze"))
-                {
-                    // autor má možnost vytvořit novou verzi - zobrazím příslušný 'formulář'
-                    echo("<td><form action='pridatClanekForm.php' method='POST'><input type='hidden' name='clanekNazev' value='" . $nazev . "'>");
-                    echo("<input type='hidden' name='clanekCasopis' value='" . $id_casopisu . "'>");
-                    echo("<input class='nova_verze' type='submit' name='verzeSubmit' value='Vytvořit novou verzi'></form></td>");
-                } 
+                echo("<td>" . $verze . "</td><td>" . $stav_autor . "</td><td>" . $datum . "</td><td><a href='zobrazitClanek.php?id=" . $id_clanku . "&verze=" . $verze . "'><button type='button' class='zobrazit'>Zobrazit detail</button></a></td>");                 
                 echo("</tr>");
             }
             // pokud se id nerovná tmp - jedná se o další článek
@@ -110,19 +102,11 @@ else
                 // pomocná proměnná bude nové id článku
                 $tmp = $id_clanku;
                 // zobrazím hlavičku nové sekce accordionu (název článku a téma časopisu)
-                echo("<h1>Název: <span class='nazev'>" . $nazev . "</span><span class='tema'>Téma: " . $tema . "</span></h1>");
+                echo("<h1><span class='nazev'>" . $nazev . "</span><span class='tema'>Téma: " . $tema . "</span></h1>");
                 // vypíšu obsah sekce
                 echo("<div><table class='acc-table' cellspacing='0'><tr>");
                 echo("<th>Verze článku</th><th>Stav verze</th><th>Datum nahrání verze</th><th>Možnosti</th></tr><tr>");
-                echo("<td>" . $verze . "</td><td>" . $stav_autor . "</td><td>" . $datum . "</td><td><a href='" . $base_path . $cesta . "' target='_blank'><button type='button' class='zobrazit'>Zobrazit</button></a></td>");
-                // pokud byla verze vrácena k úpravě a neexistuje nová verze
-                if(($stav_autor == "Vráceno k úpravě") && ($stav_redaktor != "Existuje nová verze"))
-                {
-                    // autor má možnost vytvořit novou verzi - zobrazím příslušný 'formulář'
-                    echo("<td><form action='pridatClanekForm.php' method='POST'><input type='hidden' name='clanekNazev' value='" . $nazev . "'>");
-                    echo("<input type='hidden' name='clanekCasopis' value='" . $id_casopisu . "'>");
-                    echo("<input class='nova_verze' type='submit' name='verzeSubmit' value='Vytvořit novou verzi'></form></td>");
-                }
+                echo("<td>" . $verze . "</td><td>" . $stav_autor . "</td><td>" . $datum . "</td><td><a href='zobrazitClanek.php?id=" . $id_clanku . "&verze=" . $verze . "'><button type='button' class='zobrazit'>Zobrazit detail</button></a></td>");
                 echo("</tr>");
             }       
         }

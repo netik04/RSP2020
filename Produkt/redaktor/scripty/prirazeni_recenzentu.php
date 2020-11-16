@@ -21,7 +21,7 @@ if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && isset($_REQUEST["uzav
     $sql1 = "INSERT INTO posudek (id_clanku, verze, datum_uzaverky, login_recenzenta) VALUES".
         "(:id, :verze, :uzaverka, :r1),".
         "(:id, :verze, :uzaverka, :r2);";
-    $sql2 = "UPDATE verze SET stav_redaktor = 'Probíhá recenzní řízení' WHERE id_clanku = :id AND verze = :verze";
+    $sql2 = "UPDATE verze SET stav_redaktor = 'Probíhá recenzní řízení', stav_autor = 'Předáno recenzentům' WHERE id_clanku = :id AND verze = :verze";
 
 
     $success = 1;
@@ -34,7 +34,7 @@ if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && isset($_REQUEST["uzav
     }
     catch(PDOException $e){
         $success = 0;
-        echo($e);
+        //echo($e);
     }
 
     if($success){
@@ -46,7 +46,7 @@ if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && isset($_REQUEST["uzav
         }
         catch(PDOException $e){
             $success = 0;
-            echo($e);
+            //echo($e);
         }
     }
     echo($success);

@@ -2,9 +2,8 @@
 $base_path = "../../";
 
 if (require($base_path . "db.php")) {
-    $stmt = $pdo->query("SELECT login, jmeno, prijmeni FROM uzivatel WHERE role = \"recenzent\"");
-
     try {
+        $stmt = $pdo->query("SELECT login, jmeno, prijmeni FROM uzivatel WHERE role = \"recenzent\"");
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo(json_encode($result));
     } catch (PDOException $e) {

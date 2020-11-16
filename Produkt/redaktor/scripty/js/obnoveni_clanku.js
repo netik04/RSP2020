@@ -15,27 +15,60 @@ $(document).on("click", "button.a_undeny", function () {
     if(data > 0){
       if(data == 1){
         $('.info .state').html("Stav<br><span class=\"l2\">Čeká na stanovení recenzentů</span>");
-        $('.control .accept')
+        
+        $('.a_undeny')
+          .text("Stanovit recenzenty")
+          .attr({class: 'a_setR', page: 'clanek'});
+
+        $('.a_setR')
+          .after("<button class=\"a_deny\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Zamítnout</button>");
+
+        if(inData['verze'] > 1)
+          $('.a_setR')
+            .after("<button class=\"a_release\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Přijmout k vydání</button>");
+        
+        $('.a_setR')
+          .after("<button class=\"a_return\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Vrátit k úpravám</button>");
+  
+        
+        /*$('.control .accept')
         .html("<button class=\"a_setR\" page=\"clanek\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Stanovit recenzenty</button>");
+        */
       }
       else if(data == 2){
         $('.info .state').html("Stav<br><span class=\"l2\">Probíhá recenzní řízení</span>");
-        $('.control .accept').hide();
+        $('.a_undeny').remove();
+
+        //$('.control .accept').hide();
       }
       else if(data == 3){
         $('.info .state').html("Stav<br><span class=\"l2\">1. posudek doručen redakci</span>");
-        $('.control .accept').hide();
+        $('.a_undeny').remove();
+        
+        //$('.control .accept').hide();
       }
       else if(data == 4){
-        $('.info .state').html("Stav<br><span class=\"l2\">2. posudek doručen redakci</span>");
-        $('.control .accept').hide();
-        $('.control .release')
-          .html("<button cl_id=\"" + inData['id'] + "\" cl_ver=\"" + inData['verze'] + "\">Přijmout k vydání</button>");
-        $('.control .release').show();
+        $('.info .state').html("Stav<br><span class=\"l2\">Posudky odeslány autorovi</span>");
+        
+        $('.a_undeny')
+          .text("Vrátit k úpravám")
+          .attr({class: 'a_return'});
+
+        $('.a_return')
+          .after("<button class=\"a_deny\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Zamítnout</button>");
+
+        $('.a_return')
+          .after("<button class=\"a_release\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Přijmout k vydání</button>");
+        
+      }
+      else if(data == 5){
+        $('.info .state').html("Stav<br><span class=\"l2\">Probíhá úprava textu autorem</span>");
+        
+        $('.a_undeny')
+          .text("Zamítnout")
+          .attr('class', 'a_deny');
       }
 
-      $('.control .deny').html("<button class=\"a_deny\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Zamítnout</button>");
-      $('.control .deny').show();
 
     } else {
       alert("Nepodařilo se zrušit zamítnutí článku :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
@@ -46,10 +79,10 @@ $(document).on("click", "button.a_undeny", function () {
 
   })
   .fail(function() {
-    alert("Nepodařilo se zrušit zamítnutí článeku :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
+    alert("Nepodařilo se zrušit zamítnutí článku :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
     location.reload();
   })
   .always(function() {
-    $('button.a_undeny').blur();
+    $('button').blur();
   });
 });

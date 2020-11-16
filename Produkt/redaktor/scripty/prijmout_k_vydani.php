@@ -7,7 +7,7 @@ if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && require($base_path."d
         'verze' => $_REQUEST["verze"]
     ];
 
-    $sql = "UPDATE verze SET stav_redaktor = 'Příspěvek je přijat k vydání' WHERE id_clanku = :id AND verze = :verze";
+    $sql = "UPDATE verze SET stav_redaktor = 'Příspěvek je přijat k vydání', stav_autor = 'Schváleno' WHERE id_clanku = :id AND verze = :verze";
 
     $stmt = $pdo->prepare($sql);
 

@@ -13,11 +13,11 @@ $(document).on("click", "button.a_setR", function () {
   .done(function (data) {
     if (data) {
       if($('#set_recenzenty').length < 1)
-        $("#page").prepend("<div id=\"set_recenzenty\"></div>");
+        $("#page").prepend("<div id=\"set_recenzenty\" class=\"popbox\"></div>");
       else
         $('#set_recenzenty').show();
 
-      var htmlStr = "<option value=\"null\"></option>";
+      var htmlStr = "<option value=\"\"></option>";
 
       $.each(data, function (index, val) {
         //console.log(val["login"] + ": " + val['jmeno'] + " " + val['prijmeni']);
@@ -37,6 +37,7 @@ $(document).on("click", "button.a_setR", function () {
 
       $('#set_recenzenty').html(
         "<form action=\"scripty/prirazeni_recenzentu.php\" method=\"POST\">" +
+          "<div class=\"title\">Stanovit recenzenty</div>" +
           "<label for=\"recenzent1\">1. recenzent: </label>" +
           "<select name=\"recenzent1\">" + htmlStr +
           "<br><label for=\"recenzent2\">2. recenzent: </label>" +
@@ -46,6 +47,7 @@ $(document).on("click", "button.a_setR", function () {
           "<input name=\"id\" type=\"hidden\" value=\"" + id + "\">" +
           "<input name=\"verze\" type=\"hidden\" value=\"" + verze + "\">" +
           "<br><input type=\"submit\" value=\"Přiřadit\">" +
+          "<br><br><span class=\"error\"></span>" +
         "</form>"
       );
     } else {
@@ -60,3 +62,15 @@ $(document).on("click", "button.a_setR", function () {
   })
   .always(function() {$('button.a_setR').blur();});
 });
+/*
+$(document).on("click", "#set_recenzenty", function(e) 
+{
+    var container = $("#set_recenzenty form");
+
+    // if the target of the click isn't the container nor a descendant of the container
+    if (!container.is(e.target) && container.has(e.target).length === 0) 
+    {
+      $('#set_recenzenty').hide();
+      $('#set_recenzenty').html('');
+    }
+});*/

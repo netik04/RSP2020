@@ -68,3 +68,51 @@ label
 {
     height: 30px;
 }
+
+.detail_tabulka
+{
+    padding: 10px;
+}
+
+.detail_tabulka th
+{
+    padding-left: 10px;
+    padding-right: 10px; 
+    font-size: 1.25rem;
+}
+
+.detail_tabulka td
+{
+    font-size: 1.25rem;
+}
+
+.autor_posudek
+{
+    margin: auto;
+}
+
+.autor_posudek td
+{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border: 1px solid white;
+}
+
+.autor_posudek th
+{
+    padding: 5px;
+    border: 1px solid white;
+}
+
+.autor_posudek button
+{
+    padding: 10px;
+}
+
+.info_tlacitka
+{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}

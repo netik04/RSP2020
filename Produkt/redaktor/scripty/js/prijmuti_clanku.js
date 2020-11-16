@@ -28,18 +28,34 @@ $(document).on("click", "button.a_accept", function () {
   .done(function (data) {
     if(data == 1){
       if(page === "redaktor"){
-        $('.article#'+inData['id']+' .accept')
-          .html("<button class=\"a_setR\" page=\"redaktor\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Stanovit recenzenty</button>");
+        $('.article#'+inData['id']+' button.a_accept')
+          .text("Stanovit recenzenty")
+          .attr('class', 'a_setR');
+          
+          //.html("<button class=\"a_setR\" page=\"redaktor\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Stanovit recenzenty</button>");
         $('.article#'+inData['id']+' .state')
           .text('Stav: Čeká na stanovení recenzentů');
       }
       else if(page === "clanek"){
-        $('.control .accept')
-          .html("<button class=\"a_setR\" page=\"clanek\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Stanovit recenzenty</button>");
+        $('.a_accept')
+          .text("Stanovit recenzenty")
+          .attr('class', 'a_setR');
+        /*$('.control .accept')
+          .html("<button class=\"a_setR\" page=\"clanek\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Stanovit recenzenty</button>");*/
         $('.info .state')
           .html("Stav<br><span class=\"l2\">Čeká na stanovení recenzentů</span>");
-        $('.control .deny').html("<button class=\"a_deny\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Zamítnout</button>");
-        $('.control .deny').show();
+
+        $('.a_setR').after("<button class=\"a_deny\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Zamítnout</button>");
+          /*$('.control .deny').html("<button class=\"a_deny\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Zamítnout</button>");
+        $('.control .deny').show();*/
+
+        if(inData['verze'] > 1)
+          $('.a_setR')
+            .after("<button class=\"a_release\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Přijmout k vydání</button>");
+      
+          $('.a_setR')
+            .after("<button class=\"a_return\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Vrátit k úpravám</button>");
+  
       }
 
     } else {
@@ -55,6 +71,6 @@ $(document).on("click", "button.a_accept", function () {
     location.reload();
   })
   .always(function() {
-    $('button.a_accept').blur();
+    $('button.a_setR').blur();
   });
 });

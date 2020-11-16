@@ -2,19 +2,82 @@
 *  REDAKTOR
 */
 
+.redaktor #filter{
+    background-color: #444;
+    padding: .3rem 0;
+    border-radius: 5px;
+}
+
+.redaktor option:checked{
+    display: none;
+}
+
+.redaktor #filter form{
+    display: inline-block;
+    margin: .2rem 0;
+    padding: 0 .5rem;
+}
+
+.redaktor #filter form:first-child{
+    border-right: 1px solid #666;
+    padding-right: .5rem;
+}
+
+.redaktor #filter form:nth-child(2){
+    padding: 0 .5rem;
+    border-right: 1px solid #666;
+}
+
+.redaktor #filter button, .redaktor #filter input[type=submit]{
+    padding: 0 5px;
+    height: 22px;
+}
+
+.redaktor #filter button{
+    margin: .2rem 0;
+    margin-left: .5rem;
+    /*border: 0;*/
+}
+
+.redaktor #filter select, .redaktor #filter input[type=text]{
+    /*border: 0;*/
+    padding: 0 2px;
+    height: 22px;
+}
+
+.redaktor #filter select{
+    width: 10rem;
+}
+
+.redaktor .casopis{
+    font-size: 1.1rem;
+    margin: 1rem 0 -.5rem;
+    border-bottom: 1px solid #444;
+}
+
 .redaktor .article{
+    position: relative;
     margin: 1rem 0;
     padding: 0;
 
-    display: -webkit-box;
+    border-radius: 5px;
+
+    /*display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
 
     -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
+    flex-wrap: wrap;*/
 
     font-size: 1.15rem;
 }
+
+.redaktor .article:after{
+    display: table;
+    clear: both;
+    content: "";
+}
+
 
 .redaktor .article a{
     text-decoration: none;
@@ -22,10 +85,16 @@
 }
 
 .redaktor .article .left{
-    -webkit-box-flex:2;
+    /*-webkit-box-flex:2;
     -webkit-flex:2 1 auto;
     -ms-flex:2 1 auto;
-    flex:2 1 auto;
+    flex:2 1 auto;*/
+
+    display: block;
+
+    width: auto;
+    overflow: hidden;
+    /*height: 100%;*/
 
     padding: 1rem;
 
@@ -33,11 +102,19 @@
     text-decoration: none;
 }
 
-.redaktor .article .left:hover, .redaktor .article .left:hover ~ .control{
+/*.redaktor .article .left:hover, .redaktor .article .left:hover ~ .control{
     background-color: #666;
+}*/
+
+.redaktor .article .title{
+    width: 100%;
 }
 
-.redaktor .article .info{    
+.redaktor .article .info{   
+    width: 100%;
+
+    margin-top: 0.3rem;
+    
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -63,11 +140,16 @@
 }
 
 .redaktor .article .control{
-    -webkit-box-flex:1;
+    /*-webkit-box-flex:1;
     -webkit-flex:1 1 auto;
     -ms-flex:1 1 auto;
-    flex:1 1 auto;
+    flex:1 1 auto;*/
     /*max-width: 33rem;*/
+
+    position: relative;
+    float: right;
+    height: 100%;
+
     padding: 1rem;
     
     display: -webkit-box;
@@ -84,33 +166,64 @@
     -ms-flex-align: center;
     align-items: center;
 
-    /*-ms-flex-wrap: wrap;
-    flex-wrap: wrap;*/
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
 
     gap: 1rem;
 }
 
+@media only screen and (max-width: 768px){
+    .redaktor:not(.clanek) .article{
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
 
-.redaktor .article .control .button{
-    /*margin-left: 10px;*/
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+    .redaktor:not(.clanek) .article .control{
+        float: none;
+        width: 100%;
+        -webkit-box-ordinal-group: 3;
+        -webkit-order: 2;
+        -ms-flex-order: 2;
+        order: 2;
+    }
+    .redaktor:not(.clanek) .article .left{
+        width: 100%;
+        -webkit-box-ordinal-group: 2;
+        -webkit-order: 1;
+        -ms-flex-order: 1;
+        order: 1;
+        overflow: auto;
+    }
+}
+
+
+.redaktor .article .control .button, .redaktor .article .control button{
     padding: 1rem;
     font-size: 1.15rem;
 }
 
+/*
 .redaktor .article .control .accept,
 .redaktor .article .control .deny,
 .redaktor .article .control .release {
     padding: 0;
-}
+}*/
 
 .redaktor .article .control button{
-    /*display: inline;*/
+    border-radius: 3px;
     background-color: transparent;
-    border: 0;
-    padding: 1rem;
+    border: 1px solid #888;
     color: #fff;
     cursor: pointer;
-    font-size: 1.15rem;
+}
+
+.redaktor .article .control button:hover, .redaktor .article .control button:focus, .redaktor .article .control button:active{
+    background-color: #777;
+    border: 1px solid #aaa;
 }
 
 .redaktor .article .control .accept a{
@@ -118,13 +231,20 @@
     padding: 1rem;
 }
 
-/* STANOVENI RECENZENTU */
-#set_recenzenty{
+
+/*
+*   POPBOX
+*/
+
+.popbox{
     position: fixed;
     top: 0;
     left: 0;
     height: 100vh;
     width: 100vw;
+    overflow-y: auto;
+
+    z-index: 99;
 
     background-color: rgba(0,0,0,0.4);
 
@@ -137,32 +257,79 @@
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
-    
+
     /* vertical center */
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
+}
 
+.popbox form{
+    display: block;
+    border: 1px solid #555;
+    padding: 1rem;
+    background-color: #222;
+    /*max-width: 400px;
+    height: 400px;*/
+
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.popbox form .title{
+    font-size: 1.1rem;
+    margin-bottom: .5rem;
+    border-bottom: 1px solid #555;
+}
+
+.popbox .error{
+    color: #f55;
+}
+
+
+/* STANOVENI RECENZENTU FORM */
+#set_recenzenty{
+    
 }
 
 #set_recenzenty form{
-    display: block;
-    border: 1px solid #555;
-    /*-webkit-box-shadow: 0 0 20px 20px #000;
-    box-shadow: 0 0 40px 0 #000;*/
-    padding: 1rem;
-    background-color: #222;
     max-width: 400px;
     height: 400px;
 }
+
+/* VRATIT AUTOROVI FORM */
+#message_box form{
+
+}
+
+#message_box [name=duvod]{
+    width: 400px;
+    height: 400px;
+    max-width: 100%;
+    max-height: 80vh
+}
+
+
 
 /*
 * DETAIL ČLÁNKU REDAKTORA
 */
 
+.back_button{
+    border-radius: 3px;
+    display: inline-block;
+    background-color: #555;
+    padding: .5rem;
+    margin-bottom: 1rem;
+    text-decoration: none;
+    color: #fff;
+}
+.back_button:hover{
+    background-color: #666;
+}
+
 .redaktor.clanek .article{
     font-size: 1.3rem;
-    display: block;
 }
 
 .redaktor.clanek .article .info{
@@ -176,7 +343,11 @@
     gap: 3rem;
 }
 
-.redaktor.clanek .article .info .l2{
+.redaktor.clanek .article .info > span{
+    max-width: 21rem;
+}
+
+.redaktor.clanek .article .l2, .redaktor.clanek .article .l3{
     font-size: 1rem;
 }
 
@@ -184,14 +355,114 @@
     font-size: 1.1rem;
 }
 
-.back_button{
-    display: inline-block;
-    background-color: #555;
-    padding: .5rem;
-    margin-bottom: 1rem;
-    text-decoration: none;
-    color: #fff;
+.redaktor.clanek .article .control{
+    float: none;
 }
-.back_button:hover{
-    background-color: #666;
+
+.redaktor.clanek .article .control .change_ver > *{
+    background-color: #333;
+}
+
+
+.redaktor.clanek .article .posudky{
+    padding: 1rem;
+    width: 100%;
+}
+
+.redaktor.clanek .article .posudky table{
+    border-collapse: collapse;
+    font-size: .9rem;
+    text-align: center;
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    margin-top: .5rem;
+}
+
+.redaktor.clanek .article .posudky th, td{
+    border: 1px solid #666;
+    padding: .3rem;
+}
+
+/*
+*  MESSAGES
+*/
+
+#messageWrap{
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#messageBox{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.message{
+    background-color: #777;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 2px;
+    margin-right: 10px;
+    
+    /* flexing stuff */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.userMessage {
+    align-self: flex-end;
+    background-color: #999;
+}
+
+.centeredMessage{
+    align-self: center;
+}
+
+#messageSender {
+    align-self: center;
+    background-color: black;
+    margin-top: 10px;
+    width: 35%;
+    overflow: hidden;
+    margin-top: 10px;
+
+    /* flexing stuff */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#messageSender #message[type="text"]{
+    flex: 2 2 auto;
+}
+
+.datetime{
+    font-size: 0.8rem;
+}
+
+.message{
+    font-size: 1rem;
+}
+
+.article .button.active{
+    display: inline-block;
+    color: #fff;
+    padding: 5px 10px;
+    text-decoration: none;
+    background-color: #777;
+    border: 1px solid #aaa;
+}
+
+.article .button.active:hover{
+    background-color: #777;
+    border: 1px solid #aaa;
 }

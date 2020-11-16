@@ -10,7 +10,7 @@ if(isset($_REQUEST["reg_submit"])) // pokud byl odeslán formulář
     $passwd = hash("sha256", ($raw_login . $_REQUEST["reg_passwd"])); // salt (login) + heslo
     $jmeno = htmlentities($_REQUEST["reg_jmeno"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $prijmeni = htmlentities($_REQUEST["reg_prijmeni"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    $email = htmlentites($_REQUEST["reg_mail"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $email = $_REQUEST["reg_mail"];
     $tel = htmlentities($_REQUEST["reg_tel"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
     // pokud formulář odeslal redaktor

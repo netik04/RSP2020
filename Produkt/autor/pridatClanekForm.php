@@ -181,7 +181,7 @@ $("document").ready(function ()
 });
 </script>
 
-<h2>Přidat článek</h2>
+
 
 <?php
     // pokud je v session-ě error - něco se nepovedlo při odesílání článku
@@ -194,6 +194,7 @@ $("document").ready(function ()
     }
 ?>
 <fieldset>
+<h2>Přidat článek</h2>
 <!-- enctype=multipart/form-data ==> odesílám jak textové údaje, tak soubor -->
 <form action="scripty/pridatClanek.php" id="pridatForm" method="POST" enctype="multipart/form-data">
 <div id="casopis_info"></div>
@@ -240,8 +241,8 @@ $("document").ready(function ()
 <label for="clanekNazev">Název článku: </label><input type="text" name="clanekNazev" id="clanekNazev" <?php 
 if(isset($_REQUEST["verzeSubmit"])){echo("value='" . $_REQUEST["clanekNazev"] . "' readonly='readonly'");}?> required><br />
 <label for="clanekAutor">Autor: </label><input type="text" name="clanekAutor" value="<?php echo($jmeno . " " . $prijmeni); ?>" disabled>
-<button class="add" type="button" <?php/* Pokud přidávám specificky verzi - zakážu přidávání autorů */ if(isset($_REQUEST["verzeSubmit"])){echo("disabled");} ?> Přidat autora</button>
-<button class="remove" type="button" <?php/* Pokud přidávám verzi - zakážu odebírání autorů */ if(isset($_REQUEST["verzeSubmit"])){echo("disabled");} ?>Odebrat pole</button>
+<button class="add" type="button" <?php if(isset($_REQUEST["verzeSubmit"])){echo("disabled ");} ?>> Přidat autora</button>
+<button class="remove" type="button" <?php if(isset($_REQUEST["verzeSubmit"])){echo("disabled ");} ?>> Odebrat pole</button>
 <div id="clanekExtraAutor"></div>
 <input type="hidden" value="1" id="clanekPocetAutoru" name="clanekPocetAutoru">
 <label for="clanekSoubor">Nahrát článek:</label><input type="file" name="clanekSoubor" accept=".doc, .docx, .pdf, .odt" required><br />
