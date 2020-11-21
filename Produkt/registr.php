@@ -11,6 +11,7 @@
     else // pokud se úspěšně připojím k DB - můžu pracovat
     {      
     ?>
+    <div id="content">
         <script>
             $("document").ready(function()
             {
@@ -92,26 +93,29 @@
         <fieldset>
         <!-- registrační formulář -->
         <!-- nastavuji navíc enctype=multipart/form-data => říkám, že posílám více typů dat (text + soubor) -->
-        <form action="scripty/registrace.php" method="POST" enctype="multipart/form-data"> 
-            <label for="reg_login">Uživatelské jméno: </label><input type="text" name="reg_login" id="reg_login" required /><span id="error_login"></span><br />
-            <label for="reg_passwd">Heslo: </label><input type="password" name="reg_passwd" id="reg_passwd" required /><br />
-            <label for="reg_passwd_potvrdit">Potvrdit heslo: </label><input type="password" id="reg_passwd_potvrdit" required /><span id="error_passwd"></span><br />
-            <label for="reg_jmeno">Jméno: </label><input type="text" name="reg_jmeno" required /><br />
-            <label for="reg_prijmeni">Přijmení: </label><input type="text" name="reg_prijmeni" required /><br />
-            <label for="reg_mail">Email: </label><input type="email" name="reg_mail" required /><br />
-            <label for="reg_tel">Telefonní číslo: </label><input type="text" name="reg_tel" /><br />
-            <label for="reg_pfp">Profilový obrázek: </label><input type="file" name="reg_pfp" accept="image/png, image/jpeg" /><br />
+        <form action="scripty/registrace.php" method="POST" enctype="multipart/form-data">
+        <table> 
+            <tr><td class="labelRegistr"><label for="reg_login">Uživatelské jméno: </label></td><td><input type="text" name="reg_login" id="reg_login" required /><span id="error_login"></span><br /></tr>
+            <tr><td class="labelRegistr"><label for="reg_passwd">Heslo: </label></td><td><input type="password" name="reg_passwd" id="reg_passwd" required /><br />
+            <tr><td class="labelRegistr"><label for="reg_passwd_potvrdit">Potvrdit heslo: </label></td><td><input type="password" id="reg_passwd_potvrdit" required /><span id="error_passwd"></span><br /></tr>
+            <tr><td class="labelRegistr"><label for="reg_jmeno">Jméno: </label></td><td><input type="text" name="reg_jmeno" required /><br /></tr>
+            <tr><td class="labelRegistr"><label for="reg_prijmeni">Přijmení: </label></td><td><input type="text" name="reg_prijmeni" required /><br /></tr>
+            <tr><td class="labelRegistr"><label for="reg_mail">Email: </label></td><td><input type="email" name="reg_mail" required /><br /></tr>
+            <tr><td class="labelRegistr"><label for="reg_tel">Telefonní číslo: </label></td><td><input type="text" name="reg_tel" /><br /></tr>
+            <tr><td class="labelRegistr"><label for="reg_pfp">Profilový obrázek: </label></td><td><input type="file" name="reg_pfp" accept="image/png, image/jpeg" /><br /></tr>
             <?php
                 $role = "redaktor";
                 if(include("scripty/maSpravnouRoli.php")) // pokud jsi redaktor
                 {
                     // zobraz input navíc pro přiřazení role nového uživatele
-                    echo("<label for=\"reg_role\">Role nového uživatele: </label><select name=\"reg_role\"><option value=\"recenzent\">Recenzent</option><option value=\"sefredaktor\">Šéfredaktor</option><option value=\"administrator\">Administrátor</option></select><br />");
+                    echo("<tr><td class='labelRegistr>'<label for=\"reg_role\">Role nového uživatele: </label></td><td><select name=\"reg_role\"><option value=\"recenzent\">Recenzent</option><option value=\"sefredaktor\">Šéfredaktor</option><option value=\"administrator\">Administrátor</option></select></td></tr><br />");
                 }
             ?>
+            </table>
             <input type="submit" name="reg_submit" id="reg_submit" value="Registrovat" />
         </form>
         </fieldset>
+        </div>
     <?php    
     }
     require("foot.php"); // připojení patičky

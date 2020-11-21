@@ -1,0 +1,118 @@
+.acc-table tr td
+{
+    border-top: 1px solid white;
+    padding: 10px;
+    text-align: center;
+}
+
+.acc-table th
+{
+    padding: 10px;
+    text-align: center;
+}
+
+.ui-button
+{
+    font-size: 1rem;
+}
+
+#content{
+}
+
+#uziv{
+    overflow-x: auto;
+}
+
+.acc-table tr td
+{
+    border-top: 1px solid white;
+    padding: 10px;
+    text-align: center;
+}
+
+.acc-table th
+{
+    padding: 10px;
+    text-align: center;
+}
+
+.tema
+{
+    float: right;
+    overflow:hidden;
+}
+
+.nova_verze
+{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#clanekNazev
+{
+    width: 374px;
+}
+
+#pridatForm input
+{
+    height: 30px;
+}
+
+.detail_tabulka
+{
+    padding: 10px;
+}
+
+.detail_tabulka th
+{
+    padding-left: 10px;
+    padding-right: 10px; 
+    font-size: 1.25rem;
+}
+
+.detail_tabulka td
+{
+    font-size: 1.25rem;
+}
+
+.autor_posudek
+{
+    margin: auto;
+}
+
+.autor_posudek td
+{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border: 1px solid white;
+}
+
+.autor_posudek th
+{
+    padding: 5px;
+    border: 1px solid white;
+}
+
+.autor_posudek button
+{
+    padding: 10px;
+}
+
+.info_tlacitka
+{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+.upravitButton
+{
+    float: right; 
+}
+
+.smazatButton
+{
+    float: right;
+    padding-left: 10px;
+}

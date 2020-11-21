@@ -10,6 +10,7 @@ $head_str = "<link rel=\"stylesheet\" href=\"redaktor_style.css\">";
 $head_str .= "<script src=\"scripty/js/prijmuti_clanku.js\"></script>";
 $head_str .= "<script src=\"scripty/js/zobraz_form_recenzenti.js\"></script>";
 $head_str .= "<script src=\"scripty/js/prirazeni_recenzentu.js\"></script>";
+$head_str .= "<script src=\"scripty/js/popbox_exit.js\"></script>";
 
 require($base_path."head.php");
 ?>

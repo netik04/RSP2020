@@ -18,7 +18,8 @@
                 #code
                 break;
             case "administrator":
-                #code
+                echo "<li> <a class=\"button\" href=\"$base_path"."administrator/uzivatel.php\">Uzivatele</a> </li>";
+                echo "<li> <a class=\"button\" href=\"$base_path"."administrator/clanky.php\">Články</a> </li>";
                 break;
             default:
                 # code...

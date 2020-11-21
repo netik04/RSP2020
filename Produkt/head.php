@@ -33,10 +33,14 @@
 
             <div class="login flex_horizontalne">
                 <form id="loginForm" action="scripty/prihlaseni.php" method="POST">
-                    Login <input type="text" name="login" id="login" required><br/>
-                    Heslo <input type="password" name="password" id="password" required><br/>
-                    <input class="button" type="submit" value="Přihlásit">
-                    <input class="button" type="button" onclick="window.location.href='registr.php'" value="Registrace">
+                    <table>
+                        <tr><td class="labelRegistr">Login: </td><td><input type="text" name="login" id="login" required><br/></td></tr>
+                        <tr><td class="labelRegistr">Heslo: </td><td><input type="password" name="password" id="password" required><br/></td></tr>
+                    </table>
+                    <div class="flex_vodorovne">
+                        <input class="button" type="submit" value="Přihlásit">
+                        <input class="button" type="button" onclick="window.location.href='registr.php'" value="Registrace">
+                    </div>
                 </form>
                 <p id="error">&nbsp;<?php echo $_SESSION["error"];unset($_SESSION["error"]) //zobrazení chyb z přihlášení pomoci session, nasledně unset této session aby se zobrazila pouze jednou?></p>
             </div>

@@ -17,6 +17,7 @@ $head_str .= "<script src=\"scripty/js/odeslat_posudky.js\"></script>";
 $head_str .= "<script src=\"scripty/js/zmena_verze.js\"></script>";
 $head_str .= "<script src=\"scripty/js/zobraz_messagebox.js\"></script>";
 $head_str .= "<script src=\"scripty/js/vratit_autorovi.js\"></script>";
+$head_str .= "<script src=\"scripty/js/popbox_exit.js\"></script>";
 
 require($base_path."head.php");
 

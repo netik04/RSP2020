@@ -12,6 +12,17 @@
     display: none;
 }
 
+.redaktor option:disabled {
+    color: #fff; /* NEJDE :( */
+    background-color: #222;
+}
+
+
+.redaktor option:disabled {
+    /*color: #fff; NEJDE :( */
+    background-color: #222;
+}
+
 .redaktor #filter form{
     display: inline-block;
     margin: .2rem 0;

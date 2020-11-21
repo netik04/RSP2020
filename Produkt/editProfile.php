@@ -19,12 +19,14 @@
     <fieldset>
         <legend>Změna údajů</legend>
         <form action="scripty/editace.php" method="POST" enctype="multipart/form-data">
-            <label for="login">Login:</label><input type="text" value="<?php echo $_SESSION[session_id()]; //vyplneni aktualniho loginu?>" disabled/><br/>
-            <label for="jmeno">Jméno: </label><input type="text" value="<?php echo $jmeno; //vyplneni aktualniho jmena?>" name="jmeno"/><br />
-            <label for="prijmeni">Přijmení: </label><input type="text" value="<?php echo $prijmeni; //vyplneni aktualniho prijmeni?>" name="prijmeni" required /><br />
-            <label for="mail">Email: </label><input type="email" value="<?php echo $email; //vyplneni aktualniho email?>" name="mail" required /><br />
-            <label for="tel">Telefonní číslo: </label><input type="text" value="<?php echo $tel; //vyplneni aktualniho telefoniho cisla?>" name="tel" /><br />
-            <label for="reg_pfp">Profilový obrázek: </label><input type="file" name="reg_pfp"><br />
+            <table>
+                <tr><td class="labelRegistr"><label for="login">Login:</label></td><td><input type="text" value="<?php echo $_SESSION[session_id()]; //vyplneni aktualniho loginu?>" disabled/></td></tr>
+                <tr><td class="labelRegistr"><label for="jmeno">Jméno: </label></td><td><input type="text" value="<?php echo $jmeno; //vyplneni aktualniho jmena?>" name="jmeno"/></td></tr>
+                <tr><td class="labelRegistr"><label for="prijmeni">Přijmení: </label></td><td><input type="text" value="<?php echo $prijmeni; //vyplneni aktualniho prijmeni?>" name="prijmeni" required /></td></tr>
+                <tr><td class="labelRegistr"><label for="mail">Email: </label></td><td><input type="email" value="<?php echo $email; //vyplneni aktualniho email?>" name="mail" required /></td></tr>
+                <tr><td class="labelRegistr"><label for="tel">Telefonní číslo: </label></td><td><input type="text" value="<?php echo $tel; //vyplneni aktualniho telefoniho cisla?>" name="tel" /></td></tr>
+                <tr><td class="labelRegistr"><label for="reg_pfp">Profilový obrázek: </label></td><td><input type="file" name="reg_pfp"></td></tr>
+            </table>
             <br /><label for="login">Zadejte heslo pro potvrzeni zmen</label><br />
             <input type="password" name="password"/><br/>
             <input type="submit" name="submit" id="submit" value="Provést změny" />
@@ -35,8 +37,10 @@
     <fieldset>
         <legend>Změna hesla</legend>
         <form action="scripty/zmenitHeslo.php" method="POST" enctype="multipart/form-data">
-            <label for="newPassword">Nové heslo:</label><input type="password" name="newPassword" id="newPassword" required/> <br/>
-            <label for="newPassword">Potvrdit Nové heslo:</label><input type="password" name="new_passwd_potvrdit" id="new_passwd_potvrdit" required/> <span id="error_passwd"></span><br/>
+        <table>
+            <tr><td class="labelRegistr"><label for="newPassword">Nové heslo:</label></td><td><input type="password" name="newPassword" id="newPassword" required/></td></tr>
+            <tr><td class="labelRegistr"><label for="newPassword">Potvrdit Nové heslo:</label></td><td><input type="password" name="new_passwd_potvrdit" id="new_passwd_potvrdit" required/> <span id="error_passwd"></span></td></tr>
+        </table>
             <br /><label for="login">Zadejte svoje staré heslo pro potvrzeni zmen</label><br />
             <input type="password" name="oldPassword"/><br/>
             <input type="submit" name="submit" id="pass_submit" value="Změnit heslo" />

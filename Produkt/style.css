@@ -74,6 +74,13 @@ footer {
     border: 1px solid #aaa;
 }
 
+/*
+* Registr
+*/
+.labelRegistr
+{
+    text-align: right;
+}
 
 /*
 * Login 
