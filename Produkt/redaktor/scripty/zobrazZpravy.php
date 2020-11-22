@@ -6,7 +6,7 @@ $article_verze = $_REQUEST['article_verze'];
 $interni = $_REQUEST['interni'];
 
 if(require($base_path."db.php")){
-    $query = $pdo->prepare("SELECT text_zpravy, datum_cas, login, jmeno, prijmeni, duvod FROM zprava NATURAL JOIN uzivatel WHERE id_clanku = ? AND verze = ? AND interni = ?");
+    $query = $pdo->prepare("SELECT text_zpravy, datum_cas, login, jmeno, prijmeni, duvod FROM zprava NATURAL LEFT JOIN uzivatel WHERE id_clanku = ? AND verze = ? AND interni = ?");
     $params = array($article_id, $article_verze, $interni);
     $query->execute($params);
     if($query->rowCount() > 0){
@@ -18,7 +18,12 @@ if(require($base_path."db.php")){
             if($row['login'] == $_SESSION[session_id()]){
                 echo "<div class = \"message userMessage\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" . $row["text_zpravy"] . "</span></div>";
             }else{
-                echo "<div class = \"message\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" . $row["text_zpravy"] . "</span> <span class=\"messagerName\">" . $row["jmeno"] . " " . $row["prijmeni"] . "</span></div>";
+                if($row['login'] == ""){
+                    echo "<div class = \"message\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" . $row["text_zpravy"] . "</span> <span class=\"messagerName\">[deleted]</span></div>";
+                }else{
+                    echo "<div class = \"message\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" . $row["text_zpravy"] . "</span> <span class=\"messagerName\">" . $row["jmeno"] . " " . $row["prijmeni"] . "</span></div>";
+                }
+                
             }
             
         }

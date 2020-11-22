@@ -24,7 +24,7 @@
             <label for="prijmeni">Přijmení: </label><input type="text" value="<?php echo $prijmeni; //vyplneni aktualniho prijmeni?>" name="prijmeni" required /><br />
             <label for="mail">Email: </label><input type="email" value="<?php echo $email; //vyplneni aktualniho email?>" name="mail" required /><br />
             <label for="tel">Telefonní číslo: </label><input type="text" value="<?php echo $tel; //vyplneni aktualniho telefoniho cisla?>" name="tel" /><br />
-            <!--<label for="reg_pfp">Profilový obrázek: </label><input type="file" name="reg_pfp"><br />-->
+            <label for="reg_pfp">Profilový obrázek: </label><input type="file" name="reg_pfp"><br />
             <br /><label for="login">Zadejte heslo pro potvrzeni zmen</label><br />
             <input type="password" name="password"/><br/>
             <input type="submit" name="submit" id="submit" value="Provést změny" />

@@ -35,8 +35,8 @@
                 <form id="loginForm" action="scripty/prihlaseni.php" method="POST">
                     Login <input type="text" name="login" id="login" required><br/>
                     Heslo <input type="password" name="password" id="password" required><br/>
-                    <input type="submit" value="Přihlásit">
-                    <input type="button" onclick="window.location.href='registr.php'" value="Registrace">
+                    <input class="button" type="submit" value="Přihlásit">
+                    <input class="button" type="button" onclick="window.location.href='registr.php'" value="Registrace">
                 </form>
                 <p id="error">&nbsp;<?php echo $_SESSION["error"];unset($_SESSION["error"]) //zobrazení chyb z přihlášení pomoci session, nasledně unset této session aby se zobrazila pouze jednou?></p>
             </div>
@@ -62,8 +62,8 @@
                     </div>
                 </div>
                 <div class="flex_vodorovne">
-                    <button id="logOut">Odhlášení</button>
-                    <button id="editProfile">Upravit profil</button>
+                    <button class="button" id="logOut">Odhlášení</button>
+                    <button class="button" id="editProfile">Upravit profil</button>
                 </div>
             </div>
 

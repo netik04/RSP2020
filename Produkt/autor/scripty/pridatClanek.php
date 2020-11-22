@@ -11,10 +11,10 @@
     if(isset($_REQUEST["clanekSubmit"]))
     {
         // stáhnu si potřebné informace
-        $login = $_SESSION[session_id()]; // login autora
-        $nazev= $_REQUEST["clanekNazev"]; // název článku
-        $pocetAutoru = $_REQUEST["clanekPocetAutoru"]; // kolik autorů bylo zadáno ve formuláři
-        $casopis = $_REQUEST["clanekCasopis"]; // do kterého časopisu článek bude odeslán
+        $login = htmlentities($_SESSION[session_id()], ENT_QUOTES | ENT_HTML5, 'UTF-8'); // login autora
+        $nazev= htmlentities($_REQUEST["clanekNazev"], ENT_QUOTES | ENT_HTML5, 'UTF-8'); // název článku
+        $pocetAutoru = htmlentities($_REQUEST["clanekPocetAutoru"], ENT_QUOTES | ENT_HTML5, 'UTF-8'); // kolik autorů bylo zadáno ve formuláři
+        $casopis = htmlentities($_REQUEST["clanekCasopis"], ENT_QUOTES | ENT_HTML5, 'UTF-8'); // do kterého časopisu článek bude odeslán
         $datum = date("Y-m-d"); // datum odeslání (formát YYYY-MM-DD)
         $stav_autor = "Podáno"; // stav pro autora - článek (resp. verze) je nově odeslaný(á)
         $stav_redaktor = "Nově podaný"; // stav pro redaktora - to samé jako pro autora
@@ -43,7 +43,7 @@
             }
             else
             {
-                $autori[$i] = $_REQUEST["clanekAutor" . ($i+1)];
+                $autori[$i] = htmlentities($_REQUEST["clanekAutor" . ($i+1)], ENT_QUOTES | ENT_HTML5, 'UTF-8');
             }
         }
 
@@ -59,7 +59,7 @@
         catch(PDOException $ex)
         {
             // vracím se zpět na přidávací formulář s chybou
-            $_SESSION["error"] = "Nepodařilo se nahrát článek. Zkuste to prosím znovu.";
+            $_SESSION["error"] = "Nepodařilo se nahrát článek (count). Zkuste to prosím znovu.";
             header("Location: ../pridatClanekForm.php");
             exit();
         }
@@ -80,7 +80,7 @@
             catch(PDOException $ex)
             {
                 // vrátím se na formulář s chybou
-                $_SESSION["error"] = "Nepodařilo se nahrát článek. Zkuste to prosím znovu.";
+                $_SESSION["error"] = "Nepodařilo se nahrát článek (insert). Zkuste to prosím znovu.";
                 header("Location: ../pridatClanekForm.php");
                 exit();
             }
@@ -159,7 +159,7 @@
         {
             $queryVerze = $pdo -> prepare("INSERT INTO verze (id_clanku, verze, stav_autor, stav_redaktor, datum, cesta) VALUES (?, ?, ?, ?, ?, ?)");
             $params = array($id_clanku, $verze, $stav_autor, $stav_redaktor, $datum, $finalSoubor);
-            $queryVerze -> execute($params);
+            $queryVerze -> execute($params);            
         }
         // nepodařilo se vytvořit verzi
         catch(PDOException $ex)
@@ -230,6 +230,7 @@
             exit();
         }
       
+        $queryUpdateVerze = $pdo->query("UPDATE verze SET stav_redaktor = 'Existuje nová verze' WHERE id_clanku = " . $id_clanku . " AND verze = " . ($verze - 1));                   
         // vše  prošlo - článek/verze je kompletně nahraná
         // přesměruji autora na jeho hlavní stránku
         header("Location: ../index.php");

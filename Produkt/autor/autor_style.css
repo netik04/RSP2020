@@ -1,9 +1,9 @@
-tr, th, td
+.form-table tr, .form-table th, .form-table td
 {
     border: 1px solid white;
     padding: 10px;
 }
-table
+.form-table
 {
     float: right;
     text-align: right;
@@ -27,4 +27,44 @@ label
     display: inline-block;
     width: 190px;
     text-align: right;
+}
+
+.acc-table tr td
+{
+    border-top: 1px solid white;
+    padding: 10px;
+    text-align: center;
+}
+
+.acc-table th
+{
+    padding: 10px;
+    text-align: center;
+}
+
+.nazev
+{
+    overflow: hidden;
+}
+
+.tema
+{
+    float: right;
+    overflow:hidden;
+}
+
+.nova_verze
+{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#clanekNazev
+{
+    width: 374px;
+}
+
+#pridatForm input
+{
+    height: 30px;
 }

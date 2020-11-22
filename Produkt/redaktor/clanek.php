@@ -17,6 +17,8 @@ $head_str .= "<script src=\"scripty/js/odeslat_posudky.js\"></script>";
 $head_str .= "<script src=\"scripty/js/zmena_verze.js\"></script>";
 $head_str .= "<script src=\"scripty/js/zobraz_messagebox.js\"></script>";
 $head_str .= "<script src=\"scripty/js/vratit_autorovi.js\"></script>";
+$head_str .= "<script src=\"scripty/js/popbox_exit.js\"></script>";
+$head_str .= "<script src=\"scripty/js/upozornit_sefredaktora.js\"></script>";
 
 require($base_path."head.php");
 
@@ -37,7 +39,9 @@ if(is_numeric($_GET['verze'])){
     if (!include($base_path."db.php")) echo "Nepodařilo se navázat spojení s databází.<br>Zkuste to prosím později.";
     else {
         if(isset($article_verze))
-            $sql = "SELECT nazev, vs.verze, vs.datum, verze.datum AS datum_verze, verze.stav_redaktor, verze.cesta, casopis.*, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
+            $sql = "SELECT nazev, vs.verze, vs.datum, verze.datum AS datum_verze, verze.stav_redaktor, verze.cesta, verze.sefredaktor, casopis.*,
+                GROUP_CONCAT((SELECT CONCAT(\" \", jmeno, \"&nbsp;\", prijmeni) from uzivatel where login = pise.login)) as autor
+                , p.posudek_uzaverka FROM clanek AS cl
                 JOIN casopis ON cl.id_casopisu = casopis.id_casopisu
                 JOIN pise ON cl.id_clanku = pise.id_clanku
                 JOIN uzivatel ON pise.login = uzivatel.login 
@@ -47,7 +51,9 @@ if(is_numeric($_GET['verze'])){
                 WHERE cl.id_clanku = ".$article_id." AND verze.verze = ".$article_verze  
             ;
         else
-            $sql = "SELECT nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, casopis.*, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
+            $sql = "SELECT nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, verze.sefredaktor, casopis.*,
+                GROUP_CONCAT((SELECT CONCAT(\" \", jmeno, \"&nbsp;\", prijmeni) from uzivatel where login = pise.login)) as autor
+                , p.posudek_uzaverka FROM clanek AS cl
                 JOIN casopis ON cl.id_casopisu = casopis.id_casopisu
                 JOIN pise ON cl.id_clanku = pise.id_clanku
                 JOIN uzivatel ON pise.login = uzivatel.login
@@ -98,7 +104,6 @@ if(is_numeric($_GET['verze'])){
                         <span class="l2">Uzávěrka: <?php echo(date_format(date_create($article["datum_uzaverky"]),"j.n.Y"))?></span>
                     </span>
                 </div>
-                <?php /*</div>*/?>
                 <div class="control">
                     <a class="download button" target="_blank" href="<?php echo($base_path.$article["cesta"])?>">Nahlédnout</a><?php
                     switch($article["stav_redaktor"]){
@@ -144,6 +149,9 @@ if(is_numeric($_GET['verze'])){
                             //echo("<script>$('.article#".$article_id." .accept').hide()</script>");
                         break;
                     }
+                    
+                    if($article['sefredaktor'] == 0)
+                        echo("<button class=\"a_sefR\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Upozornit šéfredaktora</button>");
 
                     if($article['verze'] > 1){
                         echo("<select class=\"button change_ver\">" .
@@ -228,7 +236,7 @@ if(is_numeric($_GET['verze'])){
                                 <input type="hidden" name="verze" value="<?php echo $article_verze?>">
                                 <input type="hidden" id="inter" name="interni" value="1">
                                 <input type="text" name="message" id="message" required>
-                                <input type="submit" name="odeslatZpravu" value="Odeslat">
+                                <input type="submit" name="odeslatZpravu" value="Odeslat" <?php if($article_verze !== $article["verze"])echo "disabled"; ?>>
                         </form>
                         <div id="errorMessage"><?php echo $_SESSION["errorMessage"]; unset($_SESSION["errorMessage"]); ?></div>
                     </div>
@@ -263,7 +271,7 @@ if(is_numeric($_GET['verze'])){
                                         $('#errorMessage').text('Error' + errorMessage);
                                     }
                                 });
-                            }else{
+                            }else if($(this).attr("id") == "autorsky"){
                                 interni = 0;
                                 $("#inter").val(0);
                                 $("#interni").removeClass("active");

@@ -10,11 +10,12 @@ $head_str = "<link rel=\"stylesheet\" href=\"redaktor_style.css\">";
 $head_str .= "<script src=\"scripty/js/prijmuti_clanku.js\"></script>";
 $head_str .= "<script src=\"scripty/js/zobraz_form_recenzenti.js\"></script>";
 $head_str .= "<script src=\"scripty/js/prirazeni_recenzentu.js\"></script>";
+$head_str .= "<script src=\"scripty/js/popbox_exit.js\"></script>";
 
 require($base_path."head.php");
 ?>
 
-<div id="content" class="redaktor">
+<div id="content" class="redaktor home">
     <?php // ZDE ZAČÍNÁ OBSAH STRÁNKY REDAKTOR ?>
 
     <?php
@@ -25,7 +26,7 @@ require($base_path."head.php");
 
         <div id="filter">
             <form action="" method="POST">
-                <select name="state">
+                <select name="state" class="button">
                     <?php 
                         $states = array(
                             "Nově podaný",
@@ -51,7 +52,7 @@ require($base_path."head.php");
                         }
                     ?> 
                 </select>
-                <select name="uzaverka">
+                <select name="uzaverka" class="button">
                     <?php
                         echo("<option value=\"\" disabled ".(!empty($_POST["uzaverka"]) ? "" : "selected").">Uzávěrka časopisu</option>");
                         echo("<option value=\"\">Vše</option>");
@@ -67,13 +68,13 @@ require($base_path."head.php");
                     ?> 
                 </select>
 
-                <input type="submit" value="Filtruj">
+                <input class="button" type="submit" value="Filtruj">
             </form><?php
             ?><form action="" method="POST">
-                <input type="text" name="search" placeholder="článek nebo autor&hellip;" <?php echo(isset($_POST["search"]) ? "value=\"".$_POST["search"]."\"" : "")?>>
-                <input type="submit" value="Hledej">
+                <input class="button" type="text" name="search" placeholder="článek nebo autor&hellip;" <?php echo(isset($_POST["search"]) ? "value=\"".$_POST["search"]."\"" : "")?>>
+                <input class="button" type="submit" value="Hledej">
             </form><?php
-            ?><button onclick="location.replace('<?php echo($base_path."redaktor");?>')">Zrušit filtry</button>
+            ?><button class="button" onclick="location.replace('<?php echo($base_path."redaktor");?>')">Zrušit filtry</button>
         </div>
 
         <script>
@@ -87,26 +88,50 @@ require($base_path."head.php");
         </script>
         <?php
         
-        $sql = "SELECT cl.id_clanku AS id, nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, datum_uzaverky, tema, Concat(jmeno, ' ', prijmeni) AS autor, p.posudek_uzaverka FROM clanek AS cl
+        $sql = "SELECT cl.id_clanku AS id, nazev, lv.verze, lv.datum, lv.datum_verze, verze.stav_redaktor, verze.cesta, datum_uzaverky, tema,
+            GROUP_CONCAT((SELECT CONCAT(\" \", jmeno, \"&nbsp;\", prijmeni) from uzivatel where login = pise.login)) as autor 
+            , p.posudek_uzaverka FROM clanek AS cl
             JOIN casopis ON cl.id_casopisu = casopis.id_casopisu
+            
             JOIN pise ON cl.id_clanku = pise.id_clanku
             JOIN uzivatel ON pise.login = uzivatel.login
+
             JOIN (SELECT id_clanku, Max(verze) AS verze, Min(datum) AS datum, Max(datum) AS datum_verze FROM verze GROUP BY id_clanku) AS lv ON cl.id_clanku = lv.id_clanku
             JOIN verze ON cl.id_clanku = verze.id_clanku AND lv.verze = verze.verze
             LEFT JOIN (SELECT id_clanku, verze, Max(datum_uzaverky) AS posudek_uzaverka FROM posudek GROUP BY id_clanku, verze) AS p ON cl.id_clanku = p.id_clanku AND lv.verze = p.verze ";
         if(!empty($_POST["state"]) || !empty($_POST['uzaverka']))
+        {
+            $data = array();
             $sql .= "WHERE ";
             if(!empty($_POST["state"])){
-                $sql .= "stav_redaktor = '".$_POST["state"]."'";
+                $sql .= "stav_redaktor = :state";
                 if(!empty($_POST['uzaverka'])) $sql .= " AND";
+                $data = ['state' => $_POST["state"]];
             }
-            if(!empty($_POST['uzaverka']))
-                $sql .= " datum_uzaverky = '".$_POST["uzaverka"]."'";
-        else if(!empty($_POST["search"]))
-            $sql .= "WHERE nazev LIKE '%".$_POST["search"]."%' OR prijmeni LIKE '%".$_POST["search"]."%' OR jmeno LIKE '%".$_POST["search"]."%' ";
-        $sql .= " ORDER BY datum_uzaverky, lv.datum_verze DESC LIMIT 25";
-        $stmt = $pdo->query($sql);//GROUP BY datum_uzaverky
+            if(!empty($_POST['uzaverka'])){
+                $sql .= " datum_uzaverky = :uzaverka";
+                $data += array('uzaverka' => $_POST["uzaverka"]);
+            }
+            $sql .= " GROUP BY cl.id_clanku";
+        }
+        else if(!empty($_POST["search"])){
+            $sql = "SELECT * FROM (".$sql." GROUP BY cl.id_clanku) AS subQ WHERE nazev LIKE :search OR autor LIKE :search ";
+            $data = ['search' => "%".htmlentities($_POST["search"], ENT_QUOTES, ENT_HTML5, "UTF-8")."%"];
+        } 
+        else {
+           $sql .= " GROUP BY cl.id_clanku";
+        }
+        $sql .= " ORDER BY datum_uzaverky, datum_verze DESC LIMIT 25";//lv.dat
 
+        $stmt = $pdo->prepare($sql);
+        
+        try{
+            //$stmt = $pdo->query($sql);
+            $stmt->execute($data);
+        }
+        catch(PDOException $e){
+            echo($e);
+        }
         while($article = $stmt->fetch(PDO::FETCH_ASSOC)){
             //$lastUzaverka = $article['datum_uzaverky'];
             if($lastUzaverka != $article['datum_uzaverky']){
@@ -152,7 +177,11 @@ require($base_path."head.php");
                     </div>
                     <div class="info">
                         <span>
-                            <span class="author"><?php echo($article["autor"])?></span><br>
+                            <span class="author">
+                            <?php
+                                echo($article["autor"]);
+                            ?>
+                            </span><br>
                             <span class="date"><?php echo(date_format(date_create($article["datum"]),"j.n.Y"))?></span>
                         </span>
                         <span class="version"><?php echo($article["verze"])?>. verze<br>

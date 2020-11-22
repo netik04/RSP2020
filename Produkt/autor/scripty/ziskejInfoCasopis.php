@@ -7,7 +7,7 @@
     require_once '../../db.php';
 
     // stáhnu si ID časopisu
-    $id = $_GET["id"];
+    $id = $_REQUEST["id"];
 
     // stáhnu si datum uzávěrky a kapacitu časopisu z databáze
     try
