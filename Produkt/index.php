@@ -12,7 +12,8 @@ require("head.php");
         echo("Nepodařilo se navázat spojení s databází.<br>Zkuste to prosím později.");
     }
 ?>
-
+<div id ="content">
+    
 <p align = "justify">LOGOS POLYTECHNIKOS je vysokoškolský odborný recenzovaný časopis, který slouží pro publikační aktivity akademických pracovníků 
     Vysoké školy polytechnické Jihlava i jiných vysokých škol, univerzit a výzkumných organizací. Je veden na seznamu recenzovaných
     odborných a vědeckých časopisů ERIH PLUS - European Reference Index for the Humanities and the Social Sciences 
@@ -29,7 +30,7 @@ require("head.php");
 
 <p align = "justify">V časopise je možné publikovat odborné články, statě, přehledové studie, recenze a další typy odborných příspěvků 
     v českém, slovenském a anglickém jazyce. Do recenzního řízení jsou přijímány příspěvky tematicky odpovídající zaměření časopisu a 
-    formálně upravené dle redakční šablony</p>
+    formálně upravené dle redakční šablony</p><br />
 
 
 <!-- Vypis prijatych clanku -->
@@ -48,12 +49,11 @@ require("head.php");
             while(($radek = $query -> fetch(PDO::FETCH_BOTH)) != FALSE) {
                 $id = $radek["id_clanku"];
                 $nazev = $radek["nazev"];
-                echo("<li>" . $id . " " .$nazev . "</li>");
+                echo("<li>" .$nazev . "</li>");
             }
         echo("</ul>");
 ?>
 
-<br />
 <br />
 
 <!-- Vypis casopisu s datem uzaverky -->
@@ -70,10 +70,10 @@ require("head.php");
           echo("<ul>");
             while(($radek = $qry -> fetch(PDO::FETCH_BOTH)) != FALSE) {
                 $tema = $radek["tema"];
-                $datum = $radek["datum_uzaverky"];
+                $datum = date("j.m.yy", strtotime($radek["datum_uzaverky"]));
                 echo("<li>" . $tema . " " . "(" .$datum . ")" . "</li>");
             }
         echo("</ul>");
 ?>
-
+</div>
 <?php require("foot.php"); $pdo = null; ?>
