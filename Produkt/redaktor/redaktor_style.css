@@ -3,14 +3,29 @@
 */
 
 .redaktor #filter{
-    background-color: #444;
+    background-color: #333;
     padding: .3rem 0;
     border-radius: 5px;
+    font-size: 13px;
+}
+
+.redaktor #filter input, .redaktor #filter select, .redaktor #filter button,
+.redaktor #filter a{
+    font-size: 13px;
 }
 
 .redaktor option:checked{
     display: none;
 }
+
+/*.redaktor option{
+  color:#fff;
+}
+
+.redaktor option:disabled {
+    color: #fff;
+    background-color: #222;
+}*/
 
 .redaktor #filter form{
     display: inline-block;
@@ -19,40 +34,44 @@
 }
 
 .redaktor #filter form:first-child{
-    border-right: 1px solid #666;
+    border-right: 1px solid #007EA7;
     padding-right: .5rem;
 }
 
 .redaktor #filter form:nth-child(2){
     padding: 0 .5rem;
-    border-right: 1px solid #666;
+    border-right: 1px solid #007EA7;
 }
 
-.redaktor #filter button, .redaktor #filter input[type=submit]{
+.redaktor #filter button, .redaktor #filter a, .redaktor #filter input[type=submit]{
     padding: 0 5px;
     height: 22px;
+
+    border: 0px;
+    border-radius: 2px;
 }
 
-.redaktor #filter button{
+.redaktor #filter button, .redaktor #filter a{
     margin: .2rem 0;
     margin-left: .5rem;
-    /*border: 0;*/
 }
 
 .redaktor #filter select, .redaktor #filter input[type=text]{
-    /*border: 0;*/
     padding: 0 2px;
     height: 22px;
+
+    border: 0;
+    border-radius: 2px;
 }
 
 .redaktor #filter select{
     width: 10rem;
 }
 
-.redaktor .casopis{
+.redaktor.home .casopis{
     font-size: 1.1rem;
     margin: 1rem 0 -.5rem;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #007EA7;
 }
 
 .redaktor .article{
@@ -110,11 +129,11 @@
     width: 100%;
 }
 
-.redaktor .article .info{   
+.redaktor .article .info{
     width: 100%;
 
     margin-top: 0.3rem;
-    
+
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -151,7 +170,7 @@
     height: 100%;
 
     padding: 1rem;
-    
+
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -201,29 +220,26 @@
 }
 
 
-.redaktor .article .control .button, .redaktor .article .control button{
+.redaktor .article .control .button2, .redaktor .article .control button
+, .redaktor .article .control a{
     padding: 1rem;
     font-size: 1.15rem;
 }
 
-/*
-.redaktor .article .control .accept,
-.redaktor .article .control .deny,
-.redaktor .article .control .release {
-    padding: 0;
-}*/
-
-.redaktor .article .control button{
+.redaktor .article .control button,
+.redaktor .article .control a,
+.redaktor .article .control select
+{
     border-radius: 3px;
-    background-color: transparent;
-    border: 1px solid #888;
+    background-color: rgba(0,126,167,0.6);
+    border: 1px solid #007EA7;
     color: #fff;
     cursor: pointer;
 }
 
-.redaktor .article .control button:hover, .redaktor .article .control button:focus, .redaktor .article .control button:active{
-    background-color: #777;
-    border: 1px solid #aaa;
+.redaktor .article .control button:hover, .redaktor .article .control button:focus, .redaktor .article .control button:active,
+.redaktor .article .control a:hover, .redaktor .article .control a:focus, .redaktor .article .control a:active{
+    background-color: rgba(0,126,167,1);
 }
 
 .redaktor .article .control .accept a{
@@ -283,13 +299,14 @@
 }
 
 .popbox .error{
+    font-size: .9rem;
     color: #f55;
 }
 
 
 /* STANOVENI RECENZENTU FORM */
 #set_recenzenty{
-    
+
 }
 
 #set_recenzenty form{
@@ -297,9 +314,31 @@
     height: 400px;
 }
 
+#set_recenzenty .f_item{
+    margin: 0 0 .7rem;
+}
+
+#set_recenzenty .f_item:after{
+    display: table;
+    clear: both;
+    content: "";
+}
+
+#set_recenzenty .f_item > input, #set_recenzenty .f_item > select{
+    float: right;
+}
+
+#set_recenzenty .f_item > input[type=submit]{
+    float: none;
+}
+
+#set_recenzenty .note{
+    font-size: 0.9rem;
+    color: #ecdf2b;
+}
+
 /* VRATIT AUTOROVI FORM */
 #message_box form{
-
 }
 
 #message_box [name=duvod]{
@@ -315,17 +354,18 @@
 * DETAIL ČLÁNKU REDAKTORA
 */
 
-.back_button{
+.back_button
+{
     border-radius: 3px;
     display: inline-block;
-    background-color: #555;
+    background-color: #007EA7;
     padding: .5rem;
     margin-bottom: 1rem;
     text-decoration: none;
     color: #fff;
 }
 .back_button:hover{
-    background-color: #666;
+    background-color: #006485;
 }
 
 .redaktor.clanek .article{
@@ -343,7 +383,7 @@
     gap: 3rem;
 }
 
-.redaktor.clanek .article .info > span{
+.redaktor .article .info > span{
     max-width: 21rem;
 }
 
@@ -362,7 +402,6 @@
 .redaktor.clanek .article .control .change_ver > *{
     background-color: #333;
 }
-
 
 .redaktor.clanek .article .posudky{
     padding: 1rem;
@@ -388,81 +427,103 @@
 *  MESSAGES
 */
 
-#messageWrap{
-    padding: 1rem;
+
+/*
+*  ČASOPISY
+*/
+
+.redaktor.casopisy .info {
+    gap: 0;
+}
+
+.redaktor.casopisy .info > span{
+    margin-right: 2rem;
+
+}
+
+
+/*
+*   TERMÍNY
+*/
+.redaktor.terminy .article .title{
+    border: none;
+    font-size: 1.25rem;
+}
+
+.redaktor.terminy .article table.posudky{
+    border-collapse: collapse;
+    text-align: left;
+    max-width: 100%;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    overflow-x: auto;
 }
 
-#messageBox{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    max-height: 300px;
-    overflow-y: auto;
-}
-.message{
-    background-color: #777;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 2px;
-    margin-right: 10px;
-    
-    /* flexing stuff */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.redaktor.terminy .article table.posudky th,
+.redaktor.terminy .article table.posudky td{
+    border: 1px solid #777;
+    padding: .2rem .5rem;
 }
 
-.userMessage {
-    align-self: flex-end;
-    background-color: #999;
+.redaktor.terminy .article table.posudky td a {
+    text-decoration: underline;
+    color: #00b1ec;
 }
 
-.centeredMessage{
-    align-self: center;
+.redaktor.terminy .article table.posudky td a:hover {
+    color: #53d4ff;
 }
 
-#messageSender {
-    align-self: center;
-    background-color: black;
-    margin-top: 10px;
-    width: 35%;
-    overflow: hidden;
-    margin-top: 10px;
-
-    /* flexing stuff */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+.redaktor.terminy .article table.posudky th:nth-child(1),
+.redaktor.terminy .article table.posudky td:nth-child(1){
+    width: 50%;
+    min-width: 5rem;
 }
 
-#messageSender #message[type="text"]{
-    flex: 2 2 auto;
+.redaktor.terminy .article table.posudky th:nth-child(2),
+.redaktor.terminy .article table.posudky td:nth-child(2){
+    width: 5%;
+    min-width: 2rem;
+    /*max-width: 2rem;*/
 }
 
-.datetime{
-    font-size: 0.8rem;
+.redaktor.terminy .article table.posudky th:nth-child(3),
+.redaktor.terminy .article table.posudky td:nth-child(3){
+    width: 25%;
+    min-width: 5rem;
+    /*max-width: 4rem;*/
 }
 
-.message{
-    font-size: 1rem;
+.redaktor.terminy .article table.posudky th:nth-child(4),
+.redaktor.terminy .article table.posudky td:nth-child(4){
+    width: 20%;
+    min-width: 5rem;
+    /*max-width: 4rem;*/
 }
 
-.article .button.active{
+
+
+
+/*
+* NEvim kam s tim
+*/
+
+.article .button2{
     display: inline-block;
-    color: #fff;
-    padding: 5px 10px;
-    text-decoration: none;
-    background-color: #777;
-    border: 1px solid #aaa;
-}
-
-.article .button.active:hover{
-    background-color: #777;
-    border: 1px solid #aaa;
-}
+    background-color: rgba(0,126,167,0.6);
+    border: 0px solid #aaa;
+    color: #FFF;
+    padding: 4px 9px;
+    }
+.article .button2.active{
+      display: inline-block;
+      color: #FFF;
+      padding: 5px 10px;
+      text-decoration: none;
+      background-color: #007EA7;
+      border: 0px solid black;
+    }
+    
+.article .button2.active:hover{
+      background-color: #007EA7;
+      border: 0px solid black;
+    }

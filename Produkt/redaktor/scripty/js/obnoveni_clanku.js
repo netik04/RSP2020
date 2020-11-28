@@ -57,8 +57,9 @@ $(document).on("click", "button.a_undeny", function () {
         $('.a_return')
           .after("<button class=\"a_deny\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Zamítnout</button>");
 
-        $('.a_return')
-          .after("<button class=\"a_release\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Přijmout k vydání</button>");
+        if(inData['verze'] > 1)
+          $('.a_return')
+            .after("<button class=\"a_release\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Přijmout k vydání</button>");
         
       }
       else if(data == 5){
@@ -69,7 +70,7 @@ $(document).on("click", "button.a_undeny", function () {
           .attr('class', 'a_deny');
       }
 
-
+      zobrazZpravy();
     } else {
       alert("Nepodařilo se zrušit zamítnutí článku :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
       location.reload();

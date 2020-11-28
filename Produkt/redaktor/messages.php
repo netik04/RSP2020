@@ -1,7 +1,7 @@
 <?php
     $base_path = "../";
     $head_str = "
-    <style> 
+    <style>
 
     #messageWrap{
         width: 100%;
@@ -24,7 +24,7 @@
         padding: 10px;
         margin-bottom: 2px;
         margin-right: 10px;
-        
+
         /* flexing stuff */
         display: flex;
         flex-direction: column;
@@ -55,10 +55,10 @@
         flex: 2 2 auto;
     }
     #messageSender input[type=\"submit\"]{
-        
+
     }
 
-    .article .button.active{
+    .article .button2.active{
         display: inline-block;
         color: #fff;
         padding: 5px 10px;
@@ -67,14 +67,14 @@
         border: 1px solid #aaa;
     }
 
-    .article .button.active:hover{
+    .article .button2.active:hover{
         background-color: #777;
         border: 1px solid #aaa;
     }
 
     </style>";
     require($base_path."head.php");
-    
+
 ?>
 
 
@@ -86,8 +86,8 @@
     <div class="article">
         <div id="messageWrap">
             <div id="messagesMenu">
-                <button id="interni" class="button">Redakce</button>
-                <button id="autorsky" class="button">Autor</button>
+                <button id="interni" class="button2">Redakce</button>
+                <button id="autorsky" class="button2">Autor</button>
             </div>
             <div id="messageBox">
             </div>
@@ -112,9 +112,9 @@
             }else{
                 $('#autorsky').click();
             }
-            
+
         });
-        $(".button").click(function(){
+        $(".button2").click(function(){
             if($(this).attr("id") == "interni"){
                 interni = 1;
                 $("#inter").val(1);
@@ -122,11 +122,11 @@
                 $("#interni").addClass("active");
                 $.ajax('scripty/zapisSessionInterni.php', {
                     type: 'POST',  // http method
-                    data: { 
+                    data: {
                         interni: interni
                     },  // data to submit
                     success: function (data) {
-                            
+
                     },
                     error: function (errorMessage) {
                         $('#errorMessage').text('Error' + errorMessage);
@@ -139,7 +139,7 @@
                 $("#autorsky").addClass("active");
                 $.ajax('scripty/zapisSessionInterni.php', {
                     type: 'POST',  // http method
-                    data: { 
+                    data: {
                         interni: interni
                     },  // data to submit
                     success: function (data) {
@@ -153,7 +153,7 @@
 
             $.ajax('scripty/zobrazZpravy.php', {
                 type: 'POST',  // http method
-                data: { 
+                data: {
                     article_id: <?php echo $article_id ?>,
                     article_verze: <?php echo $article_verze ?>,
                     interni: interni

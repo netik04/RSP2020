@@ -24,22 +24,22 @@ if (!include($base_path."../db.php")) { //pripojeni k databazi
             $_SESSION["role"] = $fetchedUser["role"]; // do session ulozim roli aktualne prihlaseneho uzivatele aby nebylo potreba odesilat dotaz na databazi na kazde strance
             switch($fetchedUser['role']){// po prihlaseni uzivatele presmeruji podle jeho role na prislusnou stranku
                 case "autor":
-                    header("Location: ../autor/");
+                    header("Location: ../autor/index.php");
                 break;
                 case "redaktor":
-                    header("Location: ../redaktor/");
+                    header("Location: ../redaktor/index.php");
                     die();
                 break;
                 case "recenzent":
-                    header("Location: ../recenzent/");
+                    header("Location: ../recenzent/index.php");
                     die();
                 break;
                 case "administrator":
-                    header("Location: ../administrator/");
+                    header("Location: ../administrator/index.php");
                     die();
                 break;
                 case "sefredaktor":
-                    header("Location: ../sefredaktor/");
+                    header("Location: ../sefredaktor/index.php");
                     die();
                 break;
                 default:

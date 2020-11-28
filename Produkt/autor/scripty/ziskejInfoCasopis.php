@@ -1,13 +1,22 @@
 <?php
+    session_start();
+    $role = "autor";
     // script sloužící pro získání potřebných informací o časopisu
     // tento script je volán z hlavního formuláře přes AJAX ve chvíli, kdy uživatel vybere časopis ve formuláři
     // vrací pole kódované do JSON s informacemi o časopisu, které si hlavní formulář přebírá a zobrazuje je do tabulky
+
+    if(!isset($_SESSION[session_id()]) && $_SESSION["role"] != $role){ header("Location: ../../index.php"); exit(); }
 
     // připojení do DB
     require_once '../../db.php';
 
     // stáhnu si ID časopisu
-    $id = $_REQUEST["id"];
+    if(!isset($_POST["id"]))
+    {
+        header("Location: ../../index.php"); 
+        exit();
+    }
+    $id = $_POST["id"];
 
     // stáhnu si datum uzávěrky a kapacitu časopisu z databáze
     try
@@ -20,7 +29,7 @@
     catch(PDOException $ex)
     {
         // nemá smysl pokračovat
-        die($ex -> getMessage());
+        die();
     }
     // dotaz prošel - stáhnu si data
     $radek = $query->fetch(PDO::FETCH_ASSOC);
@@ -38,7 +47,7 @@
     catch(PDOException $ex)
     {
         // nemá smysl pokračovat
-        die($ex -> getMessage());
+        die();
     }
     // dotaz prošel - stáhnu si počet
     $pocetPrispevku = $query->fetchColumn(0);

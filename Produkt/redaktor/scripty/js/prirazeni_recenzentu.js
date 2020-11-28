@@ -11,18 +11,22 @@ $(document).on("submit", "#set_recenzenty form", function (event) {
     'verze' : $('input[name=verze]').val()
   };
 
-  if(formData['r1'] == "" || formData['r2'] == "")
-    $('#set_recenzenty .error').text("*Vyplňtě prosím oba recenzenty!");
+  if(formData['r1'] == "" && formData['r2'] == "")
+    $('#set_recenzenty .error').text("*Vyplňtě prosím alespoň jednoho recenzenta!");
   else if(formData['uzaverka'] == "")
     $('#set_recenzenty .error').text("*Vyplňtě prosím datum uzávěrky!");
   else if(formData['r1'] == formData['r2'])
     $('#set_recenzenty .error').text("*Nelze přiřadit jednoho recenzenta dvakrát!");
   else{
+
+    if((formData['r1'] == "" || formData['r2'] == "") && !confirm("Opravdu si přejete přiřadit pouze jednoho recenzenta?"))
+      return;
+    
     $.ajax({
-      type: "POST", // define the type of HTTP verb we want to use (POST for our form)
-      url: "scripty/prirazeni_recenzentu.php", // the url where we want to POST
-      data: formData, // our data object
-      dataType: "json", // what type of data do we expect back from the server
+      type: "POST",
+      url: "scripty/prirazeni_recenzentu.php",
+      data: formData,
+      dataType: "json",
       encode: true
     }).done(function (data) {
       

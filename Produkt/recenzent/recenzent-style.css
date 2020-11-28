@@ -1,0 +1,88 @@
+.recenzent_clanky
+{
+    /*margin: auto;*/
+    width: 100%;
+    border: 3px solid #007EA7;
+    padding: 10px;
+}
+
+.recenzent_clanky th
+{
+    padding: 10px;
+    text-align: center;
+}
+
+.recenzent_clanky td
+{
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid #007EA7;
+}
+
+.recenzent_clanky .recenzent_nazev
+{
+    text-align: left;
+}
+
+.detail_tabulka
+{
+    padding: 10px;
+}
+
+.detail_tabulka th
+{
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 1.25rem;
+}
+
+.detail_tabulka td
+{
+    font-size: 1.25rem;
+}
+
+.recenzent_posudek
+{
+    overflow-x: scroll;
+    margin: auto;
+    border: 3px solid #007EA7;
+}
+
+.recenzent_posudek td
+{
+  border-top: 1px solid #007EA7;
+  padding: 10px;
+  text-align: center;
+}
+
+.recenzent_posudek th
+{
+  border-top: 1px solid #007EA7;
+  padding: 10px;
+  text-align: center;
+}
+
+.recenzent_posudek button
+{
+    padding: 10px;
+}
+
+textarea
+{
+    resize: none;
+}
+
+#rec_kontrola
+{
+    transform: scale(1.8);
+}
+
+#rec_posudekTabulka
+{
+    text-align: center;
+}
+
+#rec_posudekTabulka td
+{
+    padding: 5px;
+}

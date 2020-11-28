@@ -78,7 +78,7 @@
                                 else // pokud přesun neprojde
                                 {
                                     // vygeneruj chybu a vrať uživatele na registraci
-                                    $_SESSION["error_edit"] = "Váš účet byl vytvořen, nepodařilo se však nahrát vaší profilovou fotku.";
+                                    $_SESSION["error_edit"] = "Nepodařilo se však nahrát vaší profilovou fotku.";
                                     header("Location: ../editProfile.php");
                                     exit();
                                 }
@@ -86,7 +86,7 @@
                             else // pokud se fotku nepodařilo nahrát
                             {
                                 // vygeneruj error a vrať uživatele na registraci
-                                $_SESSION["error_edit"] = "Váš účet byl vytvořen, nepodařilo se však nahrát vaší profilovou fotku.";
+                                $_SESSION["error_edit"] = "Nepodařilo se však nahrát vaší profilovou fotku.";
                                 header("Location: ../editProfile.php");
                                 exit(); 
                             }

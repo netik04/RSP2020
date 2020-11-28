@@ -1,9 +1,12 @@
 <?php
     // script sloužící pro přidávání odeslaného článku do DB
-
+    $role = "autor";
     // nastartuji session a výstupní bufferování
     session_start();
     ob_start();
+
+    if(!isset($_SESSION[session_id()]) && $_SESSION["role"] != $role){ header("Location: ../../index.php"); exit(); }
+
     // připojím se do DB
     include '../../db.php';  
     
@@ -12,7 +15,7 @@
     {
         // stáhnu si potřebné informace
         $login = htmlentities($_SESSION[session_id()], ENT_QUOTES | ENT_HTML5, 'UTF-8'); // login autora
-        $nazev= htmlentities($_REQUEST["clanekNazev"], ENT_QUOTES | ENT_HTML5, 'UTF-8'); // název článku
+        $nazev= /*htmlentities(*/$_REQUEST["clanekNazev"]/*, ENT_QUOTES | ENT_HTML5, 'UTF-8')*/; // název článku
         $pocetAutoru = htmlentities($_REQUEST["clanekPocetAutoru"], ENT_QUOTES | ENT_HTML5, 'UTF-8'); // kolik autorů bylo zadáno ve formuláři
         $casopis = htmlentities($_REQUEST["clanekCasopis"], ENT_QUOTES | ENT_HTML5, 'UTF-8'); // do kterého časopisu článek bude odeslán
         $datum = date("Y-m-d"); // datum odeslání (formát YYYY-MM-DD)
@@ -21,7 +24,7 @@
         $tmpSoubor = $_FILES["clanekSoubor"]["name"]; // celý název odeslaného souboru (včetně přípony)
 
         // zjistím příponu a název souboru
-        for($i = 3; $i < strlen($tmpSoubor); $i++)
+        for($i = strlen($tmpSoubor) - 1; $i > 0; $i--)
         {
             // projdu název souboru
             // pokud najdu tečku
@@ -32,6 +35,13 @@
                 $soubor = substr($tmpSoubor, 0, (strlen($tmpSoubor) - strlen($pripona)));
                 break;
             }
+        }
+
+        if($pripona == "" || $soubor == "")
+        {
+            $_SESSION["error"] = "Nastala chyba. Zkuste to prosím později.";
+            header("Location: ../pridatClanekForm.php");
+            exit();
         }
 
         // uložím si všechny autory do pole
@@ -59,7 +69,7 @@
         catch(PDOException $ex)
         {
             // vracím se zpět na přidávací formulář s chybou
-            $_SESSION["error"] = "Nepodařilo se nahrát článek (count). Zkuste to prosím znovu.";
+            $_SESSION["error"] = "Nepodařilo se nahrát článek. Zkuste to prosím znovu.";
             header("Location: ../pridatClanekForm.php");
             exit();
         }
@@ -80,7 +90,7 @@
             catch(PDOException $ex)
             {
                 // vrátím se na formulář s chybou
-                $_SESSION["error"] = "Nepodařilo se nahrát článek (insert). Zkuste to prosím znovu.";
+                $_SESSION["error"] = "Nepodařilo se nahrát článek. Zkuste to prosím znovu.";
                 header("Location: ../pridatClanekForm.php");
                 exit();
             }
@@ -113,7 +123,7 @@
             header("Location: ../pridatClanekForm.php");
             exit();
         }
-       
+
         // dotaz prošel - zjistím verzi
         $verze = ($queryVerze -> fetchColumn(0)) + 1;
          

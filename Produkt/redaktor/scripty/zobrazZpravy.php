@@ -1,12 +1,17 @@
 <?php
-session_start();
+//session_start();
 $base_path = "../../";
+
+$role = "redaktor";
+session_start();
+if($role !== $_SESSION['role']) die();
+
 $article_id = $_REQUEST['article_id'];
 $article_verze = $_REQUEST['article_verze'];
 $interni = $_REQUEST['interni'];
 
 if(require($base_path."db.php")){
-    $query = $pdo->prepare("SELECT text_zpravy, datum_cas, login, jmeno, prijmeni, duvod FROM zprava NATURAL JOIN uzivatel WHERE id_clanku = ? AND verze = ? AND interni = ?");
+    $query = $pdo->prepare("SELECT text_zpravy, datum_cas, login, jmeno, prijmeni, duvod, role FROM zprava NATURAL JOIN uzivatel WHERE id_clanku = ? AND verze = ? AND interni = ?");
     $params = array($article_id, $article_verze, $interni);
     $query->execute($params);
     if($query->rowCount() > 0){
@@ -16,9 +21,14 @@ if(require($base_path."db.php")){
             $row["datum_cas"] = date("j.m.yy H:i", $row["datum_cas"]);
 
             if($row['login'] == $_SESSION[session_id()]){
-                echo "<div class = \"message userMessage\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" . $row["text_zpravy"] . "</span></div>";
+                echo "<div class = \"message userMessage ". ($row["duvod"] == 1 ? "vraceni " : "") . ($row["duvod"] == 2 ? " zamitnuti " : "") ." \"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" .($row["duvod"] == 1 ? "[Důvod vrácení]: " : "") . ($row["duvod"] == 2 ? " [Důvod zamítnutí]: " : "") . $row["text_zpravy"] . "</span></div>";
             }else{
-                echo "<div class = \"message\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" . $row["text_zpravy"] . "</span> <span class=\"messagerName\">" . $row["jmeno"] . " " . $row["prijmeni"] . "</span></div>";
+                if($row['login'] == ""){
+                    echo "<div class = \"message ". ($row["duvod"] == 1 ? "vraceni " : "") . ($row["duvod"] == 2 ? " zamitnuti " : "") ."\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" .($row["duvod"] == 1 ? "[Důvod vrácení]: " : "") . ($row["duvod"] == 2 ? " [Důvod zamítnutí]: " : "") . $row["text_zpravy"] . "</span> <span class=\"messagerName\">[deleted]</span></div>";
+                }else{
+                    echo "<div class = \"message ". ($row["duvod"] == 1 ? "vraceni " : "") . ($row["duvod"] == 2 ? " zamitnuti " : "") ."\"><span class=\"datetime\">" . $row["datum_cas"] . "</span> <span class=\"messageContent\">" .($row["duvod"] == 1 ? "[Důvod vrácení]: " : "") . ($row["duvod"] == 2 ? " [Důvod zamítnutí]: " : "") . $row["text_zpravy"] . "</span> <span class=\"messagerName\">" . $row["jmeno"] . " " . $row["prijmeni"] . " - ". $row["role"] . "</span></div>";
+                }
+                
             }
             
         }

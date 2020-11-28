@@ -1,19 +1,22 @@
 <?php
 // ZMĚNIT PŘI KOPÍROVÁNÍ PROJEKTU
-$base_path = ""; // pro absolutni referenci mezi soubory např. include($base_path."head.php"); 
+$base_path = ""; // pro absolutni referenci mezi soubory např. include($base_path."head.php");
+$head_str .= "<script src='" . $base_path . "ui/jquery-ui.js'></script>";
+$head_str .= "<link rel='stylesheet' href='" . $base_path . "ui/jquery-ui.css'>";
 // bez předešlých se velice špatně používá relativná obzvláště, když se daná část přidává include (v případě head.php a style.css)
 require("head.php");
 ?>
 <div id="content">
+<script>$(document).ready( function(){ $("#helpdeskOdeslat, #helpdeskOdeslatRedaktor").button(); });</script>
     <?php
     if($_SESSION["role"] != "redaktor"){
     ?>
     <div id="wrapHelpDeskQuestion">
         <form action="<?php echo $base_path;?>scripty/odeslatHelpdesk.php" class="flex_horizontalne">
             <textarea name="text" placeholder="Zde zadejte svůj dotaz" required></textarea>
-            <input type="submit">
+            <input id="helpdeskOdeslat" class="reg_button niz"type="submit">
         </form>
-        
+
     </div>
     <?php
         }
@@ -48,7 +51,7 @@ require("head.php");
                         echo "<div class=\"odpoved\">" . $fetchedMessage["zprava"] . " - " . $fetchedMessage["jmeno"]. " " . $fetchedMessage["prijmeni"] . "</div>";
                     }else{
                         if($_SESSION["role"] == "redaktor"){
-                            echo "<form action=\"". $base_path . "scripty/odeslatHelpdesk.php\"><input type=\"hidden\" name=\"id\" value=\"". $row["id"] ."\"><textarea name=\"text\" rows=\"1\" required></textarea> <input type=\"submit\"></form>";
+                            echo "<form action=\"". $base_path . "scripty/odeslatHelpdesk.php\"><input type=\"hidden\" name=\"id\" value=\"". $row["id"] ."\"><textarea name=\"text\" rows=\"1\" required></textarea> <input id=\"helpdeskOdeslatRedaktor\" type=\"submit\"></form>";
                         }else{
                             echo "<div class=\"odpoved\">Dotaz ještě nebyl zodpovězen</div>";
                         }

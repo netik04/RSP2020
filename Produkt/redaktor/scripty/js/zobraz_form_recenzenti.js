@@ -3,11 +3,11 @@ $(document).on("click", "button.a_setR", function () {
   var verze = $(this).attr('cl_ver');
 
   var page = $(this).attr('page');
+  var rs = [$(this).attr('cl_r1'), $(this).attr('cl_r2')];
 
   $.ajax({
-    //type: "POST", // define the type of HTTP verb we want to use (POST for our form)
-    url: "scripty/get_recenzenty.php", // the url where we want to POST
-    dataType: "json", // what type of data do we expect back from the server
+    url: "scripty/get_recenzenty.php",
+    dataType: "json",
     encode: true
   })
   .done(function (data) {
@@ -16,38 +16,78 @@ $(document).on("click", "button.a_setR", function () {
         $("#page").prepend("<div id=\"set_recenzenty\" class=\"popbox\"></div>");
       else
         $('#set_recenzenty').show();
+   
 
-      var htmlStr = "<option value=\"\"></option>";
+      rs_left = 0;
+      if(rs[0]) rs_left++;
+      if(rs[1]) rs_left++;
 
-      $.each(data, function (index, val) {
-        //console.log(val["login"] + ": " + val['jmeno'] + " " + val['prijmeni']);
-        htmlStr +=
-          "<option value=\"" +
-          val["login"] +
-          "\">" +
-          val["jmeno"] +
-          " " +
-          val["prijmeni"] +
-          "</option>";
-      });
+      var osob_rev = "";
+      if(rs_left > 0){
+        osob_rev += "<div class=\"note f_item\">Recenzenti vyžadující osobní revizi:<br>";
 
-      htmlStr += "</select>";
+        $.each(data, function (index, val) {
+          if(val['login'] == rs[0] || val['login'] == rs[1]){
+            osob_rev += val['jmeno'] + ' ' + val['prijmeni'];
+            
+            rs_left--;
+            if(rs_left == 0) return false;
+            else{
+              osob_rev += " a ";
+            }
+          }
+        });
+        osob_rev += "</div>";
+      }
+
+      var htmlStr = ["", ""];
+
+      htmlStr[0] = htmlStr[1] = "<option value=\"\">Nevybráno</option>";
+
+      var i = 0;
+      while(i < 2)
+      {
+        $.each(data, function (index, val) {
+          htmlStr[i] +="<option ";
+          if(val['login'] == rs[i])
+            htmlStr[i] += " selected "
+            
+          htmlStr[i] += "value=\"" +
+            val["login"] +
+            "\">" +
+            val["jmeno"] +
+            " " +
+            val["prijmeni"] +
+            "</option>";
+        });
+
+        i++;
+      }
 
       $('#set_recenzenty').attr("page", page);
 
       $('#set_recenzenty').html(
         "<form action=\"scripty/prirazeni_recenzentu.php\" method=\"POST\">" +
           "<div class=\"title\">Stanovit recenzenty</div>" +
-          "<label for=\"recenzent1\">1. recenzent: </label>" +
-          "<select name=\"recenzent1\">" + htmlStr +
-          "<br><label for=\"recenzent2\">2. recenzent: </label>" +
-          "<select name=\"recenzent2\">" + htmlStr +
-          "<br><label for=\"uzaverka\">Datum uzávěrky: </label>" +
-          "<input name=\"uzaverka\" type=\"date\">" +
+          osob_rev +
+          "<div class=\"f_item\">" +
+            "<label for=\"recenzent1\">1. recenzent: </label>" +
+            "<select name=\"recenzent1\">" + htmlStr[0] + "</select>" +
+          "</div>" +
+          "<div class=\"f_item\">" +
+            "<label for=\"recenzent2\">2. recenzent: </label>" +
+            "<select name=\"recenzent2\">" + htmlStr[1] + "</select>" +
+          "</div>" +
+          "<div class=\"f_item\">" +
+            "<label for=\"uzaverka\">Datum uzávěrky: </label>" +
+            "<input name=\"uzaverka\" type=\"date\">" +
+          "</div>" +
           "<input name=\"id\" type=\"hidden\" value=\"" + id + "\">" +
           "<input name=\"verze\" type=\"hidden\" value=\"" + verze + "\">" +
-          "<br><input type=\"submit\" value=\"Přiřadit\">" +
-          "<br><br><span class=\"error\"></span>" +
+          "<div class=\"f_item\">" +
+            "<input type=\"submit\" value=\"Přiřadit\">" +
+          "</div>" +
+          "<span class=\"error\"></span>" +
         "</form>"
       );
     } else {
