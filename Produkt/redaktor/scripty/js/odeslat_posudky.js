@@ -25,10 +25,11 @@ $(document).on("click", "button.a_sendP", function () {
       $('.a_return')
         .after("<button class=\"a_deny\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Zamítnout</button>");
       
-      $('.a_return')
-        .after("<button class=\"a_release\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Přijmout k vydání</button>");
+      if(inData['verze'] > 1)
+        $('.a_return')
+          .after("<button class=\"a_release\" cl_id=\"" + inData['id'] +"\" cl_ver=\"" + inData['verze'] + "\">Přijmout k vydání</button>");
 
-
+      zobrazZpravy();
     } else {
       alert("Nepodařilo se odeslat posudky autorovi :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
       location.reload();

@@ -1,0 +1,162 @@
+.acc-table{
+  margin: auto;
+  width: 50%;
+  border: 3px solid #007EA7;
+  padding: 10px;
+}
+
+
+.acc-table th
+{
+    padding: 10px;
+    text-align: center;
+}
+
+.ui-button
+{
+    font-size: 1rem;
+    vertical-align: baseline;
+}
+
+#uziv{
+    overflow-x: auto;
+}
+
+.acc-table tr td
+{
+    border-top: 1px solid #007EA7;
+    padding: 10px;
+    text-align: center;
+}
+
+.ax-table{
+  margin: auto;
+  float: left;
+}
+
+
+.ax-table th
+{
+    padding: 10px;
+    text-align: center;
+}
+
+.ax-table tr td
+{
+    border-top: 1px solid #007EA7;
+    padding: 10px;
+    text-align: center;
+}
+
+.tema
+{
+    float: right;
+    overflow:hidden;
+}
+
+.nova_verze
+{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#clanekNazev
+{
+    width: 374px;
+}
+
+#pridatForm input
+{
+    height: 30px;
+}
+
+.detail_tabulka
+{
+    padding: 10px;
+}
+
+.detail_tabulka th
+{
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 1.25rem;
+}
+
+.detail_tabulka td
+{
+    font-size: 1.25rem;
+}
+
+.autor_posudek
+{
+    overflow-x: scroll;
+    margin: auto;
+    border: 3px solid #007EA7;
+}
+
+.autor_posudek td
+{
+  border-top: 1px solid #007EA7;
+  padding: 10px;
+  text-align: center;
+}
+
+.autor_posudek th
+{
+  border-top: 1px solid #007EA7;
+  padding: 10px;
+  text-align: center;
+}
+
+.autor_posudek button
+{
+    padding: 10px;
+}
+
+.info_tlacitka
+{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+.upravitButton
+{
+    float: right;
+}
+
+.smazatButton
+{
+    float: right;
+    padding-left: 10px;
+}
+
+.posudekButton
+{
+    margin: auto;
+}
+
+#fieldsetPosudek
+{
+    overflow-x: auto;
+}
+#posudekModal{
+  display: flex;
+  flex-direction: column;
+  align-items: unset;
+  justify-content: center;
+}
+
+#posudekModal button{
+    margin-top: 0.3rem;
+    align-self: center;
+}
+
+#posudekModal > .reg_button{
+padding: 1px 5px;
+border-radius: 2px;
+}
+
+#odeslatZpravu{
+    font-size: 0.6rem;
+}

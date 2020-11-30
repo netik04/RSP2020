@@ -1,13 +1,3 @@
-$(document).on("click", ".popbox", function(e) {
-    var container = $(".popbox form");
-    if (!container.is(e.target) && container.has(e.target).length === 0) 
-    {
-      $('.popbox').hide();
-      $('.popbox').html('');
-    }
-});
-
-
 $(document).on("click", "button.a_return, button.a_deny", function () {
   var id = $(this).attr('cl_id');
   var verze = $(this).attr('cl_ver');
@@ -31,7 +21,7 @@ $(document).on("click", "button.a_return, button.a_deny", function () {
         "<textarea name=\"duvod\" placeholder=\"Důvod&hellip;\"></textarea>" +
         "<input name=\"id\" type=\"hidden\" value=\"" + id + "\">" +
         "<input name=\"verze\" type=\"hidden\" value=\"" + verze + "\">" +
-        "<br><input type=\"submit\" class=\"button\" value=\"Odeslat\">" +
+        "<br><input type=\"submit\" class=\"button2\" value=\"Odeslat\">" +
         "<br><br><span class=\"error\"></span>" +
       "</form>"
     );

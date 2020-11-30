@@ -50,7 +50,7 @@ else
     catch(PDOException $ex)
     {
         // nemá smysl pokračovat
-        die($ex -> getMessage());
+        die("Nastala chyba. Zkuste to prosím později.");
     }
 
     // dotaz vrátil 0 - uživatel nemá žádné nahrané články
@@ -74,7 +74,7 @@ else
             $verze = $radek["verze"]; // verzi článku
             $stav_autor = $radek["stav_autor"]; // jaký stav zobrazit autorovi
             $nazev = $radek["nazev"]; // název článku
-            $datum = date("j.m.yy", strtotime($radek["datum"]));
+            $datum = date_format(date_create($radek["datum"]),"j.n.Y");
             $cesta = $radek["cesta"]; // cestu ke článku
             $tema = $radek["tema"]; // do jakého časopisu byl článek odeslán
             $id_casopisu = $radek["id_casopisu"]; // id časopisu - pro pozdější práci s verzemi

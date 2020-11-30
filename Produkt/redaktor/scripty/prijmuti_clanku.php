@@ -4,6 +4,10 @@ die();*/
 
 $base_path = "../../";
 
+$role = "redaktor";
+session_start();
+if($role !== $_SESSION['role']) die();
+
 if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && require($base_path."db.php")) {
     $data = [
         'id' => $_REQUEST["id"],

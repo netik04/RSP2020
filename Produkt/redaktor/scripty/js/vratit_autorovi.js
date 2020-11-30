@@ -30,16 +30,18 @@ $(document).on("submit", "#message_box form.a_return", function (event) {
         $('.info .state')
           .html("Stav<br><span class=\"l2\">Probíhá úprava textu autorem</span>");
 
+
+        zobrazZpravy();
       } else {
         alert("Nepodařilo se vrátit článek k úpravám :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
-        //location.reload();
+        location.reload();
       }
 
     }).fail(function(){
       alert("Nepodařilo se vrátit článek k úpravámy :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
-      //location.reload();
-    }).always(function(){
       location.reload();
-    });
+    });/*.always(function(){
+      //location.reload();
+    })*/;
   }
 });
