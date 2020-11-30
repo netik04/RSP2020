@@ -1,6 +1,11 @@
 <?php
+    session_start();
+    // role, která může skript spouštět
+    $role = "administrator";
 
-    $id_clanku = $_POST["id"];
+    if(!isset($_SESSION[session_id()]) && $_SESSION["role"] != $role){ header("Location: ../../index.php"); exit(); }
+
+    $id_clanku = htmlentities($_POST["id"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $base_path = "../../";
 
     if(!require($base_path . 'db.php')){die("Problém s připojením.");}

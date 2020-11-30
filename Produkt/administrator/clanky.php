@@ -25,7 +25,7 @@ require($base_path."head.php");
         $(".accordion").accordion({
             heightStyle: "content", // proměnná velikost elementů
             collapsible: true, // je možnost zavřít všechny položky
-            active: false            
+            active: false
             // začíná se zavřenými položkami
         });
         // nastavím jQueryUI tlačítka pro přidávání nové verze a pro zobrazení článku
@@ -36,7 +36,7 @@ require($base_path."head.php");
 
 
         $(".upravitButton").on("click", function(event)
-        { 
+        {
             event.stopImmediatePropagation();
             $("#upravitID").val($(this).parent().children(".hidden").text());
             $("#upravitNazev").val($(this).parent().children(".nazev").text());
@@ -58,7 +58,7 @@ require($base_path."head.php");
             $.ajax('scripty/smazatClanek.php', {
                 type: 'POST',
                 data: {
-                    id: $("#smazatID").val()                  
+                    id: $("#smazatID").val()
                 },
                 success: function(result)
                 {
@@ -81,28 +81,28 @@ require($base_path."head.php");
 
         $("#modalUpravit").dialog({
             autoOpen: false,
-            resizable: false, 
+            resizable: false,
             width: 'auto',
             show: {
-                effect: "fade", 
+                effect: "fade",
                 duration: 200
             },
             hide: {
-                effect: "fade", 
+                effect: "fade",
                 duration: 200
             }
         });
 
         $("#modalSmazat").dialog({
             autoOpen: false,
-            resizable: false, 
+            resizable: false,
             width: 'auto',
             show: {
-                effect: "fade", 
+                effect: "fade",
                 duration: 200
             },
             hide: {
-                effect: "fade", 
+                effect: "fade",
                 duration: 200
             }
         });
@@ -130,14 +130,14 @@ require($base_path."head.php");
                 }
             });
         });
-    });   
+    });
 </script>
 
 <div id="content" class="autor">
 
 <div id='modalUpravit' title='Upravit údaje o článku'>
-    <form id='upravitForm'> 
-        <input type='hidden' id='upravitID' name='upravitID'>       
+    <form id='upravitForm'>
+        <input type='hidden' id='upravitID' name='upravitID'>
         <input type='text' id='upravitNazev' name='upravitNazev' placeholder='Název článku' required><br />
         <select name='upravitCasopis' id='upravitCasopis' required>
         <?php
@@ -147,7 +147,7 @@ require($base_path."head.php");
         {
             echo("<option value='" . $radek["id_casopisu"] . "'>" . $radek["tema"] . "</option>");
         }
-        ?>        
+        ?>
         </select><br>
         <input type='submit' id='upravitSubmit' value='Upravit'>
     </form>
@@ -165,12 +165,12 @@ require($base_path."head.php");
 <?php
 // pokusím se připojit do DB
 if (!include($base_path."db.php")) echo "Nepodařilo se navázat spojení s databází.<br>Zkuste to prosím později."; // pokud se nepovedlo, nemá smysl pokračovat
-else 
+else
 {
     // z DB si zjistím potřebné informace
     try
     {
-        $query = $pdo -> prepare("SELECT * FROM clanek NATURAL JOIN verze NATURAL JOIN casopis");       
+        $query = $pdo -> prepare("SELECT * FROM clanek NATURAL JOIN verze NATURAL JOIN casopis");
         $query -> execute();
     }
     // pokud se nepovedlo
@@ -215,7 +215,7 @@ else
             {
                 // jedná se pouze o verzi - vypíšu info k verzi do již existující sekce accordionu
                 echo("<tr>");
-                echo("<td>" . $verze . "</td><td>" . $stav_autor . "</td><td>" . $datum . "</td><td><a href='zobrazitClanek.php?id=" . $id_clanku . "&verze=" . $verze . "'><button type='button' class='zobrazit'>Zobrazit detail</button></a></td>");                 
+                echo("<td>" . $verze . "</td><td>" . $stav_autor . "</td><td>" . $datum . "</td><td><a href='zobrazitClanek.php?id=" . $id_clanku . "&verze=" . $verze . "'><button type='button' class='zobrazit'>Zobrazit detail</button></a></td>");
                 echo("</tr>");
             }
             // pokud se id nerovná tmp - jedná se o další článek
@@ -249,11 +249,11 @@ else
                 echo("<h1><span class='nazev'>" . $nazev . "</span><span class='tema'>Téma: " . $tema . "</span><br><span>Autoři: " . $autor . "</span><a class='smazatButton'>Smazat článek</a><a class='upravitButton'>Upravit článek</a><span class='hidden'>" . $id_clanku . "</span>");
                 echo("<input type='hidden' value='" . $id_casopisu . "' class='hidden_2'></h1>");
                 // vypíšu obsah sekce
-                echo("<div><table class='acc-table' cellspacing='0'><tr>");
+                echo("<div><table class='ax-table' cellspacing='0'><tr>");
                 echo("<th>Verze článku</th><th>Stav verze</th><th>Datum nahrání verze</th><th>Možnosti</th></tr><tr>");
                 echo("<td>" . $verze . "</td><td>" . $stav_autor . "</td><td>" . $datum . "</td><td><a href='zobrazitClanek.php?id=" . $id_clanku . "&verze=" . $verze . "'><button type='button' class='zobrazit'>Zobrazit detail</button></a></td>");
                 echo("</tr>");
-            }       
+            }
         }
         // končím s výpisem
         // ukočím poslední sekci accordionu

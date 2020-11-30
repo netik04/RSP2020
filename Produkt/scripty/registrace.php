@@ -49,40 +49,50 @@ if(isset($_REQUEST["reg_submit"])) // pokud byl odeslán formulář
         // připravím lokaci, kde se má na konci nacházet
         $newFile = '../img/profile_pics/'.$_FILES['reg_pfp']['name'];   
 
-        // pokud se úspěšně nahrála
-        if(is_uploaded_file($_FILES['reg_pfp']['tmp_name']))
+        // zjistím, jakou příponu má obrázek
+        $extension = '';
+        for($i = strlen($newFile) - 1; $i > 0; $i--)
         {
-            // přesunu z dočasné složky do složky s profilovými fotkami
-            // pokud se přesun zadaří
-            if(move_uploaded_file($tmpFile, $newFile))
+            if($newFile[$i] == '.')
             {
-            // zjistím, jakou příponu má obrázek
-                $extension = '';
-                for($i = 3; $i < strlen($newFile); $i++)
-                {
-                    if($newFile[$i] == '.')
-                    {
-                        $extension = substr($newFile, $i, (strlen($newFile) - 1));
-                        break;
-                    }
+                $extension = substr($newFile, $i, (strlen($newFile) - 1));
+                break;
+            }                    
+        }
+        if($extension == ".jpg" || $extension == ".jpeg" || $extension == ".png" || $extension == ".gif")
+        {
+
+            // pokud se úspěšně nahrála
+            if(is_uploaded_file($_FILES['reg_pfp']['tmp_name']))
+            {
+                // přesunu z dočasné složky do složky s profilovými fotkami
+                // pokud se přesun zadaří
+                if(move_uploaded_file($tmpFile, $newFile))
+                {            
+                    // přejmenuji přesunutý soubor podle loginu uživatele
+                    rename($newFile, "../img/profile_pics/" . $raw_login . $extension);
                 }
-                // přejmenuji přesunutý soubor podle loginu uživatele
-                rename($newFile, "../img/profile_pics/" . $raw_login . $extension);
+                else // pokud přesun neprojde
+                {
+                    // vygeneruj chybu a vrať uživatele na registraci
+                    $_SESSION["error"] = "Váš účet byl vytvořen, nepodařilo se však nahrát vaší profilovou fotku.";
+                    header("Location: ../index.php");
+                    exit();
+                }
             }
-            else // pokud přesun neprojde
+            else // pokud se fotku nepodařilo nahrát
             {
-                // vygeneruj chybu a vrať uživatele na registraci
+                // vygeneruj error a vrať uživatele na registraci
                 $_SESSION["error"] = "Váš účet byl vytvořen, nepodařilo se však nahrát vaší profilovou fotku.";
                 header("Location: ../index.php");
-                exit();
+                exit(); 
             }
         }
-        else // pokud se fotku nepodařilo nahrát
+        else
         {
-            // vygeneruj error a vrať uživatele na registraci
-            $_SESSION["error"] = "Váš účet byl vytvořen, nepodařilo se však nahrát vaší profilovou fotku.";
+            $_SESSION["error"] = "Váš účet byl vytvořen, ovšem tento formát fotek není podporován.";
             header("Location: ../index.php");
-            exit(); 
+            exit();
         }
     }
     // pokud vše prošlo, nebo uživatel nenahrál žádnou profilovku - přesměruj na index

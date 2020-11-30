@@ -15,12 +15,12 @@ require($base_path . "head.php");
     function zobrazData()
     {
         $.ajax({
-            type: 'POST', 
-            url: 'scripty/zobrazUzivatele.php', 
+            type: 'POST',
+            url: 'scripty/zobrazUzivatele.php',
             cache: false,
-            success: function(result) 
+            success: function(result)
             {
-                $("#uziv").html(result);  
+                $("#uziv").html(result);
                 $(".admin_button").button();
                 $(".admin_button_del").button();
                 $(".admin_button").on("click", function()
@@ -51,27 +51,27 @@ require($base_path . "head.php");
         zobrazData();
         $("#dialog").dialog({
             autoOpen: false,
-            resizable: false, 
+            resizable: false,
             width: 'auto',
             show: {
-                effect: "fade", 
+                effect: "fade",
                 duration: 200
             },
             hide: {
-                effect: "fade", 
+                effect: "fade",
                 duration: 200
             }
         });
         $("#dialog_smazat").dialog({
             autoOpen: false,
-            resizable: false, 
+            resizable: false,
             width: 'auto',
             show: {
-                effect: "fade", 
+                effect: "fade",
                 duration: 200
             },
             hide: {
-                effect: "fade", 
+                effect: "fade",
                 duration: 200
             }
         });
@@ -79,7 +79,7 @@ require($base_path . "head.php");
         {
             $("#dialog_smazat").dialog("close");
         });
-        
+
         $(".formular").submit(function(event)
         {
             event.preventDefault();
@@ -141,11 +141,11 @@ require($base_path . "head.php");
         <div id="dialog" title="Upravit uživatele">
             <form method='POST' class='formular'>
                 <input type='hidden' name='login' id='login'>
-                <label for='jmeno'>Jméno: </label><input type='text' name='jmeno' id='jmeno' required><br />
-                <label for='prijmeni'>Přijmení: </label><input type='text' name='prijmeni' id='prijmeni' required> <br />           
-                <label for='email'>Email: </label><input type='email' name='email' id='email' required><br />
-                <label for='telefon'>Telefonní číslo: </label><input type='text' name='telefon' id='telefon'><br />
-                <label for='role' required>Role: </label>
+                <label for='jmeno'>Jméno: </label></br><input type='text' name='jmeno' id='jmeno' required><br />
+                <label for='prijmeni'>Přijmení: </label></br><input type='text' name='prijmeni' id='prijmeni' required> <br />
+                <label for='email'>Email: </label></br><input type='email' name='email' id='email' required><br />
+                <label for='telefon'>Telefonní číslo: </label></br><input type='text' name='telefon' id='telefon'><br />
+                <label for='role' required>Role: </label></br>
                 <select name="role" id='role'>
                     <option value="recenzent">Recenzent</option>
                     <option value="sefredaktor">Šéfredaktor</option>

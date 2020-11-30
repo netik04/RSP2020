@@ -1,9 +1,10 @@
-.acc-table tr td
-{
-    border-top: 1px solid white;
-    padding: 10px;
-    text-align: center;
+.acc-table{
+  margin: auto;
+  width: 50%;
+  border: 3px solid #007EA7;
+  padding: 10px;
 }
+
 
 .acc-table th
 {
@@ -14,9 +15,7 @@
 .ui-button
 {
     font-size: 1rem;
-}
-
-#content{
+    vertical-align: baseline;
 }
 
 #uziv{
@@ -25,13 +24,26 @@
 
 .acc-table tr td
 {
-    border-top: 1px solid white;
+    border-top: 1px solid #007EA7;
     padding: 10px;
     text-align: center;
 }
 
-.acc-table th
+.ax-table{
+  margin: auto;
+  float: left;
+}
+
+
+.ax-table th
 {
+    padding: 10px;
+    text-align: center;
+}
+
+.ax-table tr td
+{
+    border-top: 1px solid #007EA7;
     padding: 10px;
     text-align: center;
 }
@@ -66,7 +78,7 @@
 .detail_tabulka th
 {
     padding-left: 10px;
-    padding-right: 10px; 
+    padding-right: 10px;
     font-size: 1.25rem;
 }
 
@@ -77,21 +89,23 @@
 
 .autor_posudek
 {
+    overflow-x: scroll;
     margin: auto;
+    border: 3px solid #007EA7;
 }
 
 .autor_posudek td
 {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    text-align: center;
-    border: 1px solid white;
+  border-top: 1px solid #007EA7;
+  padding: 10px;
+  text-align: center;
 }
 
 .autor_posudek th
 {
-    padding: 5px;
-    border: 1px solid white;
+  border-top: 1px solid #007EA7;
+  padding: 10px;
+  text-align: center;
 }
 
 .autor_posudek button
@@ -108,11 +122,41 @@
 
 .upravitButton
 {
-    float: right; 
+    float: right;
 }
 
 .smazatButton
 {
     float: right;
     padding-left: 10px;
+}
+
+.posudekButton
+{
+    margin: auto;
+}
+
+#fieldsetPosudek
+{
+    overflow-x: auto;
+}
+#posudekModal{
+  display: flex;
+  flex-direction: column;
+  align-items: unset;
+  justify-content: center;
+}
+
+#posudekModal button{
+    margin-top: 0.3rem;
+    align-self: center;
+}
+
+#posudekModal > .reg_button{
+padding: 1px 5px;
+border-radius: 2px;
+}
+
+#odeslatZpravu{
+    font-size: 0.6rem;
 }

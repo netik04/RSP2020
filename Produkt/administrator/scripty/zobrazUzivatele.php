@@ -27,9 +27,9 @@ else
     echo("<table class='acc-table' cellspacing='0'>");
     echo("<tr><th>Login</th><th>Jméno</th><th>Přijmení</th><th>Role</th><th>Email</th><th>Telefon</th></tr>");
     while(($radek = $query->fetch(PDO::FETCH_ASSOC)) != FALSE)
-    {   
+    {
         if($radek["login"] != "[deleted]")
-        {     
+        {
             echo("<tr>");
             echo("<td>" . $radek["login"] . "</td><td>" . $radek["jmeno"] . "</td><td>" . $radek["prijmeni"] . "</td><td>" . $radek["role"] . "</td><td>" . $radek["email"] . "</td><td>" . $radek["telefon"] . 
             "</td><td><button class='admin_button'>Upravit</button></td><td><button class='admin_button_del'");

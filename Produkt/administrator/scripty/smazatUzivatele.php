@@ -1,4 +1,7 @@
 <?php
+    session_start();
+    $role = "administrator";
+    if(!isset($_SESSION[session_id()]) && $_SESSION["role"] != $role){ header("Location: ../../index.php"); exit(); }
 
     $login = htmlentities($_POST["login"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $role = htmlentities($_POST["role"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
@@ -97,4 +100,9 @@
     {
         die("Nastala chyba. Zkuste to prosím znovu.");
     }
+
+    
+    $file_pattern = $base_path. "img/profile_pics/".$login.".*";
+    array_map("unlink", glob($file_pattern));
+    
 ?>

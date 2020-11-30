@@ -1,7 +1,10 @@
 <?php
 $base_path = "../../";
 
+$role = "redaktor";
 session_start();
+if($role !== $_SESSION['role']) die();
+//session_start();
 
 if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && require($base_path."db.php")) {
     $data1 = [
@@ -16,8 +19,8 @@ if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && require($base_path."d
         'verze' => $_REQUEST["verze"]
     ];
 
-    $sql = "INSERT INTO zprava (id_clanku, verze, datum_cas, text_zpravy, login, interni) VALUES".
-        "(:id, :verze, Now(), :text, :login, 0);";
+    $sql = "INSERT INTO zprava (id_clanku, verze, datum_cas, text_zpravy, login, interni, duvod) VALUES".
+        "(:id, :verze, Now(), :text, :login, 0, 3);";
     $stmt = $pdo->prepare($sql);
 
     try{

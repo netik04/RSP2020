@@ -1,13 +1,16 @@
 <?php
+    $role = "autor";
     // script, sloužící pro kontrolu, zdali login autora existuje
     // tento script je volán z hlavního formuláře pomocí AJAXu a přes echo vrací několik možných variant
     session_start();
     
+    if(!isset($_SESSION[session_id()]) && $_SESSION["role"] != $role){ header("Location: ../../index.php"); exit(); }
+
     // připojím se do DB
     require_once '../../db.php';
 
     // stáhnu si login
-    $login = $_GET["login"];
+    $login = htmlentities($_GET["login"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
     // pokud je zadaný login hlavním autorem článku
     if($login == $_SESSION[session_id()])

@@ -1,8 +1,12 @@
 <?php
 
 $base_path = "../../";
-session_start();
 
+$role = "redaktor";
+session_start();
+if($role !== $_SESSION['role']) die();
+
+//session_start();
 
 if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && isset($_REQUEST["duvod"])
     && isset($_SESSION[session_id()]) && require($base_path."db.php")) {

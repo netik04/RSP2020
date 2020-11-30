@@ -1,9 +1,12 @@
 <?php
+    session_start();
+    $role = "administrator";
+    if(!isset($_SESSION[session_id()]) && $_SESSION["role"] != $role){ header("Location: ../../index.php"); exit(); }
 
-    $id_clanku = $_POST["id_cl"];
-    $nazev = $_POST["nazev"];
-    $id_casopisu = $_POST["id_cas"];
-
+    $id_clanku = htmlentities($_POST["id_cl"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $nazev = htmlentities($_POST["nazev"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $id_casopisu = htmlentities($_POST["id_cas"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+ 
     if(!require '../../db.php') die("Chyba v DB");
 
     try

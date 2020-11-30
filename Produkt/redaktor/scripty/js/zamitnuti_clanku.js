@@ -33,6 +33,7 @@ $(document).on("submit", "#message_box form.a_deny", function (event) {
           $('.a_return').remove();
           $('.a_release').remove();
 
+        zobrazZpravy();
       }
       else {
         alert("Nepodařilo se zamítnout článek :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
@@ -46,7 +47,6 @@ $(document).on("submit", "#message_box form.a_deny", function (event) {
     })
     .always(function() {
       $('button').blur();
-      location.reload();
     });
   }
 });

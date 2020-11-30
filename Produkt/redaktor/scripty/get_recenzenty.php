@@ -1,5 +1,10 @@
 <?php
+
 $base_path = "../../";
+
+$role = "redaktor";
+session_start();
+if($role !== $_SESSION['role']) die();
 
 if (require($base_path . "db.php")) {
     try {

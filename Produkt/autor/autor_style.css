@@ -1,34 +1,27 @@
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 .form-table tr, .form-table th, .form-table td
 {
-    border: 1px solid white;
-    padding: 10px;
+    padding: 13px;
+    text-align:right;
 }
 .form-table
 {
     float: right;
     text-align: right;
+    margin-right: 4%;
 }
-
-input, .add, .remove, .pridat_clanek
-{
-    margin: 2px;
-    padding: 4px;
+.form-table tr td{
+      border-bottom: 1px solid #007EA7;
 }
-
-select
-{
-    margin: 2px;
-    margin-left: -3px;
-    padding: 4px;
+.form-table th{
+      border-top: 3px solid #007EA7;
+      border-bottom: 3px solid #007EA7;
 }
-
-label
-{
-    display: inline-block;
-    width: 190px;
-    text-align: right;
-}
-
 .acc-table tr td
 {
     border-top: 1px solid white;
@@ -42,7 +35,37 @@ label
     text-align: center;
 }
 
-.nazev
+.fix, .pridat_clanek, select
+{
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  width: 30%;
+  border-width: 1px;
+  border-style: solid;
+  padding: 2px;
+  outline: 0;
+  font-family: inherit;
+  font-size: 0.95em;
+}
+
+select
+{
+    padding: 4px;
+}
+.add, .remove{
+padding: 7px;
+margin-left: 5%;
+}
+
+th, td {
+  text-align: left;
+  padding: 20px;
+  font-weight: 300;
+}
+
+.accordion h1
 {
     overflow: hidden;
 }
@@ -50,7 +73,8 @@ label
 .tema
 {
     float: right;
-    overflow:hidden;
+    text-align: right;
+    max-width: 60%;
 }
 
 .nova_verze
@@ -59,12 +83,72 @@ label
     padding-right: 10px;
 }
 
-#clanekNazev
-{
-    width: 374px;
-}
-
 #pridatForm input
 {
     height: 30px;
+}
+
+.detail_tabulka
+{
+    padding: 0px;
+}
+
+.detail_tabulka th
+{
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 1.25rem;
+}
+
+.detail_tabulka td
+{
+    font-size: 1.25rem;
+}
+
+.autor_posudek
+{
+    margin: auto;
+}
+
+.autor_posudek td
+{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border: 1px solid #007EA7;
+}
+
+.autor_posudek th
+{
+    padding: 10px;
+    border: 1px solid #007EA7;
+    background: rgba(0, 139, 185, 0.2); 
+    
+}
+
+.autor_posudek button
+{
+    padding: 10px;
+}
+
+.info_tlacitka
+{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+.kekw{
+margin-top: 5px;
+padding: 5px 5px;
+border-radius: 3px;
+}
+
+#chatNadpis
+{
+    margin-bottom: 0;
+}
+
+#odeslatZpravu
+{
+    font-size: 0.6rem;
 }

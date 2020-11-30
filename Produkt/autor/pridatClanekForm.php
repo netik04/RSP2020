@@ -14,7 +14,7 @@ require($base_path."head.php");
 <?php
 // připojím se do DB
 if (!include($base_path."db.php")) echo "Nepodařilo se navázat spojení s databází.<br>Zkuste to prosím později."; // pokud se nepodařilo připojit - nemá smysl pokračovat
-else 
+else
 {
     // stáhnu si jméno a přijmení uživatele, který si zobrazil formulář (hlavní autor)
     try
@@ -51,7 +51,7 @@ $("document").ready(function ()
         {
             // vytvořím instanci XMLHttpRequest a vytvořím funkci, pokud se změní jeho stav
             var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() 
+            xmlhttp.onreadystatechange = function()
             {
                 // pokud byl přijat výstup z externího scrpitu
                 if (this.readyState == 4 && this.status == 200)
@@ -64,8 +64,8 @@ $("document").ready(function ()
                         {
                             // pokud najdu shodu - autor byl již zadán předtím
                             if((input === $("#new_" + i).val()) && (id != $("#new_" + i).attr('id')))
-                            {   
-                                // vypíšu chybu a nedovolím uživatele odeslat formulář                             
+                            {
+                                // vypíšu chybu a nedovolím uživatele odeslat formulář
                                 $("#error" + id).html("Tento člověk je již uveden jako autor.");
                                 $("#error" + id).css("color", "red");
                                 $(".pridat_clanek").prop("disabled", true);
@@ -79,7 +79,7 @@ $("document").ready(function ()
                                 $("#error" + id).css("color", "green");
                                 $(".pridat_clanek").prop("disabled", false);
                             }
-                        }                     
+                        }
                     }
                     // pokud script oznámí, že se jedná o stejného autora jako hlavní autor článku
                     else if(this.responseText == "stejny_autor")
@@ -88,16 +88,16 @@ $("document").ready(function ()
                         $("#error" + id).html("Vy už jste uveden jako autor");
                         $("#error" + id).css("color", "red");
                         $(".pridat_clanek").prop("disabled", true);
-                    }  
-                    // pokud uživatel existuje, ale není autor 
+                    }
+                    // pokud uživatel existuje, ale není autor
                     else if(this.responseText == "neni_autor")
                     {
                         // vypíšu chybu a nedovolím odeslat formulář
                         $("#error" + id).html("Tento uživatel není autorem!");
                         $("#error" + id).css("color", "red");
                         $(".pridat_clanek").prop("disabled", true);
-                    } 
-                    // pokud uživatel neexistuje                            
+                    }
+                    // pokud uživatel neexistuje
                     else
                     {
                         // vypíšu chybu a nedovolím odeslat formulář
@@ -108,7 +108,7 @@ $("document").ready(function ()
                  }
             };
             // nastavím, na který script se má odkazovat a předám hodnotu z inputu
-            xmlhttp.open("GET","scripty/zkontrolujAutora.php?login="+$(this).val(),true);
+            xmlhttp.open("POST","scripty/zkontrolujAutora.php?login="+$(this).val(),true);
             // odešlu požadavek na script
             xmlhttp.send();
         }
@@ -126,37 +126,38 @@ $("document").ready(function ()
     $('.remove').on('click', remove);
 
     // funkce pro přidávání více autorů
-    function add() 
+    function add()
     {
         // zjistím, kolikátý autor to bude
         var pocetAutoru = parseInt($('#clanekPocetAutoru').val()) + 1;
         // vytvořím input a vše potřebné okolo
-        var novyAutor = "<label for='clanekAutor" + pocetAutoru + "'>Zadejte login autora č." + pocetAutoru + ": </label><input type='text' id='new_" + pocetAutoru + "' name='clanekAutor" + pocetAutoru + "' required><span id='errornew_" + pocetAutoru + "'></span><br />";
+        var novyAutor = "<span class='extraAutor'><label for='clanekAutor" + pocetAutoru + "'>Zadejte login autora č." + pocetAutoru + ": </label><br><input type='text' class='fix' id='new_" + pocetAutoru + "' name='clanekAutor" + pocetAutoru + "' required><span id='errornew_" + pocetAutoru + "'></span><br></span>";
         $('#clanekExtraAutor').append(novyAutor);
         // do inputu dám hodnotu počtu autorů
         $('#clanekPocetAutoru').val(pocetAutoru);
     }
 
     // funkce pro odebrání posledního inputu autora
-    function remove() 
+    function remove()
     {
         // zjistím, kolik máme autorů
         var posledni_cislo_autora = $('#clanekPocetAutoru').val();
         // pokud nemáme pouze jednoho extra autora
-        if (posledni_cislo_autora > 1) 
+        if (posledni_cislo_autora > 1)
         {
             // smažu input, odřádkování, span
-            $('#new_' + posledni_cislo_autora).remove(); 
-            $("#clanekExtraAutor").find("br:last").remove();
+            $('#new_' + posledni_cislo_autora).remove();
+            /*$("#clanekExtraAutor").find("br:last").remove();
             $("#clanekExtraAutor").find("label:last").remove();
-            $("#clanekExtraAutor").find("span:last").remove();
+            $("#clanekExtraAutor").find("span:last").remove();*/
+            $("#clanekExtraAutor").find(".extraAutor:last").remove();
             // snížím počet autorů o jedničku
             $('#clanekPocetAutoru').val(posledni_cislo_autora - 1);
         }
     }
 
     // pokud uživatel vybere možnost v select-u
-    $(document).on('change', 'select', function() 
+    $(document).on('change', 'select', function()
     {
         // nastavím ajax pro zjištění informací o časopisu z externího scriptu
         $.ajax({
@@ -166,22 +167,22 @@ $("document").ready(function ()
             dataType: 'json', // jak je script vrátí
             cache: false,
             // pokud se vše povede
-            success: function(result) 
+            success: function(result)
             {
                 // stáhnu si data z JSON pole
                 var datum = result[0].split("-").reverse().join(".");
                 var kapacita = result[1];
-                var pocetPrispevku = result[2]; 
-                // vypíšu všechny informace do tabulky   
-                $("#casopis_info").html("<table class='form-table'><tr><th>Počet příspěvků v recenzním řízení</th><th>Kapacita výtisku</th><th>Datum uzávěrky</th></tr>" + 
-                "<tr><td>" + pocetPrispevku + "</td><td>" + kapacita + "</td><td>" + datum + "</td></tr></table>");           
+                var pocetPrispevku = result[2];
+                // vypíšu všechny informace do tabulky
+                $("#casopis_info").html("<table class='form-table' cellspacing='0'><tr><th>Počet příspěvků v recenzním řízení</th><th>Kapacita výtisku</th><th>Datum uzávěrky</th></tr>" +
+                "<tr><td>" + pocetPrispevku + "</td><td>" + kapacita + "</td><td>" + datum + "</td></tr></table>");
             },
-        });       
+        });
     });
 });
 </script>
 
-<h2>Přidat článek</h2>
+
 
 <?php
     // pokud je v session-ě error - něco se nepovedlo při odesílání článku
@@ -194,10 +195,11 @@ $("document").ready(function ()
     }
 ?>
 <fieldset>
+<h2>Přidat článek</h2>
 <!-- enctype=multipart/form-data ==> odesílám jak textové údaje, tak soubor -->
 <form action="scripty/pridatClanek.php" id="pridatForm" method="POST" enctype="multipart/form-data">
 <div id="casopis_info"></div>
-<label for="clanekCasopis">Zvolte časopis:</label>
+<label for="clanekCasopis">Zvolte časopis:</label></br>
 <select name="clanekCasopis" id="clanekCasopis" required>
 <option disabled selected value>Vyberte...</option>
 <?php
@@ -233,19 +235,22 @@ $("document").ready(function ()
     if(isset($_REQUEST["verzeSubmit"]))
     {
         // nastavím pevnou value SELECTu, zakážu vybrání jiného časopisu a předám value do hidden inputu
-        echo("<script>$('#clanekCasopis').val(" . $_REQUEST["clanekCasopis"] . ");$('#clanekCasopis').prop('disabled', true);</script><input type='hidden' name='clanekCasopis' value='" . $_REQUEST["clanekCasopis"] . "'>");
+        echo("<script>$('#clanekCasopis').val(" . $_REQUEST["clanekCasopis"] . ");$('#clanekCasopis').prop('disabled', true);</script><input class='fix' type='hidden' name='clanekCasopis' value='" . $_REQUEST["clanekCasopis"] . "'>");
     }
 ?>
 </select><br />
-<label for="clanekNazev">Název článku: </label><input type="text" name="clanekNazev" id="clanekNazev" <?php 
+<label for="clanekNazev">Název článku: </label></br><input class="fix" type="text" name="clanekNazev" id="clanekNazev" <?php
 if(isset($_REQUEST["verzeSubmit"])){echo("value='" . $_REQUEST["clanekNazev"] . "' readonly='readonly'");}?> required><br />
-<label for="clanekAutor">Autor: </label><input type="text" name="clanekAutor" value="<?php echo($jmeno . " " . $prijmeni); ?>" disabled>
-<button class="add" type="button" <?php if(isset($_REQUEST["verzeSubmit"])){echo("disabled ");} ?>> Přidat autora</button>
-<button class="remove" type="button" <?php if(isset($_REQUEST["verzeSubmit"])){echo("disabled ");} ?>> Odebrat pole</button>
-<div id="clanekExtraAutor"></div>
-<input type="hidden" value="1" id="clanekPocetAutoru" name="clanekPocetAutoru">
-<label for="clanekSoubor">Nahrát článek:</label><input type="file" name="clanekSoubor" accept=".doc, .docx, .pdf, .odt" required><br />
-<input type="submit" name="clanekSubmit" value="Přidat článek" class="pridat_clanek">
+<?php
+    if(!isset($_REQUEST["verzeSubmit"]))
+    {
+        echo("<label for=\"clanekAutor\">Autor: </label></br><input class=\"fix\" type=\"text\" name=\"clanekAutor\" value=\"" .  $jmeno . " " . $prijmeni . "\" disabled>" .
+        "<div id=\"clanekExtraAutor\"></div><input class=\"fix\" type=\"hidden\" value=\"1\" id=\"clanekPocetAutoru\" name=\"clanekPocetAutoru\">".
+      "</br><button class=\"add reg_button\" type=\"button\"> Přidat autora</button><button class=\"remove reg_button\" type=\"button\">Odebrat pole</button></br>");
+    }
+?>
+</br><label for="clanekSoubor">Nahrát článek:</label></br><input class="fix" type="file" name="clanekSoubor" accept=".doc, .docx, .pdf, .odt" required><br />
+<input type="submit" name="clanekSubmit" value="Přidat článek" class="pridat_clanek reg_button">
 </form>
 </fieldset>
 

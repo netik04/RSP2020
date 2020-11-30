@@ -1,7 +1,10 @@
 <?php
+    session_start();
+    $role = "administrator";
+    if(!isset($_SESSION[session_id()]) && $_SESSION["role"] != $role){ header("Location: ../../index.php"); exit(); }
 
-    $id = $_POST["id"];
-    $verze = $_POST["verze"];
+    $id = htmlentities($_POST["id"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $verze = htmlentities($_POST["verze"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $stavAutor = $_POST["stavAutor"];
     $stavRedaktor = $_POST["stavRedaktor"];
     $datum = $_POST["datum"];
