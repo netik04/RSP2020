@@ -101,7 +101,7 @@
             <label for="reg_prijmeni"></label><input type="text" name="reg_prijmeni" placeholder="Přimení" required /><br />
             <label for="reg_mail"></label><input type="email" name="reg_mail" placeholder="Email" required /><br />
             <label for="reg_tel"></label><input type="text" name="reg_tel" placeholder="Telefonní číslo" /><br />
-            <label for="reg_pfp"></label><input type="file" name="reg_pfp" accept="image/png, image/jpeg" /><br />
+            <label for="reg_pfp"></label><input type="file" name="reg_pfp" accept=".png, .jpg, .jpeg, .gif" /><br />
             <?php
                 $role = "redaktor";
                 if(include("scripty/maSpravnouRoli.php")) // pokud jsi redaktor

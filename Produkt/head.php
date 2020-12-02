@@ -15,6 +15,7 @@
       href="<?php echo($base_path."img/icon.png");?>">
     <link rel="stylesheet" href="<?php echo($base_path."style.css");?>">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="<?php echo($base_path."scripty/js/rainbow.js");?>"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css ">
     <?php echo($head_str); //přidá další věci do hlavičky z volajícího php?>
     <style>
@@ -29,13 +30,14 @@
     <div id="page">
 
         <header>
-            <h1 class="logo"><a href="<?php echo($base_path."index.php");?>"><span class="logos">Logos</span>POLY<span class="logospolytechnos2">TECH</span>NIKOS</a></h1>
+            <div class="empty"></div>
+            <div class="logo_wrap"><h1 class="logo"><a href="<?php echo($base_path."index.php");?>"><span class="logos">Logos</span>POLY<span class="logospolytechnos2">TECH</span>NIKOS</a></h1></div>
 
             <?php
             if (!include("scripty/jePrihlasen.php")){ // test jestli je uživatel přihlášen, pokud není, uživateli je zobrazeno pole pro přihlášení
             ?>
 
-            <div class="login flex_horizontalne">
+            <div class="login override flex_horizontalne">
               <div class="flex_vodorovne">
                 <form id="loginForm" action="scripty/prihlaseni.php" method="POST">
                     <input type="text" name="login" id="login" placeholder="Uživatelské jméno" required><br/>
@@ -53,7 +55,7 @@
             {
             ?>
 
-            <div class="login flex_horizontalne">
+            <div class="login override flex_horizontalne">
                 <div class="flex_vodorovne">
                     <?php include($base_path . "scripty/view_profile_pic.php")?>
                     <div class="flex_horizontalne">
@@ -66,7 +68,8 @@
                         <div><?php echo $fetchedUser['jmeno'] . ' ' . $fetchedUser['prijmeni']; //zobrazeni jmena a prijmeni ktere vratil dotaz?></div>
                         <div class="role"><?php echo $_SESSION['role'] //zobrazeni role ktera je prenasena v session role?></div>
                     </div>
-                    <div class="flex_vodorovne">
+                    <div class="flex_vodorovne buttons_wrap">
+                        <?php include($base_path."scripty/notifikace.php");?>
                         <button class="buttonikOdhlasit btn-three" id="editProfile"><i class="fa fa-user-edit" aria-hidden="true"></i></button>
                         <button class="buttonikOdhlasit btn-three" id="logOut"><i class="fa fa-sign-out-alt" aria-hidden="true"></i></button>
                     </div>

@@ -35,7 +35,7 @@ if (!include($base_path."../db.php")) { //pripojeni k databazi
                     die();
                 break;
                 case "administrator":
-                    header("Location: ../administrator/index.php");
+                    header("Location: ../administrator/uzivatel.php");
                     die();
                 break;
                 case "sefredaktor":

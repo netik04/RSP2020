@@ -86,3 +86,8 @@ textarea
 {
     padding: 5px;
 }
+
+#rec_01, #rec_02, #rec_03, #rec_04
+{
+    width: 60%;
+}

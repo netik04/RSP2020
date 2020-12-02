@@ -29,6 +29,8 @@ $(document).on("click", "button.a_release", function () {
       $('.control .accept').show();
 
       $('.control .deny').hide();*/
+
+      zobrazZpravy(true);
     } else {
       alert("Nepodařilo se přijmout článek k vydání :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
       location.reload();

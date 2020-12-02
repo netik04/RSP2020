@@ -8,7 +8,7 @@ $(document).on("submit", "#message_box form.a_return", function (event) {
   };
 
   if(formData['duvod'] == "")
-    $('#message_box .error').text("*Vyplňtě prosím důvod navrácení!");
+    $('#message_box .error').html("<br>*Vyplňtě prosím důvod navrácení!");
   else{
     $.ajax({
       type: "POST",
@@ -31,7 +31,7 @@ $(document).on("submit", "#message_box form.a_return", function (event) {
           .html("Stav<br><span class=\"l2\">Probíhá úprava textu autorem</span>");
 
 
-        zobrazZpravy();
+        zobrazZpravy(true);
       } else {
         alert("Nepodařilo se vrátit článek k úpravám :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");
         location.reload();

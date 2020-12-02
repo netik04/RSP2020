@@ -13,9 +13,16 @@ require($base_path."head.php");
 $id = $_GET["id"];
 $verze = $_GET["verze"];
 $login = $_SESSION[session_id()];
-$query = $pdo->prepare("SELECT datum, cesta, nazev, tema FROM verze NATURAL JOIN clanek NATURAL JOIN casopis WHERE id_clanku = ? AND verze = ?");
-$params = array($id, $verze);
-$query->execute($params);
+try
+{
+    $query = $pdo->prepare("SELECT datum, cesta, nazev, tema FROM verze NATURAL JOIN clanek NATURAL JOIN casopis WHERE id_clanku = ? AND verze = ?");
+    $params = array($id, $verze);
+    $query->execute($params);
+}
+catch(PDOException $ex)
+{
+    die("Nastala chyba v systému. Zkuste to prosím později.");
+}
 
 $radek = $query->fetch(PDO::FETCH_ASSOC);
 $datum = date_format(date_create($radek["datum"]),"j.n.Y");
@@ -23,6 +30,41 @@ $cesta = $radek["cesta"];
 $nazev = $radek["nazev"];
 $tema = $radek["tema"];
 
+
+try
+{
+    $queryRevize = $pdo -> prepare("SELECT osobni_revize FROM posudek WHERE login_recenzenta = ? AND id_clanku = ?");
+    $params = array($login, $id);
+    $queryRevize -> execute($params);
+}
+catch(PDOException $ex)
+{
+    die("Nastala chyba v systému. Zkuste to prosím později");
+}
+
+if($queryRevize -> rowCount() == 0)
+{
+    $revize = false;
+}
+else
+{
+    while($radekRevize = $queryRevize->fetch(PDO::FETCH_ASSOC))
+    {
+        $tmp = $radekRevize["osobni_revize"];
+        if($tmp == 1)
+        {
+        break;
+        }
+    }
+    if($tmp == 0)
+    {
+        $revize = false;
+    }
+    else
+    {
+        $revize = true;
+    }
+}
 ?>
 
 <script>
@@ -52,6 +94,15 @@ $tema = $radek["tema"];
         $("#rec_posudekForm").submit(function(event)
         {
             event.preventDefault();      
+            var kontrola;
+            if($("#rec_kontrola").prop("checked") == true)
+            {
+                kontrola = 1;
+            }
+            else
+            {
+                kontrola = 0;
+            }
 
             $.ajax("scripty/odeslatPosudek.php", {
                 type: "POST",
@@ -64,7 +115,7 @@ $tema = $radek["tema"];
                     rec03: $("#rec_03").val(),
                     rec04: $("#rec_04").val(),
                     recOdpoved: $("#rec_odpoved").val(),
-                    recKontrola: $("#rec_kontrola").is(":checked")
+                    recKontrola: kontrola
                 },
                 success: function(result)
                 {
@@ -91,7 +142,7 @@ $tema = $radek["tema"];
                 <tr><td><label for='rec_03'>Odborná úroveň:</label></td></tr><tr><td><input type='number' id='rec_03' min='1' max='5' name='rec_03' placeholder='Známka 1-5' required></td></tr>
                 <tr><td><label for='rec_04'>Jazyková a stylistická úroveň:</label></td></tr><tr><td><input type='number' id='rec_04' min='1' name='rec_04' max='5' placeholder='Známka 1-5' required></td></tr>
                 <tr><td><label for='rec_odpoved'>Otevřená odpověď:</label></td></tr><tr><td><textarea id='rec_odpoved' name='rec_odpoved' placeholder='Zde se můžete ke článku vyjádřit'></textarea></td></tr>
-                <tr><td><label for='rec_revize'>Vyžadována osobní kontrola:</label></td></tr><tr><td><input type='checkbox' id='rec_kontrola' name='rec_kontrola' value='1'></td></tr>
+                <tr><td><label for='rec_revize'>Vyžadována osobní kontrola:</label></td></tr><tr><td><input type='checkbox' id='rec_kontrola' name='rec_kontrola' value='1' <?php if($revize) echo("disabled title='K tomuto článku jste si již osobní revizi vyžádal.'");?> ></td></tr>
                 <tr><td><input type='submit' id='rec_submit' value='Odeslat posudek'></td></tr>
 </table>
         </form>
@@ -143,10 +194,113 @@ $tema = $radek["tema"];
                 echo("<td>" . $vyjadreni_autora . "</td></tr></table>");
                 echo("</fieldset>");
             }
+
+            try
+            {
+                $queryMax = $pdo->prepare("SELECT MAX(verze) FROM verze WHERE id_clanku = ?");
+                $params = array($id);
+                $queryMax -> execute($params);
+            }
+            catch(PDOException $ex)
+            {
+                die("Nastala chyba. Zkuste to prosím později");
+            }
+
+            $maxVerze = $queryMax->fetchColumn(0);
             ?>
             <br />
             <fieldset>
                 <h2>Chat s redakcí</h2>
+                <script>
+                    $(document).ready( function(){ 
+                        $("#odeslatZpravu").button(); 
+                        $('#messageBox').on('scroll', chk_scroll);   
+                        zobrazZpravy(true);
+                        startTimer(true);
+                    });
+                </script>
+                    <div id="messageWrap">
+                        <div id="messageBox">
+                        </div>
+                        <form id="messageSender" action="scripty/odeslatZpravu.php">
+                                <input type="hidden" id="zpravaId" name="id" value="<?php echo $id?>">
+                                <input type="hidden" id="zpravaVerze" name="verze" value="<?php echo $verze?>">
+                                <input type="hidden" id="inter" name="interni" value="1">
+                                <input type="text" id="message" name="message" required>
+                                <input id="odeslatZpravu" type="submit" name="odeslatZpravu" value="Odeslat" <?php if($verze != $maxVerze)echo "disabled"; ?>>
+                        </form>
+                    </div>
+
+                <script>
+                    var timer;
+                    function zobrazZpravy(neco){
+                        $.ajax('<?php echo $base_path;?>scripty/zobrazZpravy.php', {
+                                type: 'POST',  // http method
+                                data: {
+                                    article_id: <?php echo $id ?>,
+                                    article_verze: <?php echo $verze ?>,
+                                    interni: 1
+                                },  // data to submit
+                                success: function (data) {
+                                    $('#messageBox').html(data);
+                                    if(neco == true){
+                                        var objDiv = document.getElementById("messageBox");
+                                        objDiv.scrollTop = objDiv.scrollHeight;
+                                    }
+                                },
+                                error: function (errorMessage) {
+                                    $('#errorMessage').text('Error' + errorMessage);
+                                }
+                            });
+                    }
+
+                    $(document).ready(function(){
+                        $("#messageSender").submit(function(event){
+                                event.preventDefault();
+                                $.ajax('<?php echo $base_path;?>scripty/odeslatZpravu.php', {
+                                    type: 'POST',
+                                    data: {
+                                        id: $("#zpravaId").val(),
+                                        verze: $("#zpravaVerze").val(),
+                                        interni: $("#inter").val(),
+                                        message: $("#message").val()
+                                    },
+                                    success: function(result)
+                                    {
+                                        if(result != "")
+                                        {
+                                            alert(result);
+                                        }
+                                        else
+                                        {
+                                            zobrazZpravy(true);
+                                            $("#message").val("");
+                                        }
+                                    }
+                                });
+                            });
+                        });
+
+                    function startTimer(neco){
+                    clearInterval(timer);
+                    timer = setInterval(function(){ zobrazZpravy(neco) }, 2000);
+                    }
+
+                    function stopTimer(){
+                        clearInterval(timer);
+                    }
+
+                    function chk_scroll(e) {
+                        var elem = $(e.currentTarget);
+                        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+                            stopTimer();
+                            startTimer(true);
+                        }else{
+                            stopTimer();
+                            startTimer(false);
+                        }
+                    }
+                </script>
             </fieldset>            
             <?php
         }

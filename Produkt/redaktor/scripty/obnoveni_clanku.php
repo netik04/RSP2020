@@ -102,8 +102,7 @@ if (isset($_REQUEST["id"]) && isset($_REQUEST["verze"]) && require($base_path."d
     }
 
     $sql = "DELETE FROM zprava ".
-        "WHERE id_clanku = :id AND verze = :verze AND duvod = 2";
-
+        "WHERE id_clanku = :id AND verze = :verze AND (duvod = 2 OR duvod = 4)";
 
     $stmt = $pdo->prepare($sql);
 

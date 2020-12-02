@@ -32,10 +32,10 @@ require($base_path."head.php");
 <?php
 //Vytahnu login prave prihlaseneho uzivatele
 $login=$_SESSION[session_id()];
-              
+    date_default_timezone_set("Europe/Prague");         
     try {
         //SQL dotaz -> vytahnuti id, nazvu a verze clanku pro recenzenta
-        $query3 = $pdo->prepare("SELECT id_clanku, nazev, verze, datum_vytvoreni FROM clanek NATURAL JOIN posudek
+        $query3 = $pdo->prepare("SELECT id_clanku, nazev, verze, datum_vytvoreni, datum_uzaverky FROM clanek NATURAL JOIN posudek
                                  WHERE login_recenzenta = ? ORDER BY datum_vytvoreni");
         $params = array($login);
         $query3->execute($params);
@@ -43,40 +43,48 @@ $login=$_SESSION[session_id()];
             echo("Selhal dotaz " . $ex->getMessage());
         }
         //Vytahni data z db a vypis
-        if($query3->rowCount() == 0)
-        {
-            echo("<h2>Nemáte zatím přidělené žádné články k recenzi.</h2>");
-        }
-        else
-        {
             $tmp = "";
-            echo("<h2>Články k recenzi</h2>");
-            echo("<table class='recenzent_clanky' cellspacing='0'>");
-            echo("<th class='recenzent_nazev'>Název článku</th><th>Verze</th><th>Možnosti</th>");
+            $tmp2 = "";
             while(($radek = $query3 -> fetch(PDO::FETCH_BOTH)) != FALSE) {
                 $id = $radek["id_clanku"];
                 $nazev = $radek["nazev"];
                 $verze = $radek["verze"];
                 $datum = $radek["datum_vytvoreni"];
+                $datum_uz = date_format(date_create($radek['datum_uzaverky']),"j.n.Y G:i");
                 
                 if($datum == "")
                 {
-                    echo("<tr>");
-                    echo("<td class='recenzent_nazev'>" . $nazev . "</td><td>" . $verze . "</td><td><a href='zobrazitDetail.php?id=" . $id . "&verze=" . $verze . "'><button class='recenzent_detail'>Zobrazit detail</button></a></td>");
-                    echo("</tr>");
+                    $tmp2 .= "<tr><td class='recenzent_nazev'>" . $nazev . "</td><td>" . $verze . "</td><td>" . $datum_uz . "</td><td><a href='zobrazitDetail.php?id=" . $id . "&verze=" . $verze . "'><button class='recenzent_detail'>Zobrazit detail</button></a></td></tr>";
                 }
                 else
                 {
                     $tmp .= "<tr><td class='recenzent_nazev'>" . $nazev . "</td><td>" . $verze . "</td><td><a href='zobrazitDetail.php?id=" . $id . "&verze=" . $verze . "'><button class='recenzent_detail'>Zobrazit detail</button></a></td></tr>";
                 }
             }
-            echo("</table><br>");
+            echo("<h2>Články k recenzi</h2>");
+            if($tmp2 != "")
+            {                
+                echo("<table class='recenzent_clanky' cellspacing='0'>");
+                echo("<tr><th class='recenzent_nazev'>Název článku</th><th>Verze</th><th>Datum uzávěrky</th><th>Možnosti</th></tr>");
+                echo($tmp2);
+                echo("</table><br>");
+            }
+            else
+            {
+                echo("<table class='recenzent_clanky'><tr><th><h3>Gratulace, nechybí Vám žádné články k recenzi.</h3></th></tr></table>");
+            }
             echo("<h2>Vámi již zrecenzované články</h2>");
-            echo("<table class='recenzent_clanky' cellspacing='0'>");
-            echo("<th class='recenzent_nazev'>Název článku</th><th>Verze</th><th>Možnosti</th>");
-            echo($tmp);
-            echo("</table>");
-        }
+            if($tmp != "")
+            {                
+                echo("<table class='recenzent_clanky' cellspacing='0'>");
+                echo("<th class='recenzent_nazev'>Název článku</th><th>Verze</th><th>Možnosti</th>");
+                echo($tmp);
+                echo("</table>");
+            }
+            else
+            {
+                echo("<table class='recenzent_clanky'><tr><th><h3>Zatím jste nesepsal žádné posudky</h3></th></tr></table>");
+            }
 ?>
     
 </div>

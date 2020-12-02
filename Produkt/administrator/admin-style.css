@@ -156,3 +156,12 @@
 padding: 1px 5px;
 border-radius: 2px;
 }
+
+#odeslatZpravu{
+    font-size: 0.6rem;
+}
+
+#modalUpravit select
+{
+    width: 100%;
+}

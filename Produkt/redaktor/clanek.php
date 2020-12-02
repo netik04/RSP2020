@@ -201,9 +201,7 @@ if(is_numeric($_GET['verze'])){
                         break;
                         case "Posudky odeslány autorovi":
                             echo("<button class=\"a_return\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Vrátit k úpravám</button>");
-                            if($article_verze > 1){
-                                echo("<button class=\"a_release\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Přijmout k vydání</button>");
-                            }
+                            echo("<button class=\"a_release\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Přijmout k vydání</button>");
                             echo("<button class=\"a_deny\" cl_id=\"".$article_id."\" cl_ver=\"".$article["verze"]."\">Zamítnout</button>");
                         break;
                         case "Probíhá úprava textu autorem":
@@ -291,7 +289,10 @@ if(is_numeric($_GET['verze'])){
                 ?>
             </div>
                 <script>
-                    $(document).ready( function(){ $("#odeslatZpravu").button(); });
+                    $(document).ready( function(){ 
+                        $("#odeslatZpravu").button(); 
+                        $('#messageBox').on('scroll', chk_scroll);
+                    });
                 </script>
                 <div class="article">
                     <div id="messageWrap">
@@ -313,8 +314,10 @@ if(is_numeric($_GET['verze'])){
                 </div>
 
                 <script>
-                    function zobrazZpravy(){
-                        $.ajax('scripty/zobrazZpravy.php', {
+                    var timer;
+
+                    function zobrazZpravy(neco){
+                        $.ajax('<?php echo $base_path?>scripty/zobrazZpravy.php', {
                                 type: 'POST',  // http method
                                 data: {
                                     article_id: <?php echo $article_id ?>,
@@ -323,8 +326,10 @@ if(is_numeric($_GET['verze'])){
                                 },  // data to submit
                                 success: function (data) {
                                     $('#messageBox').html(data);
-                                    var objDiv = document.getElementById("messageBox");
-                                    objDiv.scrollTop = objDiv.scrollHeight;
+                                    if(neco == true){
+                                        var objDiv = document.getElementById("messageBox");
+                                        objDiv.scrollTop = objDiv.scrollHeight;
+                                    }
                                 },
                                 error: function (errorMessage) {
                                     $('#errorMessage').text('Error' + errorMessage);
@@ -348,7 +353,7 @@ if(is_numeric($_GET['verze'])){
                                 $("#inter").val(1);
                                 $("#autorsky").removeClass("active");
                                 $("#interni").addClass("active");
-                                $.ajax('scripty/zapisSessionInterni.php', {
+                                $.ajax('<?php echo $base_path?>scripty/zapisSessionInterni.php', {
                                     type: 'POST',  // http method
                                     data: {
                                         interni: interni
@@ -365,7 +370,7 @@ if(is_numeric($_GET['verze'])){
                                 $("#inter").val(0);
                                 $("#interni").removeClass("active");
                                 $("#autorsky").addClass("active");
-                                $.ajax('scripty/zapisSessionInterni.php', {
+                                $.ajax('<?php echo $base_path?>scripty/zapisSessionInterni.php', {
                                     type: 'POST',  // http method
                                     data: {
                                         interni: interni
@@ -379,12 +384,13 @@ if(is_numeric($_GET['verze'])){
                                 });
                             }
 
-                            zobrazZpravy();
+                            zobrazZpravy(true);
+                            startTimer(true);
                         });
 
                         $("#messageSender").submit(function(event){
                                 event.preventDefault();
-                                $.ajax('scripty/odeslatZpravu.php', {
+                                $.ajax('<?php echo $base_path?>scripty/odeslatZpravu.php', {
                                     type: 'POST',
                                     data: {
                                         id: $("#zpravaId").val(),
@@ -400,13 +406,34 @@ if(is_numeric($_GET['verze'])){
                                         }
                                         else
                                         {
-                                            zobrazZpravy();
+                                            zobrazZpravy(true);
                                             $("#message").val("");
                                         }
                                     }
                                 });
                             });
                     });
+
+                    function startTimer(neco){
+                        clearInterval(timer);
+                        timer = setInterval(function(){ zobrazZpravy(neco) }, 2000);
+                    }
+
+                    function stopTimer(){
+                        clearInterval(timer);
+                    }
+
+                    function chk_scroll(e) {
+                        var elem = $(e.currentTarget);
+                        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+                            stopTimer();
+                            startTimer(true);
+                        }else{
+                            stopTimer();
+                            startTimer(false);
+                        }
+                    }
+
                 </script>
 
     <?php } } ?>

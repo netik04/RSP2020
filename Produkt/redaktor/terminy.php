@@ -28,7 +28,7 @@ require($base_path."head.php");
             WHERE datum_uzaverky > CURRENT_DATE() OR (
                 SELECT COUNT(*) FROM clanek
                 NATURAL JOIN verze
-                NATURAL LEFT JOIN posudek
+                NATURAL JOIN posudek
                 WHERE clanek.id_casopisu = c.id_casopisu AND posudek.datum_vytvoreni IS NULL AND verze.stav_redaktor <> 'Příspěvek zamítnut'
             )
             ORDER BY c.datum_uzaverky ASC";
@@ -59,7 +59,7 @@ require($base_path."head.php");
                                     <tr>
                                         <th>Název článku</th>
                                         <th>Verze</th>
-                                        <th>Autor</th>
+                                        <th>Recenzent</th>
                                         <th>Datum uzávěrky</th>
                                     </tr>
                                 <?php

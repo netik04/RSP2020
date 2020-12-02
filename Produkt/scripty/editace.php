@@ -45,58 +45,66 @@
                     }
 
                     if($_FILES["reg_pfp"]['error'] != 4)
-                        {
+                    {
                             // zjistím lokaci, kam se fotka nahrála
                             $tmpFile = $_FILES['reg_pfp']['tmp_name'];
                             // připravím lokaci, kde se má na konci nacházet
                             $newFile = '../img/profile_pics/'.$_FILES['reg_pfp']['name'];   
 
-                            if(glob($base_path . "img/profile_pics/" . html_entity_decode($_SESSION[session_id()]) . ".*" )){ //pokud se nachazi profilovka s loginem prihlaseneho uzivatele
-                                array_map('unlink', glob($base_path . "img/profile_pics/" . html_entity_decode($_SESSION[session_id()]) . ".*")); // smaz profilovku s timto loginem
-                            }
-
-                            // pokud se úspěšně nahrála profilovka
-                            if(is_uploaded_file($_FILES['reg_pfp']['tmp_name']))
+                            // zjistím, jakou příponu má obrázek
+                            $extension = '';
+                            for($i = strlen($newFile) - 1; $i > 0; $i--)
                             {
-                                // přesunu z dočasné složky do složky s profilovými fotkami
-                                // pokud se přesun zadaří
-                                if(move_uploaded_file($tmpFile, $newFile))
+                                if($newFile[$i] == '.')
                                 {
-                                // zjistím, jakou příponu má obrázek
-                                    $extension = '';
-                                    for($i = 3; $i < strlen($newFile); $i++)
-                                    {
-                                        if($newFile[$i] == '.')
-                                        {
-                                            $extension = substr($newFile, $i, (strlen($newFile) - 1));
-                                            break;
-                                        }
-                                    }
-                                    // přejmenuji přesunutý soubor podle loginu uživatele
-                                    rename($newFile, "../img/profile_pics/" . $raw_login . $extension);
+                                    $extension = substr($newFile, $i, (strlen($newFile) - 1));
+                                    break;
                                 }
-                                else // pokud přesun neprojde
+                            }
+                            if($extension == ".jpg" || $extension == ".jpeg" || $extension == ".png" || $extension == ".gif")
+                            {
+
+                                if(glob($base_path . "img/profile_pics/" . html_entity_decode($_SESSION[session_id()]) . ".*" )){ //pokud se nachazi profilovka s loginem prihlaseneho uzivatele
+                                    array_map('unlink', glob($base_path . "img/profile_pics/" . html_entity_decode($_SESSION[session_id()]) . ".*")); // smaz profilovku s timto loginem
+                                }
+
+                                // pokud se úspěšně nahrála profilovka
+                                if(is_uploaded_file($_FILES['reg_pfp']['tmp_name']))
                                 {
-                                    // vygeneruj chybu a vrať uživatele na registraci
+                                    // přesunu z dočasné složky do složky s profilovými fotkami
+                                    // pokud se přesun zadaří
+                                    if(move_uploaded_file($tmpFile, $newFile))
+                                    {                                
+                                        // přejmenuji přesunutý soubor podle loginu uživatele
+                                        rename($newFile, "../img/profile_pics/" . $raw_login . $extension);
+                                    }
+                                    else // pokud přesun neprojde
+                                    {
+                                        // vygeneruj chybu a vrať uživatele na registraci
+                                        $_SESSION["error_edit"] = "Nepodařilo se však nahrát vaší profilovou fotku.";
+                                        header("Location: ../editProfile.php");
+                                        exit();
+                                    }
+                                }
+                                else // pokud se fotku nepodařilo nahrát
+                                {
+                                    // vygeneruj error a vrať uživatele na registraci
                                     $_SESSION["error_edit"] = "Nepodařilo se však nahrát vaší profilovou fotku.";
                                     header("Location: ../editProfile.php");
-                                    exit();
+                                    exit(); 
                                 }
                             }
-                            else // pokud se fotku nepodařilo nahrát
-                            {
-                                // vygeneruj error a vrať uživatele na registraci
-                                $_SESSION["error_edit"] = "Nepodařilo se však nahrát vaší profilovou fotku.";
+                            else{
+                                $_SESSION["error_edit"] = "Tento formát profilových obrázků není podporován.";
                                 header("Location: ../editProfile.php");
-                                exit(); 
+                                exit();
                             }
-                        }
+                    }
 
                     // pokud vše prošlo  , nebo uživatel nenahrál žádnou profilovku - přesměruj na index
                     $_SESSION["error_edit"] = $_SESSION["error_edit"] . "Úprava proběhla úspěšně!";
                     header("Location: ../editProfile.php");
                     exit();
-
                 }else{
                     //uzivatel zadal spatne heslo
                     $_SESSION["error_edit"] ="Špatně zadané heslo";

@@ -216,8 +216,25 @@ $tema = $radek["tema"];
             <fieldset>
                 <h2>Informace o článku</h2>
             <?php
+                try
+                {
+                    $query_autor = $pdo->prepare("SELECT jmeno, prijmeni FROM uzivatel NATURAL JOIN pise WHERE id_clanku = ?");
+                    $params = array($id);
+                    $query_autor->execute($params);
+                }
+                catch(PDOException $ex)
+                {
+                    die("Nastala chyba. Zkuste to prosím později.");
+                }
+                $autor = "";
+                while(($radek2 = $query_autor->fetch(PDO::FETCH_ASSOC)) != FALSE)
+                {
+                    $autor .= $radek2["jmeno"] . " " . $radek2["prijmeni"] . "; ";
+                }
+                $autor = substr($autor, 0, -2);            
                 echo("<table class='detail_tabulka' cellspacing='0'><tr><th><span class=\"blue\">Název článku:</span></th><td>" . $nazev . "</td></tr></table>");
                 echo("<table class='detail_tabulka' cellspacing='0'><tr><th><span class=\"blue\">Verze článku:</span></th><td>" . $verze . "</td></tr></table>");
+                echo("<table class='detail_tabulka' cellspacing='0'><tr><th><span class='blue'>Autoři:</span></th><td>" . $autor . "</td></tr></table>");
                 echo("<table class='detail_tabulka' cellspacing='0'><tr><th><span class=\"blue\">Datum nahrání:</span></th><td>" . $datum . "</td></tr></table>");
                 echo("<table class='detail_tabulka' cellspacing='0'><tr><th><span class=\"blue\">Stav autora:</span></th><td>" . $stav_autor . "</td></tr></table>");
                 echo("<table class='detail_tabulka' cellspacing='0'><tr><th><span class=\"blue\">Stav redaktora:</span></th><td>" . $stav_redaktor . "</td></tr></table>");
@@ -275,7 +292,154 @@ $tema = $radek["tema"];
             ?>
             <br />
             <fieldset>
-                <h2>Chat s redakcí</h2>
+
+                <script>
+                    $(document).ready( function(){ 
+                        $("#odeslatZpravu").button(); 
+                        $('#messageBox').on('scroll', chk_scroll);
+                    });
+                </script>
+                    <div id="messageWrap">
+                        <div id="messagesMenu">
+                            <button id="interni" class="button2">Redakce</button>
+                            <button id="autorsky" class="button2">Autor</button>
+                        </div>
+                        <div id="messageBox">
+                        </div>
+                        <form id="messageSender" action="scripty/odeslatZpravu.php">
+                                <input type="hidden" id="zpravaId" name="id" value="<?php echo $id?>">
+                                <input type="hidden" id="zpravaVerze" name="verze" value="<?php echo $verze?>">
+                                <input type="hidden" id="inter" name="interni" value="1">
+                                <input type="text" id="message" name="message" required>
+                                <input id="odeslatZpravu" type="submit" name="odeslatZpravu" value="Odeslat" <?php if($article_verze !== $article["verze"])echo "disabled"; ?>>
+                        </form>
+                        <div id="errorMessage"><?php echo $_SESSION["errorMessage"]; unset($_SESSION["errorMessage"]); ?></div>
+                    </div>
+
+                <script>
+                    var timer;
+
+                    function zobrazZpravy(neco){
+                        $.ajax('<?php echo $base_path?>scripty/zobrazZpravy.php', {
+                                type: 'POST',  // http method
+                                data: {
+                                    article_id: <?php echo $id ?>,
+                                    article_verze: <?php echo $verze ?>,
+                                    interni: interni
+                                },  // data to submit
+                                success: function (data) {
+                                    $('#messageBox').html(data);
+                                    if(neco == true){
+                                        var objDiv = document.getElementById("messageBox");
+                                        objDiv.scrollTop = objDiv.scrollHeight;
+                                    }
+                                    
+                                },
+                                error: function (errorMessage) {
+                                    $('#errorMessage').text('Error' + errorMessage);
+                                }
+                            });
+                    }
+
+                    $(document).ready(function(){
+                        $(function() {
+                            var interni = <?php if(!isset($_SESSION["interni"])) $_SESSION["interni"]=1; echo $_SESSION["interni"]; ?>;
+                            if(interni == 1){
+                                $('#interni').click();
+                            }else{
+                                $('#autorsky').click();
+                            }
+
+                        });
+                        $(".button2").click(function(){
+                            if($(this).attr("id") == "interni"){
+                                interni = 1;
+                                $("#inter").val(1);
+                                $("#autorsky").removeClass("active");
+                                $("#interni").addClass("active");
+                                $.ajax("<?php echo $base_path?>scripty/zapisSessionInterni.php", {
+                                    type: 'POST',  // http method
+                                    data: {
+                                        interni: interni
+                                    },  // data to submit
+                                    success: function (data) {
+
+                                    },
+                                    error: function (errorMessage) {
+                                        $('#errorMessage').text('Error' + errorMessage);
+                                    }
+                                });
+                            }else if($(this).attr("id") == "autorsky"){
+                                interni = 0;
+                                $("#inter").val(0);
+                                $("#interni").removeClass("active");
+                                $("#autorsky").addClass("active");
+                                $.ajax("<?php echo $base_path?>scripty/zapisSessionInterni.php", {
+                                    type: 'POST',  // http method
+                                    data: {
+                                        interni: interni
+                                    },  // data to submit
+                                    success: function (data) {
+
+                                    },
+                                    error: function (errorMessage) {
+                                        $('#errorMessage').text('Error' + errorMessage);
+                                    }
+                                });
+                            }
+                            zobrazZpravy(true);
+                            startTimer(true);
+                        });
+
+                        $("#messageSender").submit(function(event){
+                                event.preventDefault();
+                                $.ajax("<?php echo $base_path?>scripty/odeslatZpravu.php", {
+                                    type: 'POST',
+                                    data: {
+                                        id: $("#zpravaId").val(),
+                                        verze: $("#zpravaVerze").val(),
+                                        interni: $("#inter").val(),
+                                        message: $("#message").val()
+                                    },
+                                    success: function(result)
+                                    {
+                                        if(result != "")
+                                        {
+                                            alert(result);
+                                        }
+                                        else
+                                        {
+                                            zobrazZpravy(true);
+                                            $("#message").val("");
+                                        }
+                                    }
+                                });
+                            });
+                    });
+
+
+                    function startTimer(neco){
+                        clearInterval(timer);
+                        timer = setInterval(function(){ zobrazZpravy(neco) }, 2000);
+                    }
+
+                    function stopTimer(){
+                        clearInterval(timer);
+                    }
+
+                    function chk_scroll(e) {
+                        var elem = $(e.currentTarget);
+                        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+                            stopTimer();
+                            startTimer(true);
+                        }else{
+                            stopTimer();
+                            startTimer(false);
+                        }
+                    }
+                </script>
+
+
             </fieldset>
             <div id='posudekModal' title='Přidělit posudek jinému recenzentovi'>
                 <select id='posudekLogin'>

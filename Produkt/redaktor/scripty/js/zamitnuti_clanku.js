@@ -8,7 +8,7 @@ $(document).on("submit", "#message_box form.a_deny", function (event) {
   };
 
   if(formData['duvod'] == "")
-    $('#message_box .error').text("*Vyplňtě prosím důvod navrácení!");
+    $('#message_box .error').html("<br>*Vyplňtě prosím důvod navrácení!");
   else{
     $.ajax({
       type: "POST",
@@ -33,7 +33,7 @@ $(document).on("submit", "#message_box form.a_deny", function (event) {
           $('.a_return').remove();
           $('.a_release').remove();
 
-        zobrazZpravy();
+        zobrazZpravy(true);
       }
       else {
         alert("Nepodařilo se zamítnout článek :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");

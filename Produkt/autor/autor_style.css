@@ -142,3 +142,13 @@ margin-top: 5px;
 padding: 5px 5px;
 border-radius: 3px;
 }
+
+#chatNadpis
+{
+    margin-bottom: 0;
+}
+
+#odeslatZpravu
+{
+    font-size: 0.6rem;
+}

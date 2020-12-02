@@ -82,7 +82,7 @@ require($base_path."head.php");
         $("#modalUpravit").dialog({
             autoOpen: false,
             resizable: false,
-            width: 'auto',
+            width: $("#content").width() * 0.4,
             show: {
                 effect: "fade",
                 duration: 200

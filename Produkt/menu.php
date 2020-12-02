@@ -1,6 +1,6 @@
 <?php
+echo "<div id=\"menu\"><ul>";
     if (include("scripty/jePrihlasen.php")){
-        echo "<div id=\"menu\"><ul>";
         echo "<li> <a class=\"button btn-three\" href=\"$base_path"."index.php\">Home</a> </li>";
         switch ($_SESSION["role"]) {
             case 'autor':
@@ -30,8 +30,8 @@
                 break;
         }
         echo "<li> <a class=\"button btn-three\" href=\"$base_path"."helpdesk.php\">HelpDesk</a> </li>";
-        echo "</ul></div>";
     }
+    echo "</ul></div>";
 ?>
 <script>
 $(document).ready(function(){

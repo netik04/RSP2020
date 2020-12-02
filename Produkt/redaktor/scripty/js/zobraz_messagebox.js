@@ -17,12 +17,12 @@ $(document).on("click", "button.a_return, button.a_deny", function () {
     }
     $('#message_box').html(
       "<form class=\""+$(this).attr('class')+"\" action=\""+action+"\" method=\"POST\">" +
-        "<div class=\"title\">"+title+"</div>" +
-        "<textarea name=\"duvod\" placeholder=\"Důvod&hellip;\"></textarea>" +
+        "<div class=\"title\">"+title+"<div class=\"exit\"></div></div>" +
+        "<div class=\"f_item\"><textarea name=\"duvod\" placeholder=\"Důvod&hellip;\"></textarea></div>" +
         "<input name=\"id\" type=\"hidden\" value=\"" + id + "\">" +
         "<input name=\"verze\" type=\"hidden\" value=\"" + verze + "\">" +
-        "<br><input type=\"submit\" class=\"button2\" value=\"Odeslat\">" +
-        "<br><br><span class=\"error\"></span>" +
+        "<div class=\"f_item submit\"><input type=\"submit\" class=\"button2\" value=\"Odeslat\"></div>" +
+        "<span class=\"error\"></span>" +
       "</form>"
     );
   /*} else {

@@ -27,7 +27,7 @@
             <label for="reg_pfp">Profilový obrázek: </br></label><input type="file" name="reg_pfp"><br />
             <br /><label for="login">Zadejte heslo pro potvrzeni zmen</label><br />
             <input type="password" name="password"/><br/>
-            <input type="submit" name="submit" id="submit" value="Provést změny" class="reg_button" />
+            <input type="submit" name="submit" id="submit" value="Provést změny" class="reg_button" /></br>
             <span class="error"><?php echo $_SESSION["error_edit"]; unset($_SESSION["error_edit"]) //zobrazení chyb z přihlášení pomoci session, nasledně unset této session aby se zobrazila pouze jednou?></span>
         </form>
     </fieldset>

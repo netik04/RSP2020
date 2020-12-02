@@ -1,10 +1,8 @@
 <?php
 
-$base_path = "../../";
-
-$role = "redaktor";
+$base_path = "../";
 session_start();
-if($role !== $_SESSION['role']) die();
+if(!include("jePrihlasen.php")) die();
 
 //session_start();
 if(require($base_path . "scripty/jePrihlasen.php")){
@@ -21,11 +19,11 @@ if(require($base_path . "scripty/jePrihlasen.php")){
             $params = array($id, $verze, $datetime, $message, $interni, $_SESSION[session_id()], 0);
             $query->execute($params);
         }catch(Exception $e){
-            echo("Došlo k chybě. Zkuste to prosím za chvíli.");
+            echo("2Došlo k chybě. Zkuste to prosím za chvíli.");
             die();
         }
     }else{
-        echo("Došlo k chybě. Zkuste to prosím za chvíli.");
+        echo("1Došlo k chybě. Zkuste to prosím za chvíli.");
         die();
     }
 }

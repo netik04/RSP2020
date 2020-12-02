@@ -68,7 +68,7 @@ $(document).on("click", "button.a_setR", function () {
 
       $('#set_recenzenty').html(
         "<form action=\"scripty/prirazeni_recenzentu.php\" method=\"POST\">" +
-          "<div class=\"title\">Stanovit recenzenty</div>" +
+          "<div class=\"title\">Stanovit recenzenty<div class=\"exit\"></div></div>" +
           osob_rev +
           "<div class=\"f_item\">" +
             "<label for=\"recenzent1\">1. recenzent: </label>" +
@@ -84,7 +84,7 @@ $(document).on("click", "button.a_setR", function () {
           "</div>" +
           "<input name=\"id\" type=\"hidden\" value=\"" + id + "\">" +
           "<input name=\"verze\" type=\"hidden\" value=\"" + verze + "\">" +
-          "<div class=\"f_item\">" +
+          "<div class=\"f_item submit\">" +
             "<input type=\"submit\" value=\"Přiřadit\">" +
           "</div>" +
           "<span class=\"error\"></span>" +
@@ -102,15 +102,3 @@ $(document).on("click", "button.a_setR", function () {
   })
   .always(function() {$('button.a_setR').blur();});
 });
-/*
-$(document).on("click", "#set_recenzenty", function(e) 
-{
-    var container = $("#set_recenzenty form");
-
-    // if the target of the click isn't the container nor a descendant of the container
-    if (!container.is(e.target) && container.has(e.target).length === 0) 
-    {
-      $('#set_recenzenty').hide();
-      $('#set_recenzenty').html('');
-    }
-});*/

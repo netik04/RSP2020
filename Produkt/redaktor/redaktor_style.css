@@ -269,12 +269,10 @@
     display: -ms-flexbox;
     display: flex;
 
-    /* horizontal center */
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
 
-    /* vertical center */
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
@@ -282,7 +280,8 @@
 
 .popbox form{
     display: block;
-    border: 1px solid #555;
+    border: 1px solid #007EA7;
+    border-radius: 3px;
     padding: 1rem;
     background-color: #222;
     /*max-width: 400px;
@@ -292,15 +291,55 @@
     max-height: 100%;
 }
 
+.popbox form .f_item{
+    margin: 0 0 .7rem;
+}
+
 .popbox form .title{
     font-size: 1.1rem;
     margin-bottom: .5rem;
-    border-bottom: 1px solid #555;
+    border-bottom: 1px solid #007EA7;
+}
+
+.popbox .exit{
+    width: 20px;
+    height: 20px;
+    float: right;
+    background-position: -94px -127px;
+    
+    background-image: url("../ui/images/ui-icons_ffffff_256x240.png");
+    background-color: #007EA7;
+
+    cursor: pointer;
+
+    border-radius: 3px;
 }
 
 .popbox .error{
     font-size: .9rem;
     color: #f55;
+}
+
+.popbox form input, .popbox form select{
+    width: 150px;
+}
+
+.popbox form .f_item.submit{
+    text-align: center;
+    margin: 0;
+}
+
+.popbox form input[type="submit"]{
+    padding: .4em 1em;
+    background: #007EA7;
+    border-radius: 3px;
+    border: 1px solid #007EA7;
+    color: #fff;
+
+}
+
+.popbox form textarea{
+    resize: auto;
 }
 
 
@@ -310,12 +349,7 @@
 }
 
 #set_recenzenty form{
-    max-width: 400px;
-    height: 400px;
-}
-
-#set_recenzenty .f_item{
-    margin: 0 0 .7rem;
+    width: 330px;
 }
 
 #set_recenzenty .f_item:after{
@@ -342,8 +376,8 @@
 }
 
 #message_box [name=duvod]{
-    width: 400px;
-    height: 400px;
+    min-width: 250px;
+    min-height: 200px;
     max-width: 100%;
     max-height: 80vh
 }

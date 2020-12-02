@@ -141,10 +141,115 @@ require($base_path."head.php");
             {
                 echo("<fieldset><h2>K tomuto článku zatím nejsou dostupné posudky.</h2></fieldset>");
             }
+
+            try
+            {
+                $queryMax = $pdo->prepare("SELECT MAX(verze) FROM verze WHERE id_clanku = ?");
+                $params = array($id);
+                $queryMax -> execute($params);
+            }
+            catch(PDOException $ex)
+            {
+                die("Nastala chyba. Zkuste to prosím později");
+            }
+
+            $maxVerze = $queryMax->fetchColumn(0);
             ?>
             <br />
             <fieldset>
-                <h2>Chat s redakcí</h2>
+                <h2 id='chatNadpis'>Chat s redakcí</h2>
+                <script>
+                    $(document).ready( function(){
+                        $("#odeslatZpravu").button();
+                        $('#messageBox').on('scroll', chk_scroll);   
+                        zobrazZpravy(true);     
+                        startTimer(true);          
+                    });
+                </script>
+                    <div id="messageWrap">
+                        <div id="messageBox">
+                        </div>
+                        <form id="messageSender" action="<?php echo $base_path;?>scripty/odeslatZpravu.php">
+                                <input type="hidden" id="zpravaId" name="id" value="<?php echo $id?>">
+                                <input type="hidden" id="zpravaVerze" name="verze" value="<?php echo $verze?>">
+                                <input type="hidden" id="inter" name="interni" value="1">
+                                <input type="text" id="message" name="message" required>
+                                <input id="odeslatZpravu" type="submit" name="odeslatZpravu" value="Odeslat" <?php if($verze != $maxVerze)echo "disabled"; ?>>
+                        </form>
+                        <div id="errorMessage"><?php echo $_SESSION["errorMessage"]; unset($_SESSION["errorMessage"]); ?></div>
+                    </div>
+
+                <script>
+                var timer;
+                    function zobrazZpravy(neco){
+                        $.ajax('<?php echo $base_path;?>scripty/zobrazZpravy.php', {
+                                type: 'POST',  // http method
+                                data: {
+                                    article_id: <?php echo $id ?>,
+                                    article_verze: <?php echo $verze ?>,
+                                    interni: 0
+                                },  // data to submit
+                                success: function (data) {
+                                    $('#messageBox').html(data);
+                                    if(neco == true){
+                                        var objDiv = document.getElementById("messageBox");
+                                        objDiv.scrollTop = objDiv.scrollHeight;
+                                    }  
+                                },
+                                error: function (errorMessage) {
+                                    $('#errorMessage').text('Error' + errorMessage);
+                                }
+                            });
+                    }                   
+                    $(document).ready(function()
+                    {                                                                                     
+                        $("#messageSender").submit(function(event){
+                                event.preventDefault();
+                                $.ajax('<?php echo $base_path;?>scripty/odeslatZpravu.php', {
+                                    type: 'POST',
+                                    data: {
+                                        id: $("#zpravaId").val(),
+                                        verze: $("#zpravaVerze").val(),
+                                        interni: 0,
+                                        message: $("#message").val()
+                                    },
+                                    success: function(result)
+                                    {
+                                        if(result != "")
+                                        {
+                                            alert(result);
+                                        }
+                                        else
+                                        {
+                                            zobrazZpravy(true);
+                                            $("#message").val("");
+                                        }
+                                    }
+                                });
+                            });
+                    });
+
+                    function startTimer(neco){
+                        clearInterval(timer);
+                        timer = setInterval(function(){ zobrazZpravy(neco) }, 2000);
+                    }
+
+                    function stopTimer(){
+                        clearInterval(timer);
+                    }
+
+                    function chk_scroll(e) {
+                        var elem = $(e.currentTarget);
+                        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+                            stopTimer();
+                            startTimer(true);
+                        }else{
+                            stopTimer();
+                            startTimer(false);
+                        }
+                    }
+                </script>
+
             </fieldset>
 
             <?php

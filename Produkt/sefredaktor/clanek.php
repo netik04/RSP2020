@@ -175,7 +175,12 @@ if(is_numeric($_GET['verze'])){
                 ?>
             </div>
                 <script>
-                    $(document).ready( function(){ $("#odeslatZpravu").button(); });
+                    $(document).ready( function(){ 
+                        $("#odeslatZpravu").button(); 
+                        $('#messageBox').on('scroll', chk_scroll);   
+                        zobrazZpravy(true);
+                        startTimer(true);
+                    });
                 </script>
                 <div class="article">
                     <div id="messageWrap">
@@ -185,7 +190,6 @@ if(is_numeric($_GET['verze'])){
                         <div id="messageBox">
                         </div>
                         <form id="messageSender" action="scripty/odeslatZpravu.php">
-                        <input type="hidden" id="zpravaId" name="id" value="<?php echo $article_id?>">
                                 <input type="hidden" id="zpravaId" name="id" value="<?php echo $article_id?>">
                                 <input type="hidden" id="zpravaVerze" name="verze" value="<?php echo $article_verze?>">
                                 <input type="hidden" id="inter" name="interni" value="1">
@@ -196,8 +200,9 @@ if(is_numeric($_GET['verze'])){
                 </div>
 
                 <script>
-                    function zobrazZpravy(){
-                        $.ajax('scripty/zobrazZpravy.php', {
+                    var timer;
+                    function zobrazZpravy(neco){
+                        $.ajax('<?php echo $base_path;?>scripty/zobrazZpravy.php', {
                                 type: 'POST',  // http method
                                 data: {
                                     article_id: <?php echo $article_id ?>,
@@ -206,8 +211,10 @@ if(is_numeric($_GET['verze'])){
                                 },  // data to submit
                                 success: function (data) {
                                     $('#messageBox').html(data);
-                                    var objDiv = document.getElementById("messageBox");
-                                    objDiv.scrollTop = objDiv.scrollHeight;
+                                    if(neco == true){
+                                        var objDiv = document.getElementById("messageBox");
+                                        objDiv.scrollTop = objDiv.scrollHeight;
+                                    }
                                 },
                                 error: function (errorMessage) {
                                     $('#errorMessage').text('Error' + errorMessage);
@@ -218,7 +225,7 @@ if(is_numeric($_GET['verze'])){
                     $(document).ready(function(){
                         $("#messageSender").submit(function(event){
                                 event.preventDefault();
-                                $.ajax('scripty/odeslatZpravu.php', {
+                                $.ajax('<?php echo $base_path;?>scripty/odeslatZpravu.php', {
                                     type: 'POST',
                                     data: {
                                         id: $("#zpravaId").val(),
@@ -234,15 +241,33 @@ if(is_numeric($_GET['verze'])){
                                         }
                                         else
                                         {
-                                            zobrazZpravy();
+                                            zobrazZpravy(true);
                                             $("#message").val("");
                                         }
                                     }
                                 });
                             });
-
-                            zobrazZpravy();
                         });
+
+                    function startTimer(neco){
+                    clearInterval(timer);
+                    timer = setInterval(function(){ zobrazZpravy(neco) }, 2000);
+                    }
+
+                    function stopTimer(){
+                        clearInterval(timer);
+                    }
+
+                    function chk_scroll(e) {
+                        var elem = $(e.currentTarget);
+                        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+                            stopTimer();
+                            startTimer(true);
+                        }else{
+                            stopTimer();
+                            startTimer(false);
+                        }
+                    }
                 </script>
 
     <?php } } ?>

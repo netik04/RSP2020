@@ -6,3 +6,8 @@ $(document).on("click", ".popbox", function(e) {
       $('.popbox').html('');
     }
 });
+
+$(document).on("click", ".popbox .exit", function(e) {
+  $('.popbox').hide();
+  $('.popbox').html('');
+});

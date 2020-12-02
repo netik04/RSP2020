@@ -12,11 +12,11 @@ $(document).on("submit", "#set_recenzenty form", function (event) {
   };
 
   if(formData['r1'] == "" && formData['r2'] == "")
-    $('#set_recenzenty .error').text("*Vyplňtě prosím alespoň jednoho recenzenta!");
+    $('#set_recenzenty .error').html("<br>*Vyplňtě prosím alespoň jednoho recenzenta!");
   else if(formData['uzaverka'] == "")
-    $('#set_recenzenty .error').text("*Vyplňtě prosím datum uzávěrky!");
+    $('#set_recenzenty .error').html("<br>*Vyplňtě prosím datum uzávěrky!");
   else if(formData['r1'] == formData['r2'])
-    $('#set_recenzenty .error').text("*Nelze přiřadit jednoho recenzenta dvakrát!");
+    $('#set_recenzenty .error').html("<br>*Nelze přiřadit jednoho recenzenta dvakrát!");
   else{
 
     if((formData['r1'] == "" || formData['r2'] == "") && !confirm("Opravdu si přejete přiřadit pouze jednoho recenzenta?"))
@@ -46,9 +46,16 @@ $(document).on("submit", "#set_recenzenty form", function (event) {
           $('.a_return').remove();
           $('.a_release').remove();
 
+          var rs_count = 0;
+          if(formData['r1'] != "")
+            rs_count++;
+          if(formData['r2'] != "")
+            rs_count++;
+
           $('.info .state')
             .html("Stav<br><span class=\"l2\">Probíhá recenzní řízení</span>" +
-              "<br><span class=\"l3\">Uzávěrka recenze: " + uzaverka.getDate() + "." +  + (uzaverka.getMonth()+1) + "." + uzaverka.getFullYear() + "</span>");
+              "<br><span class=\"l3\">Uzávěrka recenze: " + uzaverka.getDate() + "." +  + (uzaverka.getMonth()+1) + "." + uzaverka.getFullYear() + "</span>"+
+              "<br><span class=\"l3\">Hotové posudky: 0/" + rs_count + "</span>");
         }
       } else {
         alert("Nepodařilo se stanovit recenzenty :(\nZkuste to prosím později.\nPokud nebude funkce stále fungovat, kontaktujte administrátora.");

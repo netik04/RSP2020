@@ -17,15 +17,7 @@ $rec02 = htmlentities($_POST["rec02"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
 $rec03 = htmlentities($_POST["rec03"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
 $rec04 = htmlentities($_POST["rec04"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
 $recOdpoved = htmlentities($_POST["recOdpoved"], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-
-if($_POST["recKontrola"])
-{
-    $recKontrola = 1;
-}
-else
-{
-    $recKontrola = 0;
-}
+$recKontrola = $_POST["recKontrola"];
 $datum = date("Y-m-d H:i:s");
 
 try
