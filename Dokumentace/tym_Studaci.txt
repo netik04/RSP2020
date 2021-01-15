@@ -1,0 +1,9 @@
+Tým Študáci ŘSP 2020/2021
+
+Role            Jméno
+-----------------------------
+Product Owner   Šilhavý David
+Scrum Master    Netík Pavel
+Dev 1           Pojer Jakub
+Dev 2           Zíka Jakub
+Dev 3           Zounek Petr
